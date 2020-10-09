@@ -1,0 +1,3 @@
+[submodule "lib/AutoTOML"]
+	path = lib/AutoTOML
+	url = https://github.com/Ryan-rsm-McKenzie/AutoTOML.git

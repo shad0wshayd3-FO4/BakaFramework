@@ -1,0 +1,16 @@
+{
+  "name": "bakaplugintemplate",
+  "version-string": "1.0.0",
+  "description": "F4SE plugin template using CommonLibF4.",
+  "homepage": "https://github.com/shad0wshayd3/BakaPluginTemplate",
+  "license": "MIT",
+  "dependencies": [
+    "boost-atomic",
+    "boost-iostreams",
+    "boost-iterator",
+    "span-lite",
+    "spdlog",
+    "stl-interfaces",
+    "tomlplusplus"
+  ]
+}
