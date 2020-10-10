@@ -5,12 +5,13 @@ class Settings
 public:
 	using ISetting = AutoTOML::ISetting;
 	using bSetting = AutoTOML::bSetting;
+	using sSetting = AutoTOML::sSetting;
 
 	static void Load()
 	{
 		try
 		{
-			const auto table = toml::parse_file("Data/F4SE/Plugins/BakaPluginTemplate.toml"s);
+			const auto table = toml::parse_file("Data/F4SE/Plugins/BakaFramework.toml"s);
 			for (const auto& setting : ISetting::get_settings())
 			{
 				setting->load(table);
@@ -37,6 +38,7 @@ public:
 	}
 
 	static inline bSetting EnableDebugLogging{ "General"s, "EnableDebugLogging"s, false };
+	static inline sSetting BetaCommentFileName{ "Config"s, "BetaCommentFileName"s, "BetaComment.txt"s };
 
 private:
 	Settings() = delete;

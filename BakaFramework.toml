@@ -1,0 +1,7 @@
+[General]
+# Enable Debug message output
+EnableDebugLogging = false
+
+[Config]
+# File that BetaComment writes to
+BetaCommentFileName = "BetaComment.txt"

@@ -7,12 +7,26 @@
 #include <sstream>
 #include <string>
 #include <string_view>
+#include <vector>
 
+#include <fmt/chrono.h>
 #include <spdlog/sinks/basic_file_sink.h>
 
 #include "AutoTOML.hpp"
 
 #define DLLEXPORT __declspec(dllexport)
+
+namespace F4SE
+{
+	namespace WinAPI
+	{
+		inline constexpr auto(MAX_COMPUTERNAME_LENGTH){ static_cast<std::uint32_t>(0x0F) };
+
+		[[nodiscard]] bool(GetComputerName)(
+			char* a_computerName,
+			std::uint32_t* a_size) noexcept;
+	}
+}
 
 namespace logger
 {
