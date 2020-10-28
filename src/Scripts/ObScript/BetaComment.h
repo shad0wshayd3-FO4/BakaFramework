@@ -11,7 +11,8 @@ namespace ObScript
 			const auto it = std::find_if(
 				functions.begin(),
 				functions.end(),
-				[&](auto&& a_elem) {
+				[&](auto&& a_elem)
+				{
 					return _stricmp(a_elem.functionName, "BetaComment") == 0;
 				});
 
@@ -114,7 +115,7 @@ namespace ObScript
 			PrintCameraPositionInfo(line);
 
 			logger::debug("");
-			
+
 			// Print Comment
 			line << "\"" << rawComment.data() << "\"";
 			line << "\r\n";
@@ -162,7 +163,8 @@ namespace ObScript
 
 		static bool PrintMachineName(std::stringstream& a_buf)
 		{
-			const auto machineName = []() -> std::string {
+			const auto machineName = []() -> std::string
+			{
 				char buffer[F4SE::WinAPI::MAX_COMPUTERNAME_LENGTH + 1];
 				std::uint32_t bufferSize = sizeof(buffer) / sizeof(char);
 
@@ -280,7 +282,8 @@ namespace ObScript
 
 		[[nodiscard]] static const std::string& HelpString()
 		{
-			static auto help = []() {
+			static auto help = []()
+			{
 				std::string buf;
 				buf += "Add comment to ";
 				buf += *Settings::BetaCommentFileName;

@@ -1,11 +1,5 @@
 #pragma once
 
-class FormManager
-{
-public:
-
-};
-
 class Forms
 {
 private:

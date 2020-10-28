@@ -11,7 +11,8 @@ namespace ObScript
 			const auto it = std::find_if(
 				functions.begin(),
 				functions.end(),
-				[&](auto&& a_elem) {
+				[&](auto&& a_elem)
+				{
 					return _stricmp(a_elem.functionName, "QuitGame") == 0;
 				});
 
@@ -33,17 +34,20 @@ namespace ObScript
 		static bool Execute(const RE::SCRIPT_PARAMETER*, const char*, RE::TESObjectREFR*, RE::TESObjectREFR*, RE::Script*, RE::ScriptLocals*, float&, std::uint32_t&)
 		{
 			RE::ConsoleLog::GetSingleton()->AddString("Bye.");
-			std::thread([&]() {
-				std::this_thread::sleep_for(std::chrono::milliseconds(50));
-				RE::Main::GetSingleton()->quitGame = true;
-			}).detach();
+			std::thread([&]()
+				{
+					std::this_thread::sleep_for(std::chrono::milliseconds(50));
+					RE::Main::GetSingleton()->quitGame = true;
+				})
+				.detach();
 
 			return true;
 		}
 
 		[[nodiscard]] static const std::string& HelpString()
 		{
-			static auto help = []() {
+			static auto help = []()
+			{
 				std::string buf;
 				buf += "Exit game without going through menus.";
 				return buf;
