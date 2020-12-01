@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.18)
 
 project(
 	BakaFramework
-	VERSION 1.0.0
+	VERSION 1.1.0
 	LANGUAGES CXX
 )
 
@@ -136,14 +136,16 @@ include(cmake/headerlist.cmake)
 include(cmake/sourcelist.cmake)
 
 source_group(
-	TREE ${CMAKE_CURRENT_SOURCE_DIR}
+	TREE
+		${CMAKE_CURRENT_SOURCE_DIR}
 	FILES
 		${headers}
 		${sources}
 )
 
 source_group(
-	TREE ${CMAKE_CURRENT_BINARY_DIR}
+	TREE
+		${CMAKE_CURRENT_BINARY_DIR}
 	FILES
 		${CMAKE_CURRENT_BINARY_DIR}/include/AutoTOML.hpp
 		${CMAKE_CURRENT_BINARY_DIR}/include/version.h
@@ -175,7 +177,7 @@ set_property(
 
 target_compile_features(${PROJECT_NAME}
 	PUBLIC
-		cxx_std_17
+		cxx_std_20
 )
 
 target_compile_options(${PROJECT_NAME}

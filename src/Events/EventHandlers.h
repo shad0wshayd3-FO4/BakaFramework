@@ -44,12 +44,15 @@ namespace EventHandlers
 
 		virtual RE::BSEventNotifyControl ProcessEvent(const RE::CurrentRadiationSourceCount& a_event, RE::BSTEventSource<RE::CurrentRadiationSourceCount>*) override
 		{
+			RE::BSAutoLock{ dataLock };
 			if (auto radiationSourceCount = Forms::RadiationSourceCount_DO->GetForm<RE::ActorValueInfo>(); radiationSourceCount)
 			{
-				auto count = static_cast<float>(a_event.optionalValue.value_or(0));
-				RE::PlayerCharacter::GetSingleton()->SetBaseActorValue(*radiationSourceCount, count);
+				auto value = static_cast<float>(a_event.optionalValue.value_or(0));
+				RE::PlayerCharacter::GetSingleton()
+					->SetBaseActorValue(*radiationSourceCount, value);
 			}
-
+			
+			eventDataStruct.eventReceived = true;
 			return RE::BSEventNotifyControl::kContinue;
 		}
 	};
@@ -62,12 +65,15 @@ namespace EventHandlers
 
 		virtual RE::BSEventNotifyControl ProcessEvent(const RE::PipboyLightEvent& a_event, RE::BSTEventSource<RE::PipboyLightEvent>*) override
 		{
+			RE::BSAutoLock{ dataLock };
 			if (auto pipboyLightActive = Forms::PipboyLightActive_DO->GetForm<RE::ActorValueInfo>(); pipboyLightActive)
 			{
-				auto active = a_event.optionalValue.value_or(false) ? 1.0f : 0.0f;
-				RE::PlayerCharacter::GetSingleton()->SetBaseActorValue(*pipboyLightActive, active);
+				auto value = a_event.optionalValue.value_or(false) ? 1.0f : 0.0f;
+				RE::PlayerCharacter::GetSingleton()
+					->SetBaseActorValue(*pipboyLightActive, value);
 			}
-
+			
+			eventDataStruct.eventReceived = true;
 			return RE::BSEventNotifyControl::kContinue;
 		}
 	};

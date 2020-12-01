@@ -8,9 +8,9 @@
     "boost-atomic",
     "boost-iostreams",
     "boost-iterator",
+    "boost-stl-interfaces",
     "span-lite",
     "spdlog",
-    "stl-interfaces",
     "tomlplusplus"
   ]
 }
