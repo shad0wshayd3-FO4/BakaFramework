@@ -164,7 +164,7 @@ add_library(${PROJECT_NAME} SHARED
 	${CMAKE_CURRENT_BINARY_DIR}/include/version.h
 	${CMAKE_CURRENT_BINARY_DIR}/version.rc
 	.clang-format
-	${PROJECT_NAME}.toml
+	settings.toml
 )
 
 set_property(
@@ -217,5 +217,5 @@ add_custom_command(
 	POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${PROJECT_NAME}> $ENV{Fallout4Path}/Data/F4SE/Plugins/
 	COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_PDB_FILE:${PROJECT_NAME}> $ENV{Fallout4Path}/Data/F4SE/Plugins/
-	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/${PROJECT_NAME}.toml $ENV{Fallout4Path}/Data/F4SE/Plugins/
+	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/settings.toml $ENV{Fallout4Path}/Data/F4SE/Plugins/${PROJECT_NAME}.toml
 )
