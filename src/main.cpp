@@ -1,5 +1,4 @@
 #include "Events/EventHandlers.h"
-#include "Forms/Forms.h"
 #include "Scripts/ObScript.h"
 #include "Scripts/Papyrus.h"
 

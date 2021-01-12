@@ -51,7 +51,7 @@ namespace EventHandlers
 				RE::PlayerCharacter::GetSingleton()
 					->SetBaseActorValue(*radiationSourceCount, value);
 			}
-			
+
 			eventDataStruct.eventReceived = true;
 			return RE::BSEventNotifyControl::kContinue;
 		}
@@ -72,7 +72,7 @@ namespace EventHandlers
 				RE::PlayerCharacter::GetSingleton()
 					->SetBaseActorValue(*pipboyLightActive, value);
 			}
-			
+
 			eventDataStruct.eventReceived = true;
 			return RE::BSEventNotifyControl::kContinue;
 		}

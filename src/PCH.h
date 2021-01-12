@@ -36,7 +36,6 @@ namespace logger
 namespace stl
 {
 	using F4SE::stl::report_and_fail;
-	using F4SE::stl::span;
 }
 
 using namespace std::literals;

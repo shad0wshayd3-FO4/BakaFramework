@@ -80,7 +80,7 @@ namespace ObScript
 				m_refr = RE::PlayerCharacter::GetSingleton();
 			}
 
-			/* 
+			/*
 				%D (%R)							| Current Time
 				%s								| File Name
 				%D (%R)							| File Time
