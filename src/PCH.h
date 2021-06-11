@@ -12,10 +12,23 @@
 
 #include <spdlog/sinks/basic_file_sink.h>
 #include <fmt/format.h>
+#include <fmt/chrono.h>
 #include <AutoTOML.hpp>
 #pragma warning(pop)
 
 #define DLLEXPORT __declspec(dllexport)
+
+namespace F4SE
+{
+	namespace WinAPI
+	{
+		inline constexpr auto(MAX_COMPUTERNAME_LENGTH){ static_cast<std::uint32_t>(0x0F) };
+
+		[[nodiscard]] bool(GetComputerName)(
+			char* a_computerName,
+			std::uint32_t* a_size) noexcept;
+	}
+}
 
 namespace logger = F4SE::log;
 
