@@ -8,5 +8,7 @@ set(headers ${headers}
 	src/Scripts/ObScript/BetaComment.h
 	src/Scripts/ObScript/GetBaseObject.h
 	src/Scripts/ObScript/QuitGame.h
+	src/Scripts/Papyrus/BakaUtil.h
 	src/Scripts/Papyrus/StringUtil.h
+	src/SteamAPI/SteamAPI.h
 )

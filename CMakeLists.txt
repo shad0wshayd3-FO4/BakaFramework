@@ -79,6 +79,7 @@ add_subdirectory("$ENV{CommonLibF4Path}" CommonLibF4)
 find_package(AutoTOML REQUIRED CONFIG)
 find_package(fmt REQUIRED CONFIG)
 find_package(spdlog REQUIRED CONFIG)
+find_package(SteamworksSDK REQUIRED CONFIG)
 find_package(tomlplusplus REQUIRED CONFIG)
 
 # ---- Add source files ----
@@ -134,6 +135,7 @@ target_link_libraries(
 		CommonLibF4::CommonLibF4
 		fmt::fmt
 		spdlog::spdlog
+		SteamworksSDK::SteamworksSDK
 		tomlplusplus::tomlplusplus
 )
 

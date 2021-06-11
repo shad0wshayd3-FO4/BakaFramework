@@ -198,7 +198,7 @@ namespace ObScript
 			{
 				auto cellID = fmt::format("{:08X}"sv, cell->formID);
 
-				if (cell->cellFlags & 1)
+				if (cell->cellFlags.all(RE::TESObjectCELL::Flag::kInterior))
 				{
 					auto cellName = cell->GetFormEditorID();
 					logger::debug("Cell (Interior): {}"s, cellName);

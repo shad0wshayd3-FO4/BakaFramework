@@ -11,6 +11,7 @@
     "boost-predef",
     "boost-stl-interfaces",
     "spdlog",
+    "steamworks-sdk",
     "tomlplusplus"
   ]
 }

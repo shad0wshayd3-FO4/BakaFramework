@@ -1,6 +1,7 @@
 #include "Events/EventHandlers.h"
 #include "Scripts/ObScript.h"
 #include "Scripts/Papyrus.h"
+#include "SteamAPI/SteamAPI.h"
 
 void F4SEMessageHandler(F4SE::MessagingInterface::Message* a_msg)
 {
@@ -37,6 +38,9 @@ void F4SEMessageHandler(F4SE::MessagingInterface::Message* a_msg)
 
 				// Register for events
 				EventHandlers::Register();
+
+				// SteamAPI - hook the init function and call it then?
+				SteamAPI::Init();
 			}
 			else
 			{
