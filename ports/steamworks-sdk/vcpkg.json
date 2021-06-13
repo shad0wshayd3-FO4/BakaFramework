@@ -1,6 +1,6 @@
 {
 	"name": "steamworks-sdk",
-	"version-semver": "1.34.0",
+	"version-string": "1",
 	"homepage": "https://partner.steamgames.com/doc/sdk/",
 	"dependencies": [
 		{

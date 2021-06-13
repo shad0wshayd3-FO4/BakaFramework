@@ -6,14 +6,21 @@ option(COPY_BUILD "Copy the build output to the Fallout 4 directory." ON)
 
 # ---- Cache build vars ----
 
-if (NOT DEFINED VCPKG_ROOT AND DEFINED ENV{VCPKG_ROOT})
-	set(VCPKG_ROOT $ENV{VCPKG_ROOT})
-endif ()
+macro(set_from_environment VARIABLE)
+	if (NOT DEFINED ${VARIABLE} AND DEFINED ENV{${VARIABLE}})
+		set(${VARIABLE} $ENV{${VARIABLE}})
+	endif ()
+endmacro()
+
+set_from_environment(Fallout4Path)
+set_from_environment(CommonLibF4Path)
+set_from_environment(VCPKG_ROOT)
 
 if (DEFINED VCPKG_ROOT)
-	set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
+	set(CMAKE_TOOLCHAIN_FILE "${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
 	set(VCPKG_OVERLAY_PORTS "${CMAKE_CURRENT_SOURCE_DIR}/ports" CACHE STRING "")
-	set(VCPKG_TARGET_TRIPLET "x64-windows-static-md" CACHE STRING "")
+	set(VCPKG_OVERLAY_TRIPLETS "${CMAKE_CURRENT_SOURCE_DIR}/triplets" CACHE STRING "")
+	set(VCPKG_TARGET_TRIPLET "x64-windows-static-md-custom" CACHE STRING "")
 else ()
 	message(
 		WARNING
@@ -63,6 +70,12 @@ if (MSVC)
 	add_compile_definitions(
 		_UNICODE
 	)
+
+	if (NOT ${CMAKE_GENERATOR} STREQUAL "Ninja")
+		add_compile_options(
+			/MP	# Build with Multiple Processes
+		)
+	endif ()
 endif ()
 
 # ---- Dependencies ----
@@ -74,7 +87,7 @@ set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_LIBS ON)
 set(Boost_USE_DEBUG_RUNTIME ON)
 
-add_subdirectory("$ENV{CommonLibF4Path}" CommonLibF4)
+add_subdirectory("${CommonLibF4Path}" CommonLibF4)
 
 find_package(AutoTOML REQUIRED CONFIG)
 find_package(fmt REQUIRED CONFIG)
@@ -143,7 +156,7 @@ if (MSVC)
 	target_compile_options(
 		${PROJECT_NAME}
 		PRIVATE
-			/MP	# Build with Multiple Processes
+			/EHa	# Exception handling model
 			/sdl	# Enable Additional Security Checks
 			/utf-8	# Set Source and Executable character sets to UTF-8
 			/Zi	# Debug Information Format
@@ -178,6 +191,9 @@ if (MSVC)
 			/W4	# Warning level
 			/WX	# Warning level (warnings are errors)
 
+			# disable warnings
+			/wd4324 # 'struct_name' : structure was padded due to __declspec(align())
+
 			"$<$<CONFIG:DEBUG>:>"
 			"$<$<CONFIG:RELEASE>:/Zc:inline;/JMC-;/Ob3>"
 	)
@@ -201,17 +217,13 @@ target_precompile_headers(
 # ---- File copying ----
 
 if (COPY_BUILD)
-	if (NOT DEFINED Fallout4Path AND DEFINED ENV{Fallout4Path})
-		set(Fallout4Path $ENV{Fallout4Path})
-	endif ()
-
 	if (DEFINED Fallout4Path)
 		add_custom_command(
 			TARGET ${PROJECT_NAME}
 			POST_BUILD
-			COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${PROJECT_NAME}> $ENV{Fallout4Path}/Data/F4SE/Plugins/
-			COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_PDB_FILE:${PROJECT_NAME}> $ENV{Fallout4Path}/Data/F4SE/Plugins/
-			COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/settings.toml $ENV{Fallout4Path}/Data/F4SE/Plugins/${PROJECT_NAME}.toml
+			COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${PROJECT_NAME}> ${Fallout4Path}/Data/F4SE/Plugins/
+			COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_PDB_FILE:${PROJECT_NAME}> ${Fallout4Path}/Data/F4SE/Plugins/
+			COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/settings.toml ${Fallout4Path}/Data/F4SE/Plugins/${PROJECT_NAME}.toml
 		)
 	else ()
 		message(

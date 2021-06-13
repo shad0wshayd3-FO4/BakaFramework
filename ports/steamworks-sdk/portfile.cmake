@@ -1,23 +1,31 @@
+if(NOT DEFINED ENV{STEAMWORKS_SDK})
+	message(FATAL_ERROR "environment variable STEAMWORKS_SDK is not set")
+endif()
+
 set(MAJOR 1)
 set(MINOR 34)
-set(REF "v${MAJOR}.${MINOR}")
 
-set(ARCHIVE "steamworks_sdk_${MAJOR}${MINOR}.zip")
-vcpkg_download_distfile(
-	ARCHIVE
-	URLS "http://partner.steamgames.com/downloads/${ARCHIVE}"
-	SHA512 0d5f7cd0509d8e9d40a5aabbb5d010ea3d1d0bf54fe411fa832be579f3fd066ed6b2f621327425589a8bc6f9de86537b24a1c79fee28feca469f8b30d2c3803b
-	FILENAME "${ARCHIVE}"
+cmake_path(SET STEAMWORKS_SDK NORMALIZE $ENV{STEAMWORKS_SDK}/steamworks_sdk_${MAJOR}${MINOR})
+if(NOT IS_DIRECTORY ${STEAMWORKS_SDK})
+	message(FATAL_ERROR "failed to find required version in STEAMWORKS_SDK")
+endif()
+
+set(SOURCE_PATH ${CURRENT_BUILDTREES_DIR}/src)
+
+file(
+	COPY
+		${STEAMWORKS_SDK}/sdk/public
+		${CMAKE_CURRENT_LIST_DIR}/cmake/CMakeLists.txt
+		${CMAKE_CURRENT_LIST_DIR}/cmake/config.cmake.in
+	DESTINATION
+		${SOURCE_PATH}
 )
 
-vcpkg_extract_source_archive_ex(
-	OUT_SOURCE_PATH SOURCE_PATH
-	ARCHIVE "${ARCHIVE}"
-	REF ${REF}
+configure_file(
+	${CMAKE_CURRENT_LIST_DIR}/cmake/version.cmake.in
+	${SOURCE_PATH}/version.cmake
+	@ONLY
 )
-
-file(COPY ${CMAKE_CURRENT_LIST_DIR}/cmake/CMakeLists.txt DESTINATION ${SOURCE_PATH})
-file(COPY ${CMAKE_CURRENT_LIST_DIR}/cmake/config.cmake.in DESTINATION ${SOURCE_PATH})
 
 vcpkg_cmake_configure(SOURCE_PATH ${SOURCE_PATH})
 vcpkg_cmake_install()
@@ -28,4 +36,4 @@ vcpkg_cmake_config_fixup(
 
 file(REMOVE_RECURSE ${CURRENT_PACKAGES_DIR}/debug/include)
 
-file(INSTALL ${SOURCE_PATH}/Readme.txt DESTINATION ${CURRENT_PACKAGES_DIR}/share/${PORT} RENAME copyright)
+file(INSTALL ${STEAMWORKS_SDK}/sdk/Readme.txt DESTINATION ${CURRENT_PACKAGES_DIR}/share/${PORT} RENAME copyright)
