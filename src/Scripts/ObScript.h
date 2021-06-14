@@ -1,14 +1,16 @@
 #pragma once
 
-#include "Scripts/ObScript/BetaComment.h"
-#include "Scripts/ObScript/GetBaseObject.h"
-#include "Scripts/ObScript/QuitGame.h"
+#include "ObScript/BetaComment.h"
+#include "ObScript/FreePlayer.h"
+#include "ObScript/GetBaseObject.h"
+#include "ObScript/QuitGame.h"
 
 namespace ObScript
 {
 	void Install()
 	{
 		ObScript::BetaComment::Install();
+		ObScript::FreePlayer::Install();
 		ObScript::GetBaseObject::Install();
 		ObScript::QuitGame::Install();
 	}
