@@ -23,7 +23,7 @@ public:
 			}
 		}
 
-		logger::debug("Steam overlay is disabled, or _utils is null");
+		logger::debug("Steam overlay is disabled, or _utils is null"sv);
 		if (a_fallbackToBrowser)
 		{
 			OpenURLInBrowser(a_URL);

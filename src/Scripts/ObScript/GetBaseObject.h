@@ -55,7 +55,7 @@ namespace ObScript
 				return true;
 			}
 
-			auto result = fmt::format("GetBaseObject >> {:08X}\n"s, base->formID);
+			auto result = fmt::format(FMT_STRING("GetBaseObject >> {:08X}\n"), base->formID);
 			RE::ConsoleLog::GetSingleton()->AddString(result.c_str());
 			return true;
 		}

@@ -1,5 +1,19 @@
-set(sources ${sources}
-	src/main.cpp
+set(SOURCES
+	src/Events/EventHandlers.h
+	src/Forms/Forms.h
 	src/PCH.cpp
+	src/PCH.h
+	src/Scripts/ObScript.h
+	src/Scripts/ObScript/BetaComment.h
+	src/Scripts/ObScript/FreePlayer.h
+	src/Scripts/ObScript/GetBaseObject.h
+	src/Scripts/ObScript/GetDefaultObject.h
+	src/Scripts/ObScript/QuitGame.h
+	src/Scripts/Papyrus.h
+	src/Scripts/Papyrus/BakaUtil.h
+	src/Scripts/Papyrus/StringUtil.h
+	src/Settings.h
 	src/SteamAPI/SteamAPI.cpp
+	src/SteamAPI/SteamAPI.h
+	src/main.cpp
 )

@@ -113,7 +113,7 @@ namespace EventHandlers
 		{
 			if (a_event.opening && a_event.menuName == "HUDMenu")
 			{
-				logger::debug("Registering late event sinks.");
+				logger::debug("Registering late event sinks."sv);
 				RE::CurrentRadiationSourceCount::GetEventSource()->RegisterSink(new CurrentRadiationSourceCountHandler());
 				RE::PipboyLightEvent::GetEventSource()->RegisterSink(new PipboyLightEventHandler());
 			}
@@ -124,7 +124,7 @@ namespace EventHandlers
 
 	void Register()
 	{
-		logger::debug("Registering EventHandlers.");
+		logger::debug("Registering EventHandlers."sv);
 		RE::TESContainerChangedEvent::GetEventSource()->RegisterSink(new TESContainerChangedEventHandler());
 		RE::UI::GetSingleton()->BSTEventSource<RE::MenuOpenCloseEvent>::RegisterSink(new MenuOpenCloseEventHandler());
 	}

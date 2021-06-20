@@ -11,7 +11,7 @@ void SteamAPI::Init()
 	auto handle = GetModuleHandle(L"steam_api64");
 	if (handle == NULL)
 	{
-		logger::error("steam_api64 handle is null");
+		logger::error("steam_api64 handle is null"sv);
 		return;
 	}
 
@@ -22,7 +22,7 @@ void SteamAPI::Init()
 		if (func != NULL)
 		{
 			_friends = func();
-			logger::debug("Stored SteamAPI::_friends");
+			logger::debug("Stored SteamAPI::_friends"sv);
 		}
 	}
 
@@ -33,7 +33,7 @@ void SteamAPI::Init()
 		if (func != NULL)
 		{
 			_utils = func();
-			logger::debug("Stored SteamAPI::_utils");
+			logger::debug("Stored SteamAPI::_utils"sv);
 		}
 	}
 }

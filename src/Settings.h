@@ -11,7 +11,8 @@ public:
 	{
 		try
 		{
-			const auto table = toml::parse_file("Data/F4SE/Plugins/BakaFramework.toml"s);
+			const auto table = toml::parse_file(
+				fmt::format(FMT_STRING("Data/F4SE/Plugins/{}.toml"), Version::PROJECT));
 			for (const auto& setting : ISetting::get_settings())
 			{
 				setting->load(table);

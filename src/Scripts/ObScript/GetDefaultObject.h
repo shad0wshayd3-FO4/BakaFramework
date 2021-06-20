@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 namespace ObScript
 {
@@ -77,14 +77,18 @@ namespace ObScript
 			{
 				if (auto dfob = form->As<RE::BGSDefaultObject>(); dfob)
 				{
-					auto resultText = fmt::format("GetDefaultObject ({:s}) >> 0x{:08X}\n"s,
-						dfob->formEditorID.c_str(), dfob->form ? dfob->form->formID : 0);
+					auto resultText = fmt::format(
+						FMT_STRING("GetDefaultObject ({:s}) >> 0x{:08X}\n"),
+						dfob->formEditorID.c_str(),
+						dfob->form ? dfob->form->formID : 0);
 					RE::ConsoleLog::GetSingleton()->AddString(resultText.c_str());
 					return true;
 				}
 			}
 
-			auto resultText = fmt::format("GetDefaultObject ({:s}) >> Does not exist.\n"s, dfobName.data());
+			auto resultText = fmt::format(
+				FMT_STRING("GetDefaultObject ({:s}) >> Does not exist.\n"),
+				dfobName.data());
 			RE::ConsoleLog::GetSingleton()->AddString(resultText.c_str());
 			return true;
 		}

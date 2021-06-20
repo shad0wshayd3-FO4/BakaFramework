@@ -10,10 +10,10 @@
 #include <string_view>
 #include <vector>
 
-#include <spdlog/sinks/basic_file_sink.h>
-#include <fmt/format.h>
-#include <fmt/chrono.h>
 #include <AutoTOML.hpp>
+#include <fmt/chrono.h>
+#include <fmt/format.h>
+#include <spdlog/sinks/basic_file_sink.h>
 #pragma warning(pop)
 
 #define DLLEXPORT __declspec(dllexport)
@@ -46,4 +46,5 @@ namespace stl
 using namespace std::literals;
 
 #include "version.h"
+
 #include "Settings.h"

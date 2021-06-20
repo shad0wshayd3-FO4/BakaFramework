@@ -12,46 +12,46 @@ void F4SEMessageHandler(F4SE::MessagingInterface::Message* a_msg)
 
 	switch (a_msg->type)
 	{
-	case F4SE::MessagingInterface::kPostLoad:
-		{
-			logger::debug("PostLoad"sv);
-			break;
-		}
-
-	case F4SE::MessagingInterface::kPostPostLoad:
-		{
-			logger::debug("PostPostLoad"sv);
-			break;
-		}
-
-	case F4SE::MessagingInterface::kGameLoaded:
-		{
-			logger::debug("GameLoaded"sv);
-			break;
-		}
-
-	case F4SE::MessagingInterface::kGameDataReady:
-		{
-			if (static_cast<bool>(a_msg->data))
+		case F4SE::MessagingInterface::kPostLoad:
 			{
-				logger::debug("GameDataReady - Loaded"sv);
-
-				// Register for events
-				EventHandlers::Register();
-
-				// SteamAPI - hook the init function and call it then?
-				SteamAPI::Init();
-			}
-			else
-			{
-				logger::debug("GameDataReady - Unloaded"sv);
+				logger::debug("PostLoad"sv);
+				break;
 			}
 
-			break;
-		}
+		case F4SE::MessagingInterface::kPostPostLoad:
+			{
+				logger::debug("PostPostLoad"sv);
+				break;
+			}
 
-	default:
-		break;
+		case F4SE::MessagingInterface::kGameLoaded:
+			{
+				logger::debug("GameLoaded"sv);
+				break;
+			}
+
+		case F4SE::MessagingInterface::kGameDataReady:
+			{
+				if (static_cast<bool>(a_msg->data))
+				{
+					logger::debug("GameDataReady - Loaded"sv);
+
+					// Register for events
+					EventHandlers::Register();
+
+					// SteamAPI - hook the init function and call it then?
+					SteamAPI::Init();
+				}
+				else
+				{
+					logger::debug("GameDataReady - Unloaded"sv);
+				}
+
+				break;
+			}
+
+		default:
+			break;
 	}
 }
 
@@ -64,7 +64,7 @@ extern "C" DLLEXPORT bool F4SEAPI F4SEPlugin_Query(const F4SE::QueryInterface* a
 		return false;
 	}
 
-	*logPath /= "BakaFramework.log"sv;
+	*logPath /= fmt::format(FMT_STRING("{}.log"), Version::PROJECT);
 	auto logSink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(logPath->string(), true);
 	auto log = std::make_shared<spdlog::logger>("plugin_log"s, std::move(logSink));
 
@@ -89,12 +89,12 @@ extern "C" DLLEXPORT bool F4SEAPI F4SEPlugin_Query(const F4SE::QueryInterface* a
 	}
 
 	// Initial messages
-	logger::info("BakaFramework log opened."sv);
+	logger::info(FMT_STRING("{} v{} log opened."), Version::PROJECT, Version::NAME);
 	logger::debug("Debug logging enabled."sv);
 
 	// Initialize PluginInfo
 	a_info->infoVersion = F4SE::PluginInfo::kVersion;
-	a_info->name = "BakaFramework";
+	a_info->name = Version::PROJECT.data();
 	a_info->version = Version::MAJOR;
 
 	// Check if we're being loaded in the CK.
@@ -108,7 +108,7 @@ extern "C" DLLEXPORT bool F4SEAPI F4SEPlugin_Query(const F4SE::QueryInterface* a
 	const auto ver = a_F4SE->RuntimeVersion();
 	if (ver < F4SE::RUNTIME_1_10_163)
 	{
-		logger::critical("Unsupported runtime v{}, marking as incompatible."sv, ver.string());
+		logger::critical(FMT_STRING("Unsupported runtime v{}, marking as incompatible."), ver.string());
 		return false;
 	}
 
