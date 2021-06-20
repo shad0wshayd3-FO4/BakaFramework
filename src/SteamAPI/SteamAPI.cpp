@@ -1,4 +1,4 @@
-﻿#include "SteamAPI.h"
+#include "SteamAPI.h"
 #include <windows.h>
 
 void SteamAPI::OpenURLInBrowser(const char* a_URL)

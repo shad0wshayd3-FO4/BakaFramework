@@ -46,5 +46,4 @@ namespace stl
 using namespace std::literals;
 
 #include "version.h"
-
 #include "Settings.h"

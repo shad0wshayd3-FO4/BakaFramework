@@ -38,7 +38,8 @@ namespace ObScript
 		}
 
 	private:
-		static bool Execute(const RE::SCRIPT_PARAMETER* a_parameters,
+		static bool Execute(
+			const RE::SCRIPT_PARAMETER* a_parameters,
 			const char* a_compiledParams,
 			RE::TESObjectREFR* a_refObject,
 			RE::TESObjectREFR* a_container,
@@ -76,7 +77,7 @@ namespace ObScript
 			m_refr = a_refObject;
 			if (!m_refr)
 			{
-				RE::ConsoleLog::GetSingleton()->AddString("Using Player for BetaComment.");
+				RE::ConsoleLog::GetSingleton()->AddString("Using Player for BetaComment.\n");
 				m_refr = RE::PlayerCharacter::GetSingleton();
 			}
 

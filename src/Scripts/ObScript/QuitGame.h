@@ -33,7 +33,7 @@ namespace ObScript
 	private:
 		static bool Execute(const RE::SCRIPT_PARAMETER*, const char*, RE::TESObjectREFR*, RE::TESObjectREFR*, RE::Script*, RE::ScriptLocals*, float&, std::uint32_t&)
 		{
-			RE::ConsoleLog::GetSingleton()->AddString("Bye.");
+			RE::ConsoleLog::GetSingleton()->AddString("Bye.\n");
 			std::thread([&]()
 				{
 					std::this_thread::sleep_for(std::chrono::milliseconds(50));

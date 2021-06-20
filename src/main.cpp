@@ -82,13 +82,15 @@ extern "C" DLLEXPORT bool F4SEAPI F4SEPlugin_Query(const F4SE::QueryInterface* a
 #endif
 	{
 		spdlog::set_level(spdlog::level::debug);
-		logger::debug("{} log opened."s, "BakaFramework"sv);
 	}
 	else
 	{
 		spdlog::set_level(spdlog::level::info);
-		logger::info("{} log opened."s, "BakaFramework"sv);
 	}
+
+	// Initial messages
+	logger::info("BakaFramework log opened."sv);
+	logger::debug("Debug logging enabled."sv);
 
 	// Initialize PluginInfo
 	a_info->infoVersion = F4SE::PluginInfo::kVersion;
