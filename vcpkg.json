@@ -1,17 +1,16 @@
 {
   "name": "bakaframework",
-  "version-string": "1.3.0",
+  "version-string": "1.4.0",
   "description": "F4SE plugin using CommonLibF4.",
   "homepage": "https://github.com/shad0wshayd3/BakaFramework",
   "license": "MIT",
   "dependencies": [
     "autotoml",
-    "boost-iostreams",
-    "boost-iterator",
-    "boost-predef",
     "boost-stl-interfaces",
+    "fmt",
+    "mmio",
     "spdlog",
     "steamworks-sdk",
-    "tomlplusplus"
+    "xbyak"
   ]
 }
