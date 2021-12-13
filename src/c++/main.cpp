@@ -1,11 +1,10 @@
 #include "Events/EventHandlers.h"
 #include "Scripts/ObScript.h"
 #include "Scripts/Papyrus.h"
-#include "SteamAPI/SteamAPI.h"
 
 namespace
 {
-	void F4SEMessageHandler(F4SE::MessagingInterface::Message* a_msg)
+	void MessageHandler(F4SE::MessagingInterface::Message* a_msg)
 	{
 		if (!a_msg)
 		{
@@ -39,10 +38,7 @@ namespace
 						logger::debug("GameDataReady - Loaded"sv);
 
 						// Register for events
-						EventHandlers::Register();
-
-						// SteamAPI - hook the init function and call it then?
-						SteamAPI::Init();
+						EventHandlers::RegisterOnInit();
 					}
 					else
 					{
@@ -116,7 +112,7 @@ extern "C" DLLEXPORT bool F4SEAPI F4SEPlugin_Load(const F4SE::LoadInterface* a_F
 	F4SE::AllocTrampoline(1 << 5);
 
 	const auto messaging = F4SE::GetMessagingInterface();
-	if (!messaging || !messaging->RegisterListener(F4SEMessageHandler))
+	if (!messaging || !messaging->RegisterListener(MessageHandler))
 	{
 		logger::critical("Failed to get F4SE messaging interface, marking as incompatible."sv);
 		return false;

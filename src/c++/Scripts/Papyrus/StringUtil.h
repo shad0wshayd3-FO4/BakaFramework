@@ -4,6 +4,8 @@ namespace Papyrus
 {
 	namespace StringUtil
 	{
+		constexpr auto SCRIPT_NAME = "StringUtil"sv;
+
 		std::int32_t GetLength(std::monostate, std::string_view a_string)
 		{
 			return static_cast<std::int32_t>(a_string.length());

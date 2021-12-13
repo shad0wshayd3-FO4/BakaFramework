@@ -1,39 +1,57 @@
 #include "SteamAPI.h"
+
+#include <steam/steam_api.h>
 #include <windows.h>
 
-void SteamAPI::OpenURLInBrowser(const char* a_URL)
+namespace SteamAPI
 {
-	ShellExecuteA(NULL, NULL, a_URL, NULL, NULL, SW_MAXIMIZE);
-}
-
-void SteamAPI::Init()
-{
-	auto handle = GetModuleHandleW(L"steam_api64");
-	if (handle == NULL)
+	namespace detail
 	{
-		logger::error("steam_api64 handle is null"sv);
-		return;
-	}
-
-	// SteamFriends
-	{
-		using func_t = ISteamFriends* (*)();
-		auto func = (func_t)GetProcAddress(handle, "SteamFriends");
-		if (func != NULL)
+		ISteamFriends* SteamFriends()
 		{
-			_friends = func();
-			logger::debug("Stored SteamAPI::_friends"sv);
+			auto handle = GetModuleHandleW(L"steam_api64");
+			if (handle == NULL)
+			{
+				return nullptr;
+			}
+
+			using func_t = decltype(&::SteamFriends);
+			auto func =
+				reinterpret_cast<func_t>(GetProcAddress(handle, "SteamFriends"));
+			return (func != NULL) ? func() : nullptr;
+		}
+
+		ISteamUtils* SteamUtils()
+		{
+			auto handle = GetModuleHandleW(L"steam_api64");
+			if (handle == NULL)
+			{
+				return nullptr;
+			}
+
+			using func_t = decltype(&::SteamUtils);
+			auto func =
+				reinterpret_cast<func_t>(GetProcAddress(handle, "SteamUtils"));
+			return (func != NULL) ? func() : nullptr;
 		}
 	}
 
-	// SteamUtils
+	void OpenWebPage(const char* a_url, bool a_fallback)
 	{
-		using func_t = ISteamUtils* (*)();
-		auto func = (func_t)GetProcAddress(handle, "SteamUtils");
-		if (func != NULL)
+		auto utils = detail::SteamUtils();
+		if (utils && utils->IsOverlayEnabled())
 		{
-			_utils = func();
-			logger::debug("Stored SteamAPI::_utils"sv);
+			auto friends = detail::SteamFriends();
+			if (friends)
+			{
+				friends->ActivateGameOverlayToWebPage(a_url);
+			}
+		}
+
+		if (a_fallback)
+		{
+			logger::debug("Overlay is disabled.");
+			ShellExecuteA(NULL, NULL, a_url, NULL, NULL, SW_MAXIMIZE);
 		}
 	}
 }

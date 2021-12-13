@@ -40,14 +40,18 @@ namespace EventHandlers
 		public RE::BSTValueEventSink<RE::CurrentRadiationSourceCount>
 	{
 	public:
-		virtual ~CurrentRadiationSourceCountHandler() = default;
+		[[nodiscard]] static CurrentRadiationSourceCountHandler* GetSingleton()
+		{
+			static CurrentRadiationSourceCountHandler singleton;
+			return std::addressof(singleton);
+		}
 
 		virtual RE::BSEventNotifyControl ProcessEvent(const RE::CurrentRadiationSourceCount& a_event, RE::BSTEventSource<RE::CurrentRadiationSourceCount>*) override
 		{
 			RE::BSAutoLock{ dataLock };
 			if (auto radiationSourceCount = Forms::RadiationSourceCount_DO->GetForm<RE::ActorValueInfo>(); radiationSourceCount)
 			{
-				auto value = static_cast<float>(a_event.optionalValue.value_or(0));
+				auto value = static_cast<float>(a_event.optionalValue.value_or(0.0f));
 				RE::PlayerCharacter::GetSingleton()
 					->SetBaseActorValue(*radiationSourceCount, value);
 			}
@@ -61,7 +65,11 @@ namespace EventHandlers
 		public RE::BSTValueEventSink<RE::PipboyLightEvent>
 	{
 	public:
-		virtual ~PipboyLightEventHandler() = default;
+		[[nodiscard]] static PipboyLightEventHandler* GetSingleton()
+		{
+			static PipboyLightEventHandler singleton;
+			return std::addressof(singleton);
+		}
 
 		virtual RE::BSEventNotifyControl ProcessEvent(const RE::PipboyLightEvent& a_event, RE::BSTEventSource<RE::PipboyLightEvent>*) override
 		{
@@ -82,7 +90,11 @@ namespace EventHandlers
 		public RE::BSTEventSink<RE::TESContainerChangedEvent>
 	{
 	public:
-		virtual ~TESContainerChangedEventHandler() = default;
+		[[nodiscard]] static TESContainerChangedEventHandler* GetSingleton()
+		{
+			static TESContainerChangedEventHandler singleton;
+			return std::addressof(singleton);
+		}
 
 		virtual RE::BSEventNotifyControl ProcessEvent(const RE::TESContainerChangedEvent& a_event, RE::BSTEventSource<RE::TESContainerChangedEvent>*) override
 		{
@@ -102,30 +114,11 @@ namespace EventHandlers
 		}
 	};
 
-	// Used to register some globals that we can't register at game start time
-	class MenuOpenCloseEventHandler :
-		public RE::BSTEventSink<RE::MenuOpenCloseEvent>
+	void RegisterOnInit()
 	{
-	public:
-		virtual ~MenuOpenCloseEventHandler() = default;
-
-		virtual RE::BSEventNotifyControl ProcessEvent(const RE::MenuOpenCloseEvent& a_event, RE::BSTEventSource<RE::MenuOpenCloseEvent>*) override
-		{
-			if (a_event.opening && a_event.menuName == "HUDMenu")
-			{
-				logger::debug("Registering late event sinks."sv);
-				RE::CurrentRadiationSourceCount::GetEventSource()->RegisterSink(new CurrentRadiationSourceCountHandler());
-				RE::PipboyLightEvent::GetEventSource()->RegisterSink(new PipboyLightEventHandler());
-			}
-
-			return RE::BSEventNotifyControl::kContinue;
-		}
-	};
-
-	void Register()
-	{
-		logger::debug("Registering EventHandlers."sv);
-		RE::TESContainerChangedEvent::GetEventSource()->RegisterSink(new TESContainerChangedEventHandler());
-		RE::UI::GetSingleton()->BSTEventSource<RE::MenuOpenCloseEvent>::RegisterSink(new MenuOpenCloseEventHandler());
+		logger::debug("Registering InitGame EventHandlers."sv);
+		RE::CurrentRadiationSourceCount::GetEventSource()->RegisterSink(CurrentRadiationSourceCountHandler::GetSingleton());
+		RE::PipboyLightEvent::GetEventSource()->RegisterSink(PipboyLightEventHandler::GetSingleton());
+		RE::TESContainerChangedEvent::GetEventSource()->RegisterSink(TESContainerChangedEventHandler::GetSingleton());
 	}
 }

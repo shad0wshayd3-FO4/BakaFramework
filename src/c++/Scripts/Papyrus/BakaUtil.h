@@ -1,9 +1,13 @@
 #pragma once
 
+#include "SteamAPI/SteamAPI.h"
+
 namespace Papyrus
 {
 	namespace BakaUtil
 	{
+		constexpr auto SCRIPT_NAME = "BakaUtil"sv;
+
 		std::vector<RE::TESObjectREFR*> FilterReferencesByKeywords(std::monostate, std::vector<RE::TESObjectREFR*> a_refrs, std::vector<RE::BGSKeyword*> a_kywds, bool a_whitelist)
 		{
 			std::vector<RE::TESObjectREFR*> result;
@@ -37,12 +41,9 @@ namespace Papyrus
 			return result;
 		}
 
-		void RegisterForPipboyLightEvent([[maybe_unused]] RE::BSScript::Object& a_object)
+		void OpenWebPage(std::monostate, std::string_view a_url, bool a_fallback)
 		{
-		}
-
-		void UnregisterForPipboyLightEvent([[maybe_unused]] RE::BSScript::Object& a_object)
-		{
+			SteamAPI::OpenWebPage(a_url.data(), a_fallback);
 		}
 	}
 }
