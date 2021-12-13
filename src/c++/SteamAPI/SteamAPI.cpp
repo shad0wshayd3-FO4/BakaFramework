@@ -8,7 +8,7 @@ void SteamAPI::OpenURLInBrowser(const char* a_URL)
 
 void SteamAPI::Init()
 {
-	auto handle = GetModuleHandle(L"steam_api64");
+	auto handle = GetModuleHandleW(L"steam_api64");
 	if (handle == NULL)
 	{
 		logger::error("steam_api64 handle is null"sv);

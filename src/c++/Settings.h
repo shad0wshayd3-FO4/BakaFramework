@@ -12,7 +12,7 @@ public:
 		try
 		{
 			const auto table = toml::parse_file(
-				fmt::format(FMT_STRING("Data/F4SE/Plugins/{}.toml"), Version::PROJECT));
+				fmt::format(FMT_STRING("Data/F4SE/Plugins/{}.toml"), Plugin::NAME));
 			for (const auto& setting : ISetting::get_settings())
 			{
 				setting->load(table);

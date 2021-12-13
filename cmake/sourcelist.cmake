@@ -1,19 +1,19 @@
-set(SOURCES
-	src/Events/EventHandlers.h
-	src/Forms/Forms.h
-	src/PCH.cpp
-	src/PCH.h
-	src/Scripts/ObScript.h
-	src/Scripts/ObScript/BetaComment.h
-	src/Scripts/ObScript/FreePlayer.h
-	src/Scripts/ObScript/GetBaseObject.h
-	src/Scripts/ObScript/GetDefaultObject.h
-	src/Scripts/ObScript/QuitGame.h
-	src/Scripts/Papyrus.h
-	src/Scripts/Papyrus/BakaUtil.h
-	src/Scripts/Papyrus/StringUtil.h
-	src/Settings.h
-	src/SteamAPI/SteamAPI.cpp
-	src/SteamAPI/SteamAPI.h
-	src/main.cpp
+set(SOURCE_FILES
+	${ROOT_DIR}/src/c++/Events/EventHandlers.h
+	${ROOT_DIR}/src/c++/Forms/Forms.h
+	${ROOT_DIR}/src/c++/PCH.cpp
+	${ROOT_DIR}/src/c++/PCH.h
+	${ROOT_DIR}/src/c++/Scripts/ObScript.h
+	${ROOT_DIR}/src/c++/Scripts/ObScript/BetaComment.h
+	${ROOT_DIR}/src/c++/Scripts/ObScript/FreePlayer.h
+	${ROOT_DIR}/src/c++/Scripts/ObScript/GetBaseObject.h
+	${ROOT_DIR}/src/c++/Scripts/ObScript/GetDefaultObject.h
+	${ROOT_DIR}/src/c++/Scripts/ObScript/QuitGame.h
+	${ROOT_DIR}/src/c++/Scripts/Papyrus.h
+	${ROOT_DIR}/src/c++/Scripts/Papyrus/BakaUtil.h
+	${ROOT_DIR}/src/c++/Scripts/Papyrus/StringUtil.h
+	${ROOT_DIR}/src/c++/Settings.h
+	${ROOT_DIR}/src/c++/SteamAPI/SteamAPI.cpp
+	${ROOT_DIR}/src/c++/SteamAPI/SteamAPI.h
+	${ROOT_DIR}/src/c++/main.cpp
 )

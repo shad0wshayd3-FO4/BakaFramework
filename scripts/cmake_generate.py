@@ -24,15 +24,15 @@ def make_cmake(a_directories):
 	sources.sort()
 
 	out = open(os.path.join("cmake", "sourcelist.cmake"), "w")
-	out.write("set(SOURCES\n")
+	out.write("set(SOURCE_FILES\n")
 	for source in sources:
-		out.write("\t{}\n".format(source))
+		out.write("\t${{ROOT_DIR}}/{}\n".format(source))
 	out.write(")\n")
 
 def main():
 	cur = os.path.dirname(os.path.realpath(__file__))
 	os.chdir(cur + "/..")
-	make_cmake([ "src" ])
+	make_cmake([ "src/c++" ])
 
 if __name__ == "__main__":
 	main()

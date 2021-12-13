@@ -26,7 +26,7 @@
         },
         "VCPKG_OVERLAY_PORTS": {
           "type": "STRING",
-          "value": "${sourceDir}/cmake/ports/;${sourceDir}/extern/CommonLibF4/cmake/ports/"
+          "value": "${sourceDir}/cmake/ports/;${sourceDir}/external/CommonLibF4/cmake/ports/"
         },
         "VCPKG_OVERLAY_TRIPLETS": {
           "type": "STRING",
