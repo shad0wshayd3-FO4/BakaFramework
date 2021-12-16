@@ -35,7 +35,7 @@ macro(papyrus_target TARGET)
 			"$<TARGET_FILE:Python3::Interpreter>"
 			"${SCRIPT}"
 			"--bin-dir=${CMAKE_CURRENT_BINARY_DIR}"
-			"--sse-dir=${Skyrim64Path}"
+			"--fo4-dir=${Fallout4Path}"
 			"--src-dir=${ROOT_DIR}"
 			"--target=${TARGET}"
 		COMMAND
@@ -57,16 +57,14 @@ macro(papyrus_target TARGET)
 	unset(_PREFIX)
 endmacro()
 
-cmake_path(SET VANILLA_ARCHIVE NORMALIZE "${Skyrim64Path}/Data/Scripts.zip")
+cmake_path(SET VANILLA_ARCHIVE NORMALIZE "${Fallout4Path}/Data/Scripts/Source/Base/Base.zip")
 papyrus_target(
 	"copy_vanilla"
 	DEPENDS
 		"${VANILLA_ARCHIVE}"
 )
 
-set(SOURCE_FILES
-	"placeholder"
-)
+include("${ROOT_DIR}/cmake/sourcelist_papyrus.cmake")
 
 set(PAPYRUS_COMPILE_IN ${SOURCE_FILES})
 list(TRANSFORM PAPYRUS_COMPILE_IN PREPEND "${ROOT_DIR}/src/papyrus/")
@@ -93,7 +91,7 @@ if("${COPY_OUTPUT}")
 		add_custom_command(
 			TARGET "papyrus_compile"
 			POST_BUILD
-			COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${FILE}" "${Skyrim64Path}/Data/Scripts/"
+			COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${FILE}" "${Fallout4Path}/Data/Scripts/"
 			VERBATIM
 		)
 	endforeach()
@@ -102,7 +100,7 @@ if("${COPY_OUTPUT}")
 		add_custom_command(
 			TARGET "papyrus_compile"
 			POST_BUILD
-			COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${FILE}" "${Skyrim64Path}/Data/Source/Scripts/"
+			COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${FILE}" "${Fallout4Path}/Data/Scripts/Source/User/"
 			VERBATIM
 		)
 	endforeach()
