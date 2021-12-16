@@ -1,4 +1,5 @@
-#include "Events/EventHandlers.h"
+#include "Events/Events.h"
+#include "Forms/Forms.h"
 #include "Scripts/ObScript.h"
 #include "Scripts/Papyrus.h"
 
@@ -36,9 +37,7 @@ namespace
 					if (static_cast<bool>(a_msg->data))
 					{
 						logger::debug("GameDataReady - Loaded"sv);
-
-						// Register for events
-						EventHandlers::RegisterOnInit();
+						Events::Register();
 					}
 					else
 					{
@@ -126,7 +125,6 @@ extern "C" DLLEXPORT bool F4SEAPI F4SEPlugin_Load(const F4SE::LoadInterface* a_F
 	}
 
 	Forms::InstallHooks();
-
 	ObScript::Install();
 
 	logger::info("Plugin loaded successfully."sv);
