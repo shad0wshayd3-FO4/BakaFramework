@@ -2,6 +2,7 @@
 #include "Forms/Forms.h"
 #include "Scripts/ObScript.h"
 #include "Scripts/Papyrus.h"
+#include "Serialization/Serialization.h"
 
 namespace
 {
@@ -109,6 +110,8 @@ extern "C" DLLEXPORT bool F4SEAPI F4SEPlugin_Load(const F4SE::LoadInterface* a_F
 
 	F4SE::Init(a_F4SE);
 	F4SE::AllocTrampoline(1 << 5);
+
+	Serialization::Register();
 
 	const auto messaging = F4SE::GetMessagingInterface();
 	if (!messaging || !messaging->RegisterListener(MessageHandler))

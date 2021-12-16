@@ -14,7 +14,11 @@ set(SOURCE_FILES
 	${ROOT_DIR}/src/c++/Scripts/ObScript/QuitGame.h
 	${ROOT_DIR}/src/c++/Scripts/Papyrus.h
 	${ROOT_DIR}/src/c++/Scripts/Papyrus/BakaUtil.h
+	${ROOT_DIR}/src/c++/Scripts/Papyrus/ScriptObject.h
+	${ROOT_DIR}/src/c++/Scripts/Papyrus/Shared/RegistrationMap.cpp
+	${ROOT_DIR}/src/c++/Scripts/Papyrus/Shared/RegistrationMap.h
 	${ROOT_DIR}/src/c++/Scripts/Papyrus/StringUtil.h
+	${ROOT_DIR}/src/c++/Serialization/Serialization.h
 	${ROOT_DIR}/src/c++/Settings.h
 	${ROOT_DIR}/src/c++/SteamAPI/SteamAPI.cpp
 	${ROOT_DIR}/src/c++/SteamAPI/SteamAPI.h

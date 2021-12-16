@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Papyrus/BakaUtil.h"
-//#include "Papyrus/ScriptObject.h"
+#include "Papyrus/ScriptObject.h"
 #include "Papyrus/StringUtil.h"
 
 namespace Papyrus
@@ -12,10 +12,10 @@ namespace Papyrus
 		a_VM->BindNativeMethod(BakaUtil::SCRIPT_NAME, "FilterReferencesByKeywords", BakaUtil::FilterReferencesByKeywords, true);
 		a_VM->BindNativeMethod(BakaUtil::SCRIPT_NAME, "OpenWebPage", BakaUtil::OpenWebPage, true);
 
-		/*
-		a_VM->BindNativeMethod(ScriptObject::SCRIPT_NAME, "RegisterForPipboyLightEvent", ScriptObject::RegisterForPipboyLightEvent);
-		a_VM->BindNativeMethod(ScriptObject::SCRIPT_NAME, "UnregisterForPipboyLightEvent", ScriptObject::UnregisterForPipboyLightEvent);
-		*/
+		// ScriptObject
+		a_VM->BindNativeMethod(ScriptObject::SCRIPT_NAME, "RegisterForPipboyLightEvent", ScriptObject::RegisterForPipboyLightEvent, true);
+		a_VM->BindNativeMethod(ScriptObject::SCRIPT_NAME, "UnregisterForPipboyLightEvent", ScriptObject::UnregisterForPipboyLightEvent, true);
+		RE::PipboyLightEvent::GetEventSource()->RegisterSink(ScriptObject::PipboyLightEventHandler::GetSingleton());
 
 		// StringUtil
 		a_VM->BindNativeMethod(StringUtil::SCRIPT_NAME, "GetLength", StringUtil::GetLength, true);
