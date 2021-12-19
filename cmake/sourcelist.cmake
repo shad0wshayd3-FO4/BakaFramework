@@ -1,6 +1,7 @@
 set(SOURCE_FILES
 	${ROOT_DIR}/src/c++/Events/Events.h
 	${ROOT_DIR}/src/c++/Events/Handlers/CurrentRadiationSource.h
+	${ROOT_DIR}/src/c++/Events/Handlers/ItemCrafted.h
 	${ROOT_DIR}/src/c++/Events/Handlers/PipboyLightEvent.h
 	${ROOT_DIR}/src/c++/Events/Handlers/TESContainerChanged.h
 	${ROOT_DIR}/src/c++/Forms/Forms.h
