@@ -1,19 +1,23 @@
 #pragma once
 
-class Settings
+namespace Settings
 {
-public:
-	using ISetting = AutoTOML::ISetting;
-	using bSetting = AutoTOML::bSetting;
-	using sSetting = AutoTOML::sSetting;
+	namespace General
+	{
+		inline AutoTOML::bSetting EnableDebugLogging{ "General"s, "EnableDebugLogging"s, false };
+	}
 
-	static void Load()
+	namespace Config
+	{
+		inline AutoTOML::sSetting BetaCommentFileName{ "Config"s, "BetaCommentFileName"s, "BetaComment.txt"s };
+	}
+
+	inline void Load()
 	{
 		try
 		{
-			const auto table = toml::parse_file(
-				fmt::format(FMT_STRING("Data/F4SE/Plugins/{}.toml"), Plugin::NAME));
-			for (const auto& setting : ISetting::get_settings())
+			const auto table = toml::parse_file(fmt::format(FMT_STRING("Data/F4SE/Plugins/{}.toml"), Plugin::NAME));
+			for (const auto& setting : AutoTOML::ISetting::get_settings())
 			{
 				setting->load(table);
 			}
@@ -37,17 +41,4 @@ public:
 			stl::report_and_fail("Unknown failure."sv);
 		}
 	}
-
-	static inline bSetting EnableDebugLogging{ "General"s, "EnableDebugLogging"s, false };
-	static inline sSetting BetaCommentFileName{ "Config"s, "BetaCommentFileName"s, "BetaComment.txt"s };
-
-private:
-	Settings() = delete;
-	Settings(const Settings&) = delete;
-	Settings(Settings&&) = delete;
-
-	~Settings() = delete;
-
-	Settings& operator=(const Settings&) = delete;
-	Settings& operator=(Settings&&) = delete;
-};
+}

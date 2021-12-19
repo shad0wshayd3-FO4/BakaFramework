@@ -121,7 +121,7 @@ namespace ObScript
 			line << "\"" << rawComment.data() << "\"";
 			line << "\r\n";
 
-			_file.open(*Settings::BetaCommentFileName, std::ofstream::out | std::ofstream::app);
+			_file.open(*Settings::Config::BetaCommentFileName, std::ofstream::out | std::ofstream::app);
 			_file << line.str();
 			_file.close();
 
@@ -289,7 +289,7 @@ namespace ObScript
 			{
 				std::string buf;
 				buf += "Add comment to ";
-				buf += *Settings::BetaCommentFileName;
+				buf += *Settings::Config::BetaCommentFileName;
 				buf += ". [bc \"This is clipping.\"]";
 				return buf;
 			}();

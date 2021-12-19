@@ -72,7 +72,7 @@ namespace
 		const auto level = spdlog::level::trace;
 #else
 		const auto level =
-			*Settings::EnableDebugLogging ? spdlog::level::trace : spdlog::level::info;
+			*Settings::General::EnableDebugLogging ? spdlog::level::trace : spdlog::level::info;
 #endif
 
 		auto log = std::make_shared<spdlog::logger>("global log"s, std::move(sink));
