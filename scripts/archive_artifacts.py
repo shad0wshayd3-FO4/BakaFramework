@@ -23,12 +23,16 @@ def make_rel_archive(a_name, a_args):
 			write_direct(file, "F4SE/Plugins/{}.toml".format(a_name))
 
 	if (a_args.papyrus_pex_files):
-		for file in a_args.papyrus_pex_files:
-			write(file, "Scripts")
+		for each_file in a_args.papyrus_pex_files:
+			files = each_file.split(";")
+			for file in files:
+				write(file, "Scripts")
 
 	if (a_args.papyrus_psc_files):
-		for file in a_args.papyrus_psc_files:
-			write(file, "Scripts/Source/User")
+		for each_file in a_args.papyrus_psc_files:
+			files = each_file.split(";")
+			for file in files:
+				write(file, "Scripts/Source/User")
 
 def make_dbg_archive(a_name, a_args):
 	zip = make_zipfile("{}_pdbs".format(a_name))
