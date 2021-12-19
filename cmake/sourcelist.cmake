@@ -4,6 +4,8 @@ set(SOURCE_FILES
 	${ROOT_DIR}/src/c++/Events/Handlers/PipboyLightEvent.h
 	${ROOT_DIR}/src/c++/Events/Handlers/TESContainerChanged.h
 	${ROOT_DIR}/src/c++/Forms/Forms.h
+	${ROOT_DIR}/src/c++/Misc/Patches.h
+	${ROOT_DIR}/src/c++/Misc/Patches/LoadEditorIDs.h
 	${ROOT_DIR}/src/c++/PCH.cpp
 	${ROOT_DIR}/src/c++/PCH.h
 	${ROOT_DIR}/src/c++/Scripts/ObScript.h

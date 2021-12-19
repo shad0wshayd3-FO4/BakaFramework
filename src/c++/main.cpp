@@ -1,5 +1,6 @@
 #include "Events/Events.h"
 #include "Forms/Forms.h"
+#include "Misc/Patches.h"
 #include "Scripts/ObScript.h"
 #include "Scripts/Papyrus.h"
 #include "Serialization/Serialization.h"
@@ -128,6 +129,7 @@ extern "C" DLLEXPORT bool F4SEAPI F4SEPlugin_Load(const F4SE::LoadInterface* a_F
 	}
 
 	Forms::InstallHooks();
+	Patches::Install();
 	ObScript::Install();
 
 	logger::info("Plugin loaded successfully."sv);

@@ -12,6 +12,12 @@ namespace Settings
 		inline AutoTOML::sSetting BetaCommentFileName{ "Config"s, "BetaCommentFileName"s, "BetaComment.txt"s };
 	}
 
+	namespace Patches
+	{
+		inline AutoTOML::bSetting EnableLoadingEditorIDs{ "Patches"s, "EnableLoadingEditorIDs"s, true, true };
+		inline AutoTOML::bSetting EnableEDIDConflictCheck{ "Patches"s, "EnableEditorIDConflictCheck"s, false, true };
+	}
+
 	inline void Load()
 	{
 		try
