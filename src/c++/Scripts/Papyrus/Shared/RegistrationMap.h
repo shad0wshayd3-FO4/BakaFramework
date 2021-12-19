@@ -32,7 +32,7 @@ namespace Papyrus
 				return func(a_input);
 			}
 
-			template <class T>
+			template<class T>
 			RE::BSScrapArray<RE::BSScript::Variable> GetScrapArray(std::vector<T>& a_args)
 			{
 				RE::BSScrapArray<RE::BSScript::Variable> result;
@@ -77,7 +77,7 @@ namespace Papyrus
 			RE::BSTHashMap<std::size_t, RE::BSFixedString> _events;
 		};
 
-		template <class RetnType>
+		template<class RetnType>
 		class RegistrationMap :
 			public RegistrationMapBase
 		{
@@ -99,7 +99,7 @@ namespace Papyrus
 			}
 		};
 
-		template <>
+		template<>
 		class RegistrationMap<void> :
 			public RegistrationMapBase
 		{
@@ -123,6 +123,6 @@ namespace Papyrus
 		};
 	}
 
-	template <class T>
+	template<class T>
 	using RegistrationMap = Impl::RegistrationMap<T>;
 }
