@@ -1,5 +1,6 @@
 #include "Events/Events.h"
 #include "Forms/Forms.h"
+#include "Misc/Fixes.h"
 #include "Misc/Patches.h"
 #include "Scripts/ObScript.h"
 #include "Scripts/Papyrus.h"
@@ -110,7 +111,7 @@ extern "C" DLLEXPORT bool F4SEAPI F4SEPlugin_Load(const F4SE::LoadInterface* a_F
 	logger::debug("Debug logging enabled."sv);
 
 	F4SE::Init(a_F4SE);
-	F4SE::AllocTrampoline(1 << 5);
+	F4SE::AllocTrampoline(1 << 6);
 
 	Serialization::Register();
 
@@ -129,6 +130,7 @@ extern "C" DLLEXPORT bool F4SEAPI F4SEPlugin_Load(const F4SE::LoadInterface* a_F
 	}
 
 	Forms::InstallHooks();
+	Fixes::InstallHooks();
 	Patches::Install();
 	ObScript::Install();
 
