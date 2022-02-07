@@ -313,7 +313,7 @@ namespace Workshop
 						{
 							if (!DPM->PromoteReference(a_refr, PlayerCharacter))
 							{
-								logger::warn("Failed to promote PA Frame reference.");
+								logger::warn("Failed to promote PA Frame reference."sv);
 								return false;
 							}
 						}

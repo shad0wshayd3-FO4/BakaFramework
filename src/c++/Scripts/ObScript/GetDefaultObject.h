@@ -78,7 +78,7 @@ namespace ObScript
 				if (auto dfob = form->As<RE::BGSDefaultObject>(); dfob)
 				{
 					auto resultText = fmt::format(
-						FMT_STRING("GetDefaultObject ({:s}) >> 0x{:08X}\n"),
+						FMT_STRING("GetDefaultObject ({:s}) >> 0x{:08X}\n"sv),
 						dfob->formEditorID.c_str(),
 						dfob->form ? dfob->form->formID : 0);
 					RE::ConsoleLog::GetSingleton()->AddString(resultText.c_str());
@@ -87,7 +87,7 @@ namespace ObScript
 			}
 
 			auto resultText = fmt::format(
-				FMT_STRING("GetDefaultObject ({:s}) >> Does not exist.\n"),
+				FMT_STRING("GetDefaultObject ({:s}) >> Does not exist.\n"sv),
 				dfobName.data());
 			RE::ConsoleLog::GetSingleton()->AddString(resultText.c_str());
 			return true;

@@ -4,7 +4,6 @@
   "description": "F4SE plugin using CommonLibF4.",
   "homepage": "https://github.com/shad0wshayd3/BakaFramework",
   "license": "MIT",
-  "builtin-baseline": "c06dfc0ac2649834da8b9f3092b907fb037accab",
   "dependencies": [
     "autotoml",
     "boost-stl-interfaces",
@@ -13,11 +12,5 @@
     "spdlog",
     "steamworks-sdk",
     "xbyak"
-  ],
-  "overrides": [
-    {
-      "name": "fmt",
-      "version": "8.0.1"
-    }
   ]
 }

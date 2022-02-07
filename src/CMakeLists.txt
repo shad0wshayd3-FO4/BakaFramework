@@ -1,6 +1,6 @@
 find_package(
 	Python3
-	3.9
+	3.10
 	MODULE
 	REQUIRED
 	COMPONENTS

@@ -74,7 +74,7 @@ namespace
 			stl::report_and_fail("Failed to find standard logging directory"sv);
 		}
 
-		*path /= fmt::format(FMT_STRING("{}.log"), Plugin::NAME);
+		*path /= fmt::format(FMT_STRING("{}.log"sv), Plugin::NAME);
 		auto sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(path->string(), true);
 #endif
 
