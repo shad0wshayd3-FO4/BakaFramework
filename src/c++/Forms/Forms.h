@@ -59,11 +59,9 @@ namespace Forms
 
 	void InstallHooks()
 	{
-		REL::Relocation<std::uintptr_t> target_DefaultObject{ REL::ID(1389727) };
-		REL::Relocation<std::uintptr_t> target_Setting{ REL::ID(1078413) };
-
-		auto& trampoline = F4SE::GetTrampoline();
-		trampoline.write_branch<6>(target_DefaultObject.address(), HookInitializer_DefaultObject);
-		trampoline.write_branch<5>(target_Setting.address(), HookInitializer_Setting);
+		REL::Relocation<std::uintptr_t> targetDFOB{ REL::ID(1389727) };
+		REL::Relocation<std::uintptr_t> targetGMST{ REL::ID(1078413) };
+		stl::asm_replace(targetDFOB.address(), 0x31, reinterpret_cast<std::uintptr_t>(hkDefaultObject));
+		stl::asm_replace(targetGMST.address(), 0x68, reinterpret_cast<std::uintptr_t>(hkGameSetting));
 	}
 };
