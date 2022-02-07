@@ -16,6 +16,7 @@ set(SOURCE_FILES
 	${ROOT_DIR}/src/c++/Scripts/ObScript/FreePlayer.h
 	${ROOT_DIR}/src/c++/Scripts/ObScript/GetBaseObject.h
 	${ROOT_DIR}/src/c++/Scripts/ObScript/GetDefaultObject.h
+	${ROOT_DIR}/src/c++/Scripts/ObScript/IsWorkshopPlacementActive.h
 	${ROOT_DIR}/src/c++/Scripts/ObScript/QuitGame.h
 	${ROOT_DIR}/src/c++/Scripts/Papyrus.h
 	${ROOT_DIR}/src/c++/Scripts/Papyrus/BakaUtil.h
@@ -27,5 +28,6 @@ set(SOURCE_FILES
 	${ROOT_DIR}/src/c++/Settings.h
 	${ROOT_DIR}/src/c++/SteamAPI/SteamAPI.cpp
 	${ROOT_DIR}/src/c++/SteamAPI/SteamAPI.h
+	${ROOT_DIR}/src/c++/Workshop/Workshop.h
 	${ROOT_DIR}/src/c++/main.cpp
 )

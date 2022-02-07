@@ -1,12 +1,27 @@
 #pragma once
 
 #include "SteamAPI/SteamAPI.h"
+#include "Workshop/Workshop.h"
 
 namespace Papyrus::BakaUtil
 {
 	constexpr auto SCRIPT_NAME{ "BakaUtil"sv };
 
-	std::vector<RE::TESObjectREFR*> FilterReferencesByKeywords(std::monostate, std::vector<RE::TESObjectREFR*> a_refrs, std::vector<RE::BGSKeyword*> a_kywds, bool a_whitelist)
+	bool CreatePowerArmorToken(std::monostate, RE::TESObjectREFR* a_refr)
+	{
+		return Workshop::PlacementMode::CreateToken(a_refr);
+	}
+
+	bool HandlePowerArmorToken(std::monostate, RE::TESObjectREFR* a_refr)
+	{
+		return Workshop::PlacementMode::HandleToken(a_refr);
+	}
+
+	std::vector<RE::TESObjectREFR*> FilterReferencesByKeywords(
+		std::monostate,
+		std::vector<RE::TESObjectREFR*> a_refrs,
+		std::vector<RE::BGSKeyword*> a_kywds,
+		bool a_whitelist)
 	{
 		std::vector<RE::TESObjectREFR*> result;
 		if (a_refrs.size() == 0 || a_kywds.size() == 0)

@@ -5,13 +5,16 @@ namespace Forms
 	RE::BGSDefaultObject* InventoryWeight_DO{ nullptr };
 	RE::BGSDefaultObject* PipboyLightActive_DO{ nullptr };
 	RE::BGSDefaultObject* RadiationSourceCount_DO{ nullptr };
+	RE::BGSDefaultObject* PAFrameWorkshop_DO{ nullptr };
+	RE::BGSDefaultObject* PAFrameToken_DO{ nullptr };
+	RE::BGSDefaultObject* PAFramePerk_DO{ nullptr };
 
 	namespace
 	{
 		RE::Setting fBlockMax{ "fBlockMax", 0.7f };
 		RE::BGSDefaultObject* DefaultPreviewTransform_DO{ nullptr };
 
-		std::uint32_t HookInitializer_DefaultObject()
+		std::uint32_t hkDefaultObject()
 		{
 			// Initializer override
 			DefaultPreviewTransform_DO =
@@ -36,11 +39,26 @@ namespace Forms
 					"RadiationSourceCount_DO",
 					RE::ENUM_FORM_ID::kAVIF);
 
+			PAFrameWorkshop_DO =
+				RE::DefaultObjectFormFactory::Create(
+					"PAFrameWorkshop_DO",
+					RE::ENUM_FORM_ID::kCONT);
+
+			PAFrameToken_DO =
+				RE::DefaultObjectFormFactory::Create(
+					"PAFrameToken_DO",
+					RE::ENUM_FORM_ID::kARMO);
+
+			PAFramePerk_DO =
+				RE::DefaultObjectFormFactory::Create(
+					"PAFramePerk_DO",
+					RE::ENUM_FORM_ID::kPERK);
+
 			logger::debug("Injected DefaultObjects."sv);
 			return 1;
 		}
 
-		std::uint32_t HookInitializer_Setting()
+		std::uint32_t hkGameSetting()
 		{
 			RE::GameSettingCollection::InitCollection();
 			if (auto GameSettingCollection = RE::GameSettingCollection::GetSingleton(); GameSettingCollection)

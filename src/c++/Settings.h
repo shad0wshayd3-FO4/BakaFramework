@@ -18,6 +18,11 @@ namespace Settings
 		inline AutoTOML::bSetting EnableEDIDConflictCheck{ "Patches"s, "EnableEditorIDConflictCheck"s, false, true };
 	}
 
+	namespace Features
+	{
+		inline AutoTOML::bSetting EnablePAStorage{ "Features"s, "EnablePowerArmorStorage"s, true, true };
+	}
+
 	inline void Load()
 	{
 		try

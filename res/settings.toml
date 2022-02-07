@@ -11,3 +11,7 @@ BetaCommentFileName = "BetaComment.txt"
 EnableLoadingEditorIDs = true
 # Log any EditorID conflicts found while EnabledLoadingEditorIDs is true
 EnableEditorIDConflictCheck = false
+
+[Features]
+# Enable Fallout 76 Style Power Armor Frame Storage
+EnablePowerArmorStorage = true

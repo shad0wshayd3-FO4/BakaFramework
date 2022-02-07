@@ -23,6 +23,7 @@ namespace stl
 	using F4SE::stl::emplace_vtable;
 	using F4SE::stl::report_and_fail;
 	using F4SE::stl::to_underlying;
+	using F4SE::stl::unrestricted_cast;
 
 #ifdef F4SE_SUPPORT_XBYAK
 	void asm_replace(std::uintptr_t a_from, std::size_t a_size, std::uintptr_t a_to);

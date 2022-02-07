@@ -9,6 +9,8 @@ namespace Papyrus
 	bool RegisterFunctions(RE::BSScript::IVirtualMachine* a_VM)
 	{
 		// BakaUtil
+		a_VM->BindNativeMethod(BakaUtil::SCRIPT_NAME, "CreatePowerArmorToken", BakaUtil::CreatePowerArmorToken, true);
+		a_VM->BindNativeMethod(BakaUtil::SCRIPT_NAME, "HandlePowerArmorToken", BakaUtil::HandlePowerArmorToken, true);
 		a_VM->BindNativeMethod(BakaUtil::SCRIPT_NAME, "FilterReferencesByKeywords", BakaUtil::FilterReferencesByKeywords, true);
 		a_VM->BindNativeMethod(BakaUtil::SCRIPT_NAME, "OpenWebPage", BakaUtil::OpenWebPage, true);
 

@@ -5,6 +5,7 @@
 #include "Scripts/ObScript.h"
 #include "Scripts/Papyrus.h"
 #include "Serialization/Serialization.h"
+#include "Workshop/Workshop.h"
 
 namespace
 {
@@ -32,6 +33,12 @@ namespace
 			case F4SE::MessagingInterface::kGameLoaded:
 				{
 					logger::debug("GameLoaded"sv);
+
+					if (*Settings::Features::EnablePAStorage)
+					{
+						Workshop::PlacementMode::ApplyPerk();
+					}
+
 					break;
 				}
 
@@ -40,6 +47,7 @@ namespace
 					if (static_cast<bool>(a_msg->data))
 					{
 						logger::debug("GameDataReady - Loaded"sv);
+
 						Events::Register();
 					}
 					else
@@ -111,7 +119,7 @@ extern "C" DLLEXPORT bool F4SEAPI F4SEPlugin_Load(const F4SE::LoadInterface* a_F
 	logger::debug("Debug logging enabled."sv);
 
 	F4SE::Init(a_F4SE);
-	F4SE::AllocTrampoline(1 << 6);
+	F4SE::AllocTrampoline(1 << 8);
 
 	Serialization::Register();
 
@@ -133,6 +141,7 @@ extern "C" DLLEXPORT bool F4SEAPI F4SEPlugin_Load(const F4SE::LoadInterface* a_F
 	Fixes::InstallHooks();
 	Patches::Install();
 	ObScript::Install();
+	Workshop::PlacementMode::Hooks::Install();
 
 	logger::info("Plugin loaded successfully."sv);
 
