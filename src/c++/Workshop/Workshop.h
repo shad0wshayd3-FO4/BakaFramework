@@ -71,7 +71,7 @@ namespace Workshop
 				hkCanNavigate<985073, 0x0C>::Install();
 				hkCanNavigate<1130413, 0x0C>::Install();
 
-				// Don't allow tagging for search when you're not using resources
+				// Prevent tagging for search in FreeBuild mode
 				hkShouldShowTagForSearch<119865, 0xEBB>::Install();
 				hkShouldShowTagForSearch<1089189, 0x574>::Install();
 
@@ -86,6 +86,11 @@ namespace Workshop
 				// Patch a nullptr exception
 				REL::Relocation<std::uintptr_t> targetCGR{ REL::ID(44523) };
 				stl::asm_replace(targetCGR.address(), 0x03F, reinterpret_cast<std::uintptr_t>(hkCanGoRight));
+
+				// Prevent a stupid textbox from showing up for a split second after placing an item
+				auto& trampoline = F4SE::GetTrampoline();
+				REL::Relocation<std::uintptr_t> targetURQ{ REL::ID(931840) };
+				ogUpdateRequirements = trampoline.write_branch<6>(targetURQ.address(), hkUpdateRequirements);
 			}
 
 		private:
@@ -229,7 +234,20 @@ namespace Workshop
 					   column < selectedWorkshopMenuNode->parent->children.size() - 1;
 			}
 
+			static void hkUpdateRequirements(RE::WorkshopMenu* a_this, bool a_stringingWire)
+			{
+				if (PlacementMode::IsActive())
+				{
+					return;
+				}
+
+				ogUpdateRequirements(a_this, a_stringingWire);
+			}
+
+			// static void hkHandlePlayerItemAdded
+
 			static inline REL::Relocation<decltype(&hkHandleEvent)> ogHandleEvent;
+			static inline REL::Relocation<decltype(&hkUpdateRequirements)> ogUpdateRequirements;
 		};
 
 		[[nodiscard]] static PlacementMode* GetSingleton()
