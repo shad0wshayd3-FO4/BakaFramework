@@ -475,13 +475,13 @@ namespace Workshop
 
 				SetTokenReference(nullptr);
 				SetFrameReference(nullptr);
-				
+
 				m_isActive = false;
 			}
 
 			return RE::BSEventNotifyControl::kContinue;
 		}
-	
+
 	private:
 		[[nodiscard]] static RE::ObjectRefHandle CreateWorkbench(RE::TESBoundObject* a_workbench)
 		{
