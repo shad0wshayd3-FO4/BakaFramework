@@ -56,6 +56,7 @@
     },
     {
       "cacheVariables": {
+        "CMAKE_CXX_FLAGS_RELEASE": "/O2 /DNDEBUG",
         "CMAKE_CXX_FLAGS": "/EHsc /MP /W4 /WX"
       },
       "generator": "Visual Studio 17 2022",
