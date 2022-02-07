@@ -244,8 +244,6 @@ namespace Workshop
 				ogUpdateRequirements(a_this, a_stringingWire);
 			}
 
-			// static void hkHandlePlayerItemAdded
-
 			static inline REL::Relocation<decltype(&hkHandleEvent)> ogHandleEvent;
 			static inline REL::Relocation<decltype(&hkUpdateRequirements)> ogUpdateRequirements;
 		};
@@ -336,6 +334,7 @@ namespace Workshop
 							}
 						}
 
+						const RE::PlayerCharacter::ScopedInventoryChangeMessageContext cmctx{ true, true };
 						PlayerCharacter->AddObjectToContainer(
 							TOKN,
 							DATA,
@@ -418,8 +417,8 @@ namespace Workshop
 									handle.get()->CreateInventoryList(nullptr);
 								}
 
-								RE::BSAutoReadLock{ m_frameRefr->inventoryList->rwLock };
-								RE::BSAutoWriteLock{ handle.get()->inventoryList->rwLock };
+								const RE::BSAutoReadLock lockerR{ m_frameRefr->inventoryList->rwLock };
+								const RE::BSAutoWriteLock lockerW{ handle.get()->inventoryList->rwLock };
 								for (auto& iter : m_frameRefr->inventoryList->data)
 								{
 									handle.get()->inventoryList->data.emplace_back(iter);
@@ -479,6 +478,7 @@ namespace Workshop
 
 				if (m_tokenRefr && !m_tokenRefr->GetDelete())
 				{
+					const RE::PlayerCharacter::ScopedInventoryChangeMessageContext cmctx{ true, true };
 					RE::PlayerCharacter::GetSingleton()->AddObjectToContainer(
 						m_tokenRefr->data.objectReference,
 						m_tokenRefr->extraList,

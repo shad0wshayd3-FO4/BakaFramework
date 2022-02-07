@@ -16,7 +16,7 @@ namespace Events::Handlers
 
 		virtual RE::BSEventNotifyControl ProcessEvent(const RE::PipboyLightEvent& a_event, RE::BSTEventSource<RE::PipboyLightEvent>*) override
 		{
-			RE::BSAutoLock{ dataLock };
+			const RE::BSAutoLock locker{ dataLock };
 			if (auto pipboyLightActive = Forms::PipboyLightActive_DO->GetForm<RE::ActorValueInfo>(); pipboyLightActive)
 			{
 				auto value{ a_event.optionalValue.value_or(false) ? 1.0f : 0.0f };

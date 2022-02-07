@@ -16,7 +16,7 @@ namespace Events::Handlers
 
 		virtual RE::BSEventNotifyControl ProcessEvent(const RE::CurrentRadiationSourceCount& a_event, RE::BSTEventSource<RE::CurrentRadiationSourceCount>*) override
 		{
-			RE::BSAutoLock{ dataLock };
+			const RE::BSAutoLock locker{ dataLock };
 			if (auto radiationSourceCount = Forms::RadiationSourceCount_DO->GetForm<RE::ActorValueInfo>(); radiationSourceCount)
 			{
 				auto value{ a_event.optionalValue.value_or(0) };

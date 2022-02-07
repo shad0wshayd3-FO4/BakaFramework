@@ -73,7 +73,7 @@ namespace Papyrus
 			std::string name;
 			_events.clear();
 
-			const RE::BSAutoLock locker(_lock);
+			const RE::BSAutoLock locker{ _lock };
 			for (std::uint32_t i = 0; i < rsize; i++)
 			{
 				std::uint64_t hndl{ 0 };
