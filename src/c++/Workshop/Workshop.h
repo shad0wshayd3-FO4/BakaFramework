@@ -478,17 +478,24 @@ namespace Workshop
 
 				if (m_tokenRefr && !m_tokenRefr->GetDelete())
 				{
-					const RE::PlayerCharacter::ScopedInventoryChangeMessageContext cmctx{ true, true };
-					RE::PlayerCharacter::GetSingleton()->AddObjectToContainer(
-						m_tokenRefr->data.objectReference,
-						m_tokenRefr->extraList,
-						1,
-						nullptr,
-						RE::ITEM_REMOVE_REASON::kNone);
+					if (auto PlayerCharacter = RE::PlayerCharacter::GetSingleton())
+					{
+						const RE::PlayerCharacter::ScopedInventoryChangeMessageContext cmctx{ true, true };
+						PlayerCharacter->AddObjectToContainer(
+							m_tokenRefr->data.objectReference,
+							m_tokenRefr->extraList,
+							1,
+							nullptr,
+							RE::ITEM_REMOVE_REASON::kNone);
 
-					m_tokenRefr->SetDelete(true);
-					m_tokenRefr->SetWantsDelete(true);
-					m_tokenRefr->Disable();
+						m_tokenRefr->SetDelete(true);
+						m_tokenRefr->SetWantsDelete(true);
+						m_tokenRefr->Disable();
+					}
+					else
+					{
+						m_tokenRefr->Enable(false);
+					}
 				}
 
 				SetTokenReference(nullptr);
