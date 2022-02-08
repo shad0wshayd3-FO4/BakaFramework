@@ -92,12 +92,12 @@ namespace Workshop
 			static void Install()
 			{
 				// Prevent stored frames from stacking
-				REL::Relocation<std::uintptr_t> targetCImpl{ RE::ExtraStartingWorldOrCell::VTABLE[0] };
-				targetCImpl.write_vfunc(0x01, hkCompareImpl);
+				REL::Relocation<std::uintptr_t> targetCMP{ RE::ExtraStartingWorldOrCell::VTABLE[0] };
+				targetCMP.write_vfunc(0x01, hkCompareImpl);
 
 				// Redirect Cancel input, block other buttons
-				REL::Relocation<std::uintptr_t> targetEvent{ RE::WorkshopMenu::VTABLE[1] };
-				ogHandleEvent = targetEvent.write_vfunc(0x08, hkHandleEvent);
+				REL::Relocation<std::uintptr_t> targetEVN{ RE::WorkshopMenu::VTABLE[1] };
+				ogHandleEvent = targetEVN.write_vfunc(0x08, hkHandleEvent);
 
 				// Disable selection in UI
 				hkCanNavigate<119865, 0x37A>::Install();
@@ -120,15 +120,11 @@ namespace Workshop
 				stl::asm_replace(targetUIQ.address(), 0x1C7, reinterpret_cast<std::uintptr_t>(hkUIQualifier));
 
 				// Prevent Workshops marked as deleted as being valid
+				auto& trampoline = F4SE::GetTrampoline();
 				REL::Relocation<std::uintptr_t> targetRWA{ REL::ID(1322808) };
-				stl::asm_replace(targetRWA.address(), 0x066, reinterpret_cast<std::uintptr_t>(hkIsReferenceWithinBuildableArea));
-
-				// Patch a nullptr exception
-				REL::Relocation<std::uintptr_t> targetCGR{ REL::ID(44523) };
-				stl::asm_replace(targetCGR.address(), 0x03F, reinterpret_cast<std::uintptr_t>(hkCanGoRight));
+				ogIsReferenceWithinBuildableArea = trampoline.write_branch<6>(targetRWA.address(), hkIsReferenceWithinBuildableArea);
 
 				// Prevent a stupid textbox from showing up for a split second after placing an item
-				auto& trampoline = F4SE::GetTrampoline();
 				REL::Relocation<std::uintptr_t> targetURQ{ REL::ID(931840) };
 				ogUpdateRequirements = trampoline.write_branch<6>(targetURQ.address(), hkUpdateRequirements);
 			}
@@ -235,45 +231,12 @@ namespace Workshop
 
 			static bool hkIsReferenceWithinBuildableArea(const RE::TESObjectREFR& a_workshop, const RE::TESObjectREFR& a_refr)
 			{
-				if ((a_workshop.formFlags & (1 << 5)) != 0)
+				if (a_workshop.formFlags & (1 << 5))
 				{
 					return false;
 				}
 
-				auto rfParentCell = a_refr.parentCell;
-				if (rfParentCell)
-				{
-					auto wsParentCell = a_workshop.parentCell;
-
-					RE::TESWorldSpace* wsWorldSpace{ nullptr };
-					if (wsParentCell && wsParentCell->IsExterior())
-					{
-						wsWorldSpace = rfParentCell->worldSpace;
-					}
-
-					if (rfParentCell->IsInterior() || !rfParentCell->worldSpace)
-					{
-						if (wsWorldSpace || rfParentCell != wsParentCell)
-						{
-							return false;
-						}
-					}
-					else if (wsWorldSpace != rfParentCell->worldSpace)
-					{
-						return false;
-					}
-				}
-
-				return RE::Workshop::IsLocationWithinBuildableArea(a_workshop, a_refr.data.location);
-			}
-
-			static bool hkCanGoRight()
-			{
-				std::uint32_t column{ 0 };
-				auto selectedWorkshopMenuNode = RE::Workshop::GetSelectedWorkshopMenuNode(*RE::Workshop::CurrentRow, column);
-				return selectedWorkshopMenuNode &&
-					   selectedWorkshopMenuNode->parent &&
-					   column < selectedWorkshopMenuNode->parent->children.size() - 1;
+				return ogIsReferenceWithinBuildableArea(a_workshop, a_refr);
 			}
 
 			static void hkUpdateRequirements(RE::WorkshopMenu* a_this, bool a_stringingWire)
@@ -287,6 +250,7 @@ namespace Workshop
 			}
 
 			static inline REL::Relocation<decltype(&hkHandleEvent)> ogHandleEvent;
+			static inline REL::Relocation<decltype(&hkIsReferenceWithinBuildableArea)> ogIsReferenceWithinBuildableArea;
 			static inline REL::Relocation<decltype(&hkUpdateRequirements)> ogUpdateRequirements;
 		};
 
