@@ -33,6 +33,42 @@ namespace Workshop
 			};
 
 			template<std::uint64_t id, std::ptrdiff_t offset>
+			class hkPlayMenuSound
+			{
+			public:
+				static void Install()
+				{
+					REL::Relocation<std::uintptr_t> target{ REL::ID(id), offset };
+
+					auto& trampoline = F4SE::GetTrampoline();
+					func = trampoline.write_call<5>(target.address(), thunk);
+				}
+
+			private:
+				static bool thunk(const char* a_soundName)
+				{
+					if (PlacementMode::IsActive())
+					{
+						PlacementMode::GetSingleton()->m_hasSound = true;
+						return func("");
+					}
+
+					if (PlacementMode::GetSingleton()->m_hasSound)
+					{
+						if (_stricmp(a_soundName, "UIWorkshopModeExit") == 0)
+						{
+							PlacementMode::GetSingleton()->m_hasSound = false;
+							return func("");
+						}
+					}
+
+					return func(a_soundName);
+				}
+
+				static inline REL::Relocation<decltype(&thunk)> func;
+			};
+
+			template<std::uint64_t id, std::ptrdiff_t offset>
 			class hkShouldShowTagForSearch
 			{
 			public:
@@ -70,6 +106,10 @@ namespace Workshop
 				hkCanNavigate<119865, 0x768>::Install();
 				hkCanNavigate<985073, 0x0C>::Install();
 				hkCanNavigate<1130413, 0x0C>::Install();
+
+				// Disable Workshop Startup/End sounds
+				hkPlayMenuSound<598489, 0x1195>::Install();
+				hkPlayMenuSound<98443, 0x01B5>::Install();
 
 				// Prevent tagging for search in FreeBuild mode
 				hkShouldShowTagForSearch<119865, 0xEBB>::Install();
@@ -341,6 +381,22 @@ namespace Workshop
 							1,
 							nullptr,
 							RE::ITEM_REMOVE_REASON::kNone);
+						PlayerCharacter->PlayPickUpSound(
+							TOKN,
+							true,
+							false);
+
+						if (auto MESG = Forms::PAFrameMessage_DO->GetForm<RE::BGSMessage>())
+						{
+							RE::BSFixedString message;
+							MESG->GetConvertedDescription(message);
+
+							RE::SendHUDMessage::ShowHUDMessage(
+								message.c_str(),
+								"",
+								true,
+								true);
+						}
 						a_refr->Disable();
 
 						return true;
@@ -532,5 +588,6 @@ namespace Workshop
 		RE::BSTSmartPointer<RE::TESObjectREFR, RE::BSTSmartPointerGamebryoRefCount> m_frameRefr;
 		RE::BSTSmartPointer<RE::TESObjectREFR, RE::BSTSmartPointerGamebryoRefCount> m_tokenRefr;
 		bool m_isActive{ false };
+		bool m_hasSound{ false };
 	};
 }

@@ -8,6 +8,7 @@ namespace Forms
 	RE::BGSDefaultObject* PAFrameWorkshop_DO{ nullptr };
 	RE::BGSDefaultObject* PAFrameToken_DO{ nullptr };
 	RE::BGSDefaultObject* PAFramePerk_DO{ nullptr };
+	RE::BGSDefaultObject* PAFrameMessage_DO{ nullptr };
 
 	namespace
 	{
@@ -53,6 +54,11 @@ namespace Forms
 				RE::DefaultObjectFormFactory::Create(
 					"PAFramePerk_DO",
 					RE::ENUM_FORM_ID::kPERK);
+
+			PAFrameMessage_DO =
+				RE::DefaultObjectFormFactory::Create(
+					"PAFrameMessage_DO",
+					RE::ENUM_FORM_ID::kMESG);
 
 			logger::debug("Injected DefaultObjects."sv);
 			return 1;
