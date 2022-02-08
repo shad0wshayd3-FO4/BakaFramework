@@ -89,6 +89,32 @@ namespace Workshop
 				static inline REL::Relocation<decltype(&thunk)> func;
 			};
 
+			template<std::uint64_t id, std::ptrdiff_t offset>
+			class hkUpdateRequirements
+			{
+			public:
+				static void Install()
+				{
+					REL::Relocation<std::uintptr_t> target{ REL::ID(id), offset };
+
+					auto& trampoline = F4SE::GetTrampoline();
+					func = trampoline.write_call<5>(target.address(), thunk);
+				}
+
+			private:
+				static void thunk(RE::WorkshopMenu* a_this, bool a_stringingWire)
+				{
+					if (PlacementMode::IsActive())
+					{
+						return;
+					}
+
+					func(a_this, a_stringingWire);
+				}
+
+				static inline REL::Relocation<decltype(&thunk)> func;
+			};
+
 			static void Install()
 			{
 				// Prevent stored frames from stacking
@@ -115,6 +141,23 @@ namespace Workshop
 				hkShouldShowTagForSearch<119865, 0xEBB>::Install();
 				hkShouldShowTagForSearch<1089189, 0x574>::Install();
 
+				// Prevent a stupid textbox from showing up for a split second after placing an item
+				hkUpdateRequirements<598489, 0x1144>::Install();
+				hkUpdateRequirements<1280212, 0x1F0>::Install();
+				hkUpdateRequirements<119865, 0x05C5>::Install();
+				hkUpdateRequirements<119865, 0x0868>::Install();
+				hkUpdateRequirements<119865, 0x0A16>::Install();
+				hkUpdateRequirements<119865, 0x0A42>::Install();
+				hkUpdateRequirements<119865, 0x0A65>::Install();
+				hkUpdateRequirements<119865, 0x0A88>::Install();
+				hkUpdateRequirements<119865, 0x0C64>::Install();
+				hkUpdateRequirements<119865, 0x0CD4>::Install();
+				hkUpdateRequirements<119865, 0x0F53>::Install();
+				hkUpdateRequirements<119865, 0x10FD>::Install();
+				hkUpdateRequirements<119865, 0x1181>::Install();
+				hkUpdateRequirements<119865, 0x13F6>::Install();
+				hkUpdateRequirements<119865, 0x1764>::Install();
+
 				// Enable ExtraStartingWorldOrCell as a stacking condition
 				REL::Relocation<std::uintptr_t> targetUIQ{ REL::ID(179412) };
 				stl::asm_replace(targetUIQ.address(), 0x1C7, reinterpret_cast<std::uintptr_t>(hkUIQualifier));
@@ -123,10 +166,6 @@ namespace Workshop
 				auto& trampoline = F4SE::GetTrampoline();
 				REL::Relocation<std::uintptr_t> targetRWA{ REL::ID(1322808) };
 				ogIsReferenceWithinBuildableArea = trampoline.write_branch<6>(targetRWA.address(), hkIsReferenceWithinBuildableArea);
-
-				// Prevent a stupid textbox from showing up for a split second after placing an item
-				REL::Relocation<std::uintptr_t> targetURQ{ REL::ID(931840) };
-				ogUpdateRequirements = trampoline.write_branch<6>(targetURQ.address(), hkUpdateRequirements);
 			}
 
 			static inline REL::Relocation<RE::SettingT<RE::GameSettingCollection>*> sPADisallowed{ REL::ID(1053596) };
@@ -239,19 +278,8 @@ namespace Workshop
 				return ogIsReferenceWithinBuildableArea(a_workshop, a_refr);
 			}
 
-			static void hkUpdateRequirements(RE::WorkshopMenu* a_this, bool a_stringingWire)
-			{
-				if (PlacementMode::IsActive())
-				{
-					return;
-				}
-
-				ogUpdateRequirements(a_this, a_stringingWire);
-			}
-
 			static inline REL::Relocation<decltype(&hkHandleEvent)> ogHandleEvent;
 			static inline REL::Relocation<decltype(&hkIsReferenceWithinBuildableArea)> ogIsReferenceWithinBuildableArea;
-			static inline REL::Relocation<decltype(&hkUpdateRequirements)> ogUpdateRequirements;
 		};
 
 		[[nodiscard]] static PlacementMode* GetSingleton()
