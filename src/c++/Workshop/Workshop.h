@@ -133,6 +133,8 @@ namespace Workshop
 				ogUpdateRequirements = trampoline.write_branch<6>(targetURQ.address(), hkUpdateRequirements);
 			}
 
+			static inline REL::Relocation<RE::SettingT<RE::GameSettingCollection>*> sPADisallowed{ REL::ID(1053596) };
+
 		private:
 			static bool hkCompareImpl(RE::ExtraStartingWorldOrCell* a_this, const RE::ExtraStartingWorldOrCell& a_compare)
 			{
@@ -409,6 +411,21 @@ namespace Workshop
 
 		static bool HandleToken(RE::TESObjectREFR* a_refr)
 		{
+			if (RE::PowerArmor::PlayerInPowerArmor())
+			{
+				const RE::PlayerCharacter::ScopedInventoryChangeMessageContext cmctx{ true, true };
+				RE::PlayerCharacter::GetSingleton()->PickUpObject(
+					a_refr,
+					1,
+					false);
+				RE::SendHUDMessage::ShowHUDMessage(
+					Hooks::sPADisallowed->GetString().data(),
+					"",
+					true,
+					true);
+				return false;
+			}
+
 			if (auto TOKN = Forms::PAFrameToken_DO->GetForm<RE::TESObjectARMO>())
 			{
 				if (a_refr && a_refr->data.objectReference && a_refr->data.objectReference->formID == TOKN->formID)
