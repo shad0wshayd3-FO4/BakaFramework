@@ -315,59 +315,42 @@ namespace Workshop
 
 		static bool CreateToken(RE::TESObjectREFR* a_refr)
 		{
-			if (auto KYWD = RE::TESForm::GetFormByID<RE::BGSKeyword>(0x0003430B))
+			if (a_refr &&
+				a_refr->HasKeyword(RE::TESForm::GetFormByID<RE::BGSKeyword>(0x0003430B)))
 			{
-				if (a_refr && a_refr->HasKeyword(KYWD))
+				auto token = Forms::PAFrameToken_DO->GetForm<RE::TESObjectARMO>();
+				if (!token)
 				{
-					if (auto TOKN = Forms::PAFrameToken_DO->GetForm<RE::TESObjectARMO>())
-					{
-						auto DATA =
-							RE::BSTSmartPointer(new RE::ExtraDataList());
-						DATA->SetStartingWorldOrCell(a_refr);
-
-						auto PlayerCharacter = RE::PlayerCharacter::GetSingleton();
-						if (!PlayerCharacter)
-						{
-							return false;
-						}
-
-						if (auto DPM = RE::BGSDynamicPersistenceManager::GetSingleton())
-						{
-							if (!DPM->PromoteReference(a_refr, PlayerCharacter))
-							{
-								logger::warn("Failed to promote PA Frame reference."sv);
-								return false;
-							}
-						}
-
-						const RE::PlayerCharacter::ScopedInventoryChangeMessageContext cmctx{ true, true };
-						PlayerCharacter->AddObjectToContainer(
-							TOKN,
-							DATA,
-							1,
-							nullptr,
-							RE::ITEM_REMOVE_REASON::kNone);
-						PlayerCharacter->PlayPickUpSound(
-							TOKN,
-							true,
-							false);
-
-						if (auto MESG = Forms::PAFrameMessage_DO->GetForm<RE::BGSMessage>())
-						{
-							RE::BSFixedString message;
-							MESG->GetConvertedDescription(message);
-
-							RE::SendHUDMessage::ShowHUDMessage(
-								message.c_str(),
-								"",
-								true,
-								true);
-						}
-						a_refr->Disable();
-
-						return true;
-					}
+					return false;
 				}
+
+				auto extra = RE::BSTSmartPointer(new RE::ExtraDataList());
+				extra->SetStartingWorldOrCell(a_refr);
+
+				auto PlayerCharacter = RE::PlayerCharacter::GetSingleton();
+				if (auto DPM = RE::BGSDynamicPersistenceManager::GetSingleton())
+				{
+					DPM->PromoteReference(a_refr, PlayerCharacter);
+				}
+
+				const RE::PlayerCharacter::ScopedInventoryChangeMessageContext cmctx{ true, true };
+				PlayerCharacter->AddObjectToContainer(
+					token,
+					extra,
+					1,
+					nullptr,
+					RE::ITEM_REMOVE_REASON::kNone);
+				PlayerCharacter->PlayPickUpSound(token, true, false);
+
+				if (auto MESG = Forms::PAFrameMessage_DO->GetForm<RE::BGSMessage>())
+				{
+					RE::BSFixedString message;
+					MESG->GetConvertedDescription(message);
+					RE::SendHUDMessage::ShowHUDMessage(message.c_str(), "", true, true);
+				}
+
+				a_refr->Disable();
+				return true;
 			}
 
 			return false;
@@ -390,28 +373,31 @@ namespace Workshop
 				return false;
 			}
 
-			if (auto TOKN = Forms::PAFrameToken_DO->GetForm<RE::TESObjectARMO>())
+			auto token = Forms::PAFrameToken_DO->GetForm<RE::TESObjectARMO>();
+			if (!token)
 			{
-				if (a_refr && a_refr->data.objectReference && a_refr->data.objectReference->formID == TOKN->formID)
-				{
-					if (a_refr->extraList &&
-						a_refr->extraList->HasType<RE::ExtraStartingWorldOrCell>())
-					{
-						if (auto DATA = a_refr->extraList->GetByType<RE::ExtraStartingWorldOrCell>())
-						{
-							if (DATA->startingWorldOrCell)
-							{
-								if (auto REFR = DATA->startingWorldOrCell->As<RE::TESObjectREFR>())
-								{
-									SetTokenReference(a_refr);
-									SetFrameReference(REFR);
-									a_refr->Disable();
+				return false;
+			}
 
-									Start();
-									return true;
-								}
-							}
-						}
+			if (a_refr &&
+				a_refr->data.objectReference &&
+				a_refr->data.objectReference == token)
+			{
+				if (!a_refr->extraList)
+				{
+					return false;
+				}
+
+				if (auto extra = a_refr->extraList->GetByType<RE::ExtraStartingWorldOrCell>())
+				{
+					if (auto p_refr = extra->startingWorldOrCell->As<RE::TESObjectREFR>())
+					{
+						SetTokenReference(a_refr);
+						SetFrameReference(p_refr);
+						a_refr->Disable();
+
+						Start();
+						return true;
 					}
 				}
 			}
@@ -449,10 +435,7 @@ namespace Workshop
 						{
 							if (m_frameRefr && m_frameRefr->inventoryList)
 							{
-								if (!handle.get()->inventoryList)
-								{
-									handle.get()->CreateInventoryList(nullptr);
-								}
+								handle.get()->CreateInventoryList(nullptr);
 
 								const RE::BSAutoReadLock lockerR{ m_frameRefr->inventoryList->rwLock };
 								const RE::BSAutoWriteLock lockerW{ handle.get()->inventoryList->rwLock };
@@ -477,14 +460,49 @@ namespace Workshop
 		{
 			if (a_event.workshop == m_workshop.get())
 			{
-				if (auto DPM = RE::BGSDynamicPersistenceManager::GetSingleton())
+				if (a_event.placedItem)
 				{
-					DPM->DemoteReference(m_frameRefr.get(), RE::PlayerCharacter::GetSingleton());
-				}
+					m_frameRefr->SetLocationOnReference(
+						a_event.placedItem->data.location);
+					m_frameRefr->SetAngleOnReference(
+						a_event.placedItem->data.angle);
 
-				m_frameRefr->SetDelete(true);
-				m_frameRefr->SetWantsDelete(true);
-				m_frameRefr->Disable();
+					if (auto frame3D = m_frameRefr->Get3D())
+					{
+						m_frameRefr->Update3DPosition(true);
+						if (frame3D->flags.flags & 0x4000)
+						{
+							if (auto node = frame3D->IsFadeNode())
+							{
+								node->previousMaxA = 1.0f;
+								node->currentDecalFade = 1.0f;
+								node->currentFade = 1.0f;
+								node->flags.flags |= 0x2000000000;
+							}
+						}
+					}
+
+					if (m_frameRefr->parentCell != a_event.placedItem->parentCell)
+					{
+						m_frameRefr->MoveRefToNewSpace(
+							a_event.placedItem->parentCell,
+							a_event.placedItem->parentCell->worldSpace);
+					}
+
+					a_event.placedItem->SetDelete(true);
+					a_event.placedItem->SetWantsDelete(true);
+					a_event.placedItem->Disable();
+
+					m_frameRefr->formFlags |= 0x8000000;
+					m_frameRefr->Enable(false);
+
+					if (auto DPM = RE::BGSDynamicPersistenceManager::GetSingleton())
+					{
+						DPM->DemoteReference(
+							m_frameRefr.get(),
+							RE::PlayerCharacter::GetSingleton());
+					}
+				}
 
 				m_tokenRefr->SetDelete(true);
 				m_tokenRefr->SetWantsDelete(true);
@@ -515,29 +533,21 @@ namespace Workshop
 
 				if (m_tokenRefr && !m_tokenRefr->GetDelete())
 				{
-					if (auto PlayerCharacter = RE::PlayerCharacter::GetSingleton())
-					{
-						const RE::PlayerCharacter::ScopedInventoryChangeMessageContext cmctx{ true, true };
-						PlayerCharacter->AddObjectToContainer(
-							m_tokenRefr->data.objectReference,
-							m_tokenRefr->extraList,
-							1,
-							nullptr,
-							RE::ITEM_REMOVE_REASON::kNone);
+					const RE::PlayerCharacter::ScopedInventoryChangeMessageContext cmctx{ true, true };
+					RE::PlayerCharacter::GetSingleton()->AddObjectToContainer(
+						m_tokenRefr->data.objectReference,
+						m_tokenRefr->extraList,
+						1,
+						nullptr,
+						RE::ITEM_REMOVE_REASON::kNone);
 
-						m_tokenRefr->SetDelete(true);
-						m_tokenRefr->SetWantsDelete(true);
-						m_tokenRefr->Disable();
-					}
-					else
-					{
-						m_tokenRefr->Enable(false);
-					}
+					m_tokenRefr->SetDelete(true);
+					m_tokenRefr->SetWantsDelete(true);
+					m_tokenRefr->Disable();
 				}
 
-				SetTokenReference(nullptr);
-				SetFrameReference(nullptr);
-
+				m_tokenRefr.reset();
+				m_frameRefr.reset();
 				m_isActive = false;
 			}
 
