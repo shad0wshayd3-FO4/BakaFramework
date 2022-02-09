@@ -47,6 +47,11 @@ namespace Workshop
 			private:
 				static bool thunk(const RE::TESObjectREFR& a_workshop, const RE::TESObjectREFR& a_refr)
 				{
+					if (PlacementMode::IsActive())
+					{
+						return true;
+					}
+
 					if (a_workshop.formFlags & 0x20)
 					{
 						return false;
