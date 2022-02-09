@@ -356,6 +356,11 @@ namespace Workshop
 				extra->SetStartingWorldOrCell(a_refr);
 
 				auto PlayerCharacter = RE::PlayerCharacter::GetSingleton();
+				if (a_refr->GetHandle() == PlayerCharacter->lastUsedPowerArmor)
+				{
+					PlayerCharacter->RemoveLastUsedPowerArmor();
+				}
+
 				if (auto DPM = RE::BGSDynamicPersistenceManager::GetSingleton())
 				{
 					DPM->PromoteReference(a_refr, PlayerCharacter);
@@ -515,6 +520,7 @@ namespace Workshop
 						m_frameRefr->MoveRefToNewSpace(
 							a_event.placedItem->parentCell,
 							a_event.placedItem->parentCell->worldSpace);
+						m_frameRefr->AddChange(0x400);
 					}
 
 					a_event.placedItem->SetDelete(true);
