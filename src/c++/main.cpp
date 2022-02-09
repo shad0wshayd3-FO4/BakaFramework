@@ -119,7 +119,7 @@ extern "C" DLLEXPORT bool F4SEAPI F4SEPlugin_Load(const F4SE::LoadInterface* a_F
 	logger::debug("Debug logging enabled."sv);
 
 	F4SE::Init(a_F4SE);
-	F4SE::AllocTrampoline(1 << 9);
+	F4SE::AllocTrampoline(1u << 10);
 
 	Serialization::Register();
 

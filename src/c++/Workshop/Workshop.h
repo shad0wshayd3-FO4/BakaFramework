@@ -33,6 +33,32 @@ namespace Workshop
 			};
 
 			template<std::uint64_t id, std::ptrdiff_t offset>
+			class hkIsReferenceWithinBuildableArea
+			{
+			public:
+				static void Install()
+				{
+					REL::Relocation<std::uintptr_t> target{ REL::ID(id), offset };
+
+					auto& trampoline = F4SE::GetTrampoline();
+					func = trampoline.write_call<5>(target.address(), thunk);
+				}
+
+			private:
+				static bool thunk(const RE::TESObjectREFR& a_workshop, const RE::TESObjectREFR& a_refr)
+				{
+					if (a_workshop.formFlags & 0x20)
+					{
+						return false;
+					}
+
+					return func(a_workshop, a_refr);
+				}
+
+				static inline REL::Relocation<decltype(&thunk)> func;
+			};
+
+			template<std::uint64_t id, std::ptrdiff_t offset>
 			class hkPlayMenuSound
 			{
 			public:
@@ -133,6 +159,20 @@ namespace Workshop
 				hkCanNavigate<985073, 0x0C>::Install();
 				hkCanNavigate<1130413, 0x0C>::Install();
 
+				// Prevent Workshops marked as deleted as being valid
+				hkIsReferenceWithinBuildableArea<2562, 0x156>::Install();
+				hkIsReferenceWithinBuildableArea<978467, 0x07E>::Install();
+				hkIsReferenceWithinBuildableArea<90862, 0x039>::Install();
+				hkIsReferenceWithinBuildableArea<939377, 0x090>::Install();
+				hkIsReferenceWithinBuildableArea<552874, 0x024>::Install();
+				hkIsReferenceWithinBuildableArea<525394, 0x017>::Install();
+				hkIsReferenceWithinBuildableArea<311311, 0x0A6>::Install();
+				hkIsReferenceWithinBuildableArea<566990, 0x05C>::Install();
+				hkIsReferenceWithinBuildableArea<286947, 0x047>::Install();
+				hkIsReferenceWithinBuildableArea<1371490, 0x091>::Install();
+				hkIsReferenceWithinBuildableArea<931840, 0x165>::Install();
+				hkIsReferenceWithinBuildableArea<1515428, 0x036>::Install();
+
 				// Disable Workshop Startup/End sounds
 				hkPlayMenuSound<598489, 0x1195>::Install();
 				hkPlayMenuSound<98443, 0x01B5>::Install();
@@ -161,11 +201,6 @@ namespace Workshop
 				// Enable ExtraStartingWorldOrCell as a stacking condition
 				REL::Relocation<std::uintptr_t> targetUIQ{ REL::ID(179412) };
 				stl::asm_replace(targetUIQ.address(), 0x1C7, reinterpret_cast<std::uintptr_t>(hkUIQualifier));
-
-				// Prevent Workshops marked as deleted as being valid
-				auto& trampoline = F4SE::GetTrampoline();
-				REL::Relocation<std::uintptr_t> targetRWA{ REL::ID(1322808) };
-				ogIsReferenceWithinBuildableArea = trampoline.write_branch<6>(targetRWA.address(), hkIsReferenceWithinBuildableArea);
 			}
 
 			static inline REL::Relocation<RE::SettingT<RE::GameSettingCollection>*> sPADisallowed{ REL::ID(1053596) };
@@ -268,18 +303,7 @@ namespace Workshop
 				}
 			}
 
-			static bool hkIsReferenceWithinBuildableArea(const RE::TESObjectREFR& a_workshop, const RE::TESObjectREFR& a_refr)
-			{
-				if (a_workshop.formFlags & (1 << 5))
-				{
-					return false;
-				}
-
-				return ogIsReferenceWithinBuildableArea(a_workshop, a_refr);
-			}
-
 			static inline REL::Relocation<decltype(&hkHandleEvent)> ogHandleEvent;
-			static inline REL::Relocation<decltype(&hkIsReferenceWithinBuildableArea)> ogIsReferenceWithinBuildableArea;
 		};
 
 		[[nodiscard]] static PlacementMode* GetSingleton()
