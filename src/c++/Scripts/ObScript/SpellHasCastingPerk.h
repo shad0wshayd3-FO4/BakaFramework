@@ -91,7 +91,7 @@ namespace ObScript
 						break;
 				}
 			}
-			
+
 			return true;
 		}
 

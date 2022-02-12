@@ -4,8 +4,8 @@
 #include "ObScript/FreePlayer.h"
 #include "ObScript/GetBaseObject.h"
 #include "ObScript/GetDefaultObject.h"
-#include "ObScript/SpellHasCastingPerk.h"
 #include "ObScript/QuitGame.h"
+#include "ObScript/SpellHasCastingPerk.h"
 
 namespace ObScript
 {
