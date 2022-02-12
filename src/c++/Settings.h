@@ -23,6 +23,7 @@ namespace Settings
 	{
 		inline bSetting EnableLoadingEditorIDs{ "Patches"s, "EnableLoadingEditorIDs"s, true, true };
 		inline bSetting EnableEDIDConflictCheck{ "Patches"s, "EnableEditorIDConflictCheck"s, false, true };
+		inline bSetting EnableRandomMods{ "Patches"s, "EnableRandomMods"s, true, true };
 	}
 
 	namespace Features

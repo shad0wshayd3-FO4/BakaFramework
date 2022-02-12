@@ -7,6 +7,7 @@
   "dependencies": [
     "autotoml",
     "boost-stl-interfaces",
+    "effolkronium-random",
     "fmt",
     "mmio",
     "spdlog",

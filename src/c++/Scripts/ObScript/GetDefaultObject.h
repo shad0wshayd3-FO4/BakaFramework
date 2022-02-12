@@ -106,6 +106,6 @@ namespace ObScript
 		}
 
 		static constexpr auto LONG_NAME = "GetDefaultObject"sv;
-		static constexpr auto SHORT_NAME = "getdfob"sv;
+		static constexpr auto SHORT_NAME = "gdo"sv;
 	};
 }

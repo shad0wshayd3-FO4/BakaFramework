@@ -4,7 +4,7 @@
 #include "ObScript/FreePlayer.h"
 #include "ObScript/GetBaseObject.h"
 #include "ObScript/GetDefaultObject.h"
-#include "ObScript/IsWorkshopPlacementActive.h"
+#include "ObScript/SpellHasCastingPerk.h"
 #include "ObScript/QuitGame.h"
 
 namespace ObScript
@@ -15,7 +15,7 @@ namespace ObScript
 		ObScript::FreePlayer::Install();
 		ObScript::GetBaseObject::Install();
 		ObScript::GetDefaultObject::Install();
-		ObScript::IsWorkshopPlacementActive::Install();
+		ObScript::SpellHasCastingPerk::Install();
 		ObScript::QuitGame::Install();
 	}
 }

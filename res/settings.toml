@@ -9,8 +9,13 @@ BetaCommentFileName = "BetaComment.txt"
 [Patches]
 # Load EditorIDs for most Forms to use them in the console or in logging
 EnableLoadingEditorIDs = true
+
 # Log any EditorID conflicts found while EnabledLoadingEditorIDs is true
 EnableEditorIDConflictCheck = false
+
+# Enable choosing a random mod from a modcol assigned in a COBJ for an item, if the modcol contains other modcols, it is recursed
+# e.g. a COBJ that creates modcol_CombatRifle_Barrels_Any will select a random barrel if attached to a Combat Rifle at a workbench
+EnableRandomMods = true
 
 [Features]
 # Enable Fallout 76 Style Power Armor Frame Storage
