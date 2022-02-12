@@ -2,25 +2,32 @@
 
 namespace Settings
 {
+	namespace
+	{
+		using ISetting = AutoTOML::ISetting;
+		using bSetting = AutoTOML::bSetting;
+		using sSetting = AutoTOML::sSetting;
+	}
+
 	namespace General
 	{
-		inline AutoTOML::bSetting EnableDebugLogging{ "General"s, "EnableDebugLogging"s, false };
+		inline bSetting EnableDebugLogging{ "General"s, "EnableDebugLogging"s, false };
 	}
 
 	namespace Config
 	{
-		inline AutoTOML::sSetting BetaCommentFileName{ "Config"s, "BetaCommentFileName"s, "BetaComment.txt"s };
+		inline sSetting BetaCommentFileName{ "Config"s, "BetaCommentFileName"s, "BetaComment.txt"s };
 	}
 
 	namespace Patches
 	{
-		inline AutoTOML::bSetting EnableLoadingEditorIDs{ "Patches"s, "EnableLoadingEditorIDs"s, true, true };
-		inline AutoTOML::bSetting EnableEDIDConflictCheck{ "Patches"s, "EnableEditorIDConflictCheck"s, false, true };
+		inline bSetting EnableLoadingEditorIDs{ "Patches"s, "EnableLoadingEditorIDs"s, true, true };
+		inline bSetting EnableEDIDConflictCheck{ "Patches"s, "EnableEditorIDConflictCheck"s, false, true };
 	}
 
 	namespace Features
 	{
-		inline AutoTOML::bSetting EnablePAStorage{ "Features"s, "EnablePowerArmorStorage"s, true, true };
+		inline bSetting EnablePAStorage{ "Features"s, "EnablePowerArmorStorage"s, true, true };
 	}
 
 	inline void Load()
@@ -28,7 +35,7 @@ namespace Settings
 		try
 		{
 			const auto table = toml::parse_file(fmt::format(FMT_STRING("Data/F4SE/Plugins/{}.toml"sv), Plugin::NAME));
-			for (const auto& setting : AutoTOML::ISetting::get_settings())
+			for (const auto& setting : ISetting::get_settings())
 			{
 				setting->load(table);
 			}
