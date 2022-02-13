@@ -23,6 +23,7 @@ set(SOURCE_FILES
 	${ROOT_DIR}/src/c++/Scripts/Papyrus/Actor.h
 	${ROOT_DIR}/src/c++/Scripts/Papyrus/BakaUtil.h
 	${ROOT_DIR}/src/c++/Scripts/Papyrus/ScriptObject.h
+	${ROOT_DIR}/src/c++/Scripts/Papyrus/Shared/FunctionArgs.h
 	${ROOT_DIR}/src/c++/Scripts/Papyrus/Shared/RegistrationMap.cpp
 	${ROOT_DIR}/src/c++/Scripts/Papyrus/Shared/RegistrationMap.h
 	${ROOT_DIR}/src/c++/Scripts/Papyrus/StringUtil.h

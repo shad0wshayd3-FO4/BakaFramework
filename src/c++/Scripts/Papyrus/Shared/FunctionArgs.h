@@ -43,7 +43,7 @@ namespace Papyrus
 		static_assert(sizeof(FunctionArgsBase) == 0x10);
 	}
 
-	template <class... Args>
+	template<class... Args>
 	class FunctionArgs :
 		public detail::FunctionArgsBase
 	{
