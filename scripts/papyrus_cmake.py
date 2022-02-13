@@ -21,20 +21,24 @@ def copy_vanilla_scripts(a_args):
 		"Cell.psc",
 		"Class.psc",
 		"CombatStyle.psc",
+		"CommonPropertiesScript.psc",
 		"Component.psc",
 		"Container.psc",
 		"EncounterZone.psc",
 		"Faction.psc",
+		"FollowersScript.psc",
 		"Form.psc",
 		"FormList.psc",
 		"Game.psc",
 		"GlobalVariable.psc",
+		"HeadPart.psc",
 		"Idle.psc",
 		"ImageSpaceModifier.psc",
 		"ImpactDataSet.psc",
 		"InputEnableLayer.psc",
 		"Key.psc",
 		"Keyword.psc",
+		"LeveledItem.psc",
 		"Location.psc",
 		"LocationRefType.psc",
 		"MagicEffect.psc",
@@ -67,9 +71,21 @@ def copy_vanilla_scripts(a_args):
 		"WorldSpace.psc",
 	)
 
+	f4se = (
+		"InstanceData.psc",
+	)
+
 	zipname = os.path.join(a_args.fo4_dir, "Data/Scripts/Source/Base", "Base.zip")
 	with zipfile.ZipFile(zipname) as zip:
 		for filename in vanilla:
+			src = filename
+			dst = os.path.join(a_args.bin_dir, "include", filename)
+			with zip.open(src) as zf, open(dst, "wb") as f:
+				shutil.copyfileobj(zf, f)
+
+	zipname = os.path.join(a_args.fo4_dir, "Data/Scripts/Source/F4SE", "F4SE.zip")
+	with zipfile.ZipFile(zipname) as zip:
+		for filename in f4se:
 			src = filename
 			dst = os.path.join(a_args.bin_dir, "include", filename)
 			with zip.open(src) as zf, open(dst, "wb") as f:

@@ -22,8 +22,7 @@ namespace Papyrus::ScriptObject
 			auto value = a_event.optionalValue.value_or(false);
 			if (value != valueCache)
 			{
-				auto args = std::vector<bool>{ value };
-				DispatchEvent("OnPipboyLightEvent"sv, args);
+				DispatchEvent("OnPipboyLightEvent"sv, value);
 				valueCache = value;
 			}
 

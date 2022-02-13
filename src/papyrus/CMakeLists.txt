@@ -100,7 +100,7 @@ if("${COPY_OUTPUT}")
 		add_custom_command(
 			TARGET "papyrus_compile"
 			POST_BUILD
-			COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${FILE}" "${Fallout4Path}/Data/Scripts/Source/User/"
+			COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${FILE}" "${Fallout4Path}/Data/Scripts/Source/Baka/"
 			VERBATIM
 		)
 	endforeach()

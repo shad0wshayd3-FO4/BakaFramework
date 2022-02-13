@@ -32,7 +32,7 @@ def make_rel_archive(a_name, a_args):
 		for each_file in a_args.papyrus_psc_files:
 			files = each_file.split(";")
 			for file in files:
-				write(file, "Scripts/Source/User")
+				write(file, "Scripts/Source/Baka")
 
 def make_dbg_archive(a_name, a_args):
 	zip = make_zipfile("{}_pdbs".format(a_name))

@@ -141,6 +141,7 @@ extern "C" DLLEXPORT bool F4SEAPI F4SEPlugin_Load(const F4SE::LoadInterface* a_F
 	Fixes::Install();
 	Patches::Install();
 	ObScript::Install();
+	Papyrus::Install();
 	Workshop::PlacementMode::Hooks::Install();
 
 	logger::info("Plugin loaded successfully."sv);

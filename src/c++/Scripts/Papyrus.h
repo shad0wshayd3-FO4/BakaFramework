@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Papyrus/Actor.h"
 #include "Papyrus/BakaUtil.h"
 #include "Papyrus/ScriptObject.h"
 #include "Papyrus/StringUtil.h"
@@ -34,5 +35,10 @@ namespace Papyrus
 		a_VM->BindNativeMethod(StringUtil::SCRIPT_NAME, "ArrayToString", StringUtil::StringArrayToString, true);
 
 		return true;
+	}
+
+	void Install()
+	{
+		Actor::InstallHooks();
 	}
 }

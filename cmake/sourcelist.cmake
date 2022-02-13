@@ -20,6 +20,7 @@ set(SOURCE_FILES
 	${ROOT_DIR}/src/c++/Scripts/ObScript/QuitGame.h
 	${ROOT_DIR}/src/c++/Scripts/ObScript/SpellHasCastingPerk.h
 	${ROOT_DIR}/src/c++/Scripts/Papyrus.h
+	${ROOT_DIR}/src/c++/Scripts/Papyrus/Actor.h
 	${ROOT_DIR}/src/c++/Scripts/Papyrus/BakaUtil.h
 	${ROOT_DIR}/src/c++/Scripts/Papyrus/ScriptObject.h
 	${ROOT_DIR}/src/c++/Scripts/Papyrus/Shared/RegistrationMap.cpp
