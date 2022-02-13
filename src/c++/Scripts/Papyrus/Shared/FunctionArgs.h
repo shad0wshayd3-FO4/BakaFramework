@@ -27,20 +27,20 @@ namespace Papyrus
 				vm(a_vm)
 			{}
 
-			RE::msvc::function<bool(RE::BSScrapArray<RE::BSScript::Variable>&)>
-				CreateThreadScrapFunction()
-			{
-				using func_t = RE::msvc::function<bool(RE::BSScrapArray<RE::BSScript::Variable>&)> (*)(FunctionArgsBase&);
-				REL::Relocation<func_t> func{ REL::ID(69733) };
-				return func(*this);
-			}
-
 		protected:
 			// members
 			RE::BSScript::ArrayWrapper<RE::BSScript::Variable>* args;  // 00
 			RE::BSScript::IVirtualMachine* vm;						   // 08
 		};
 		static_assert(sizeof(FunctionArgsBase) == 0x10);
+
+		inline RE::BSTThreadScrapFunction<bool(RE::BSScrapArray<RE::BSScript::Variable>&)>
+			CreateThreadScrapFunction(FunctionArgsBase& a_args)
+		{
+			using func_t = decltype(&detail::CreateThreadScrapFunction);
+			REL::Relocation<func_t> func{ REL::ID(69733) };
+			return func(a_args);
+		}
 	}
 
 	template<class... Args>
@@ -54,6 +54,11 @@ namespace Papyrus
 		{
 			auto scrap = detail::PackVariables(a_args...);
 			args = new RE::BSScript::ArrayWrapper<RE::BSScript::Variable>(scrap, *vm);
+		}
+
+		RE::BSTThreadScrapFunction<bool(RE::BSScrapArray<RE::BSScript::Variable>&)> get()
+		{
+			return detail::CreateThreadScrapFunction(*this);
 		}
 	};
 	static_assert(sizeof(FunctionArgs<std::monostate>) == 0x10);

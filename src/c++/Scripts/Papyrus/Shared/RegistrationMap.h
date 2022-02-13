@@ -48,7 +48,7 @@ namespace Papyrus
 							_event.first,
 							_event.second,
 							a_eventName,
-							args.CreateThreadScrapFunction(),
+							args.get(),
 							nullptr);
 					}
 				}
@@ -75,7 +75,7 @@ namespace Papyrus
 							_event.first,
 							_event.second,
 							a_eventName,
-							args.CreateThreadScrapFunction(),
+							args.get(),
 							nullptr);
 					}
 				}

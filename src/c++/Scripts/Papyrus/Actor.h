@@ -38,28 +38,40 @@ namespace Papyrus::Actor
 
 		if (auto victim = a_event.actorDying.get())
 		{
-			auto handle = GameVM->handlePolicy.GetHandleForObject(
-				static_cast<std::uint32_t>(victim->GetFormType()),
-				victim);
-			auto args = FunctionArgs{ GameVM->GetVM().get(), victim };
-			detail::SendEventToObjectAndRelated(
-				GameVM,
-				handle,
-				a_event.dead ? "OnDeath"sv : "OnDying"sv,
-				args.CreateThreadScrapFunction());
+			if (auto actor = victim->As<RE::Actor>())
+			{
+				auto handle = GameVM->handlePolicy.GetHandleForObject(
+					static_cast<std::uint32_t>(actor->GetFormType()),
+					actor);
+				auto args = FunctionArgs{
+					GameVM->GetVM().get(),
+					static_cast<RE::Actor*>(a_event.actorKiller.get())
+				};
+				detail::SendEventToObjectAndRelated(
+					GameVM,
+					handle,
+					a_event.dead ? "OnDeath"sv : "OnDying"sv,
+					args.get());
+			}
 		}
 
 		if (auto killer = a_event.actorKiller.get())
 		{
-			auto handle = GameVM->handlePolicy.GetHandleForObject(
-				static_cast<std::uint32_t>(killer->GetFormType()),
-				killer);
-			auto args = FunctionArgs{ GameVM->GetVM().get(), killer };
-			detail::SendEventToObjectAndRelated(
-				GameVM,
-				handle,
-				a_event.dead ? "OnKill"sv : "OnKilling"sv,
-				args.CreateThreadScrapFunction());
+			if (auto actor = killer->As<RE::Actor>())
+			{
+				auto handle = GameVM->handlePolicy.GetHandleForObject(
+					static_cast<std::uint32_t>(actor->GetFormType()),
+					actor);
+				auto args = FunctionArgs{
+					GameVM->GetVM().get(),
+					static_cast<RE::Actor*>(a_event.actorDying.get())
+				};
+				detail::SendEventToObjectAndRelated(
+					GameVM,
+					handle,
+					a_event.dead ? "OnKill"sv : "OnKilling"sv,
+					args.get());
+			}
 		}
 
 		return RE::BSEventNotifyControl::kContinue;
