@@ -137,8 +137,8 @@ extern "C" DLLEXPORT bool F4SEAPI F4SEPlugin_Load(const F4SE::LoadInterface* a_F
 		return false;
 	}
 
-	Forms::InstallHooks();
-	Fixes::InstallHooks();
+	Forms::Install();
+	Fixes::Install();
 	Patches::Install();
 	ObScript::Install();
 	Workshop::PlacementMode::Hooks::Install();

@@ -4,7 +4,7 @@
 
 namespace Fixes
 {
-	void InstallHooks()
+	void Install()
 	{
 		auto& trampoline = F4SE::GetTrampoline();
 

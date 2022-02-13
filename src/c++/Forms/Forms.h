@@ -81,7 +81,7 @@ namespace Forms
 		}
 	}
 
-	void InstallHooks()
+	void Install()
 	{
 		REL::Relocation<std::uintptr_t> targetDFOB{ REL::ID(1389727) };
 		REL::Relocation<std::uintptr_t> targetGMST{ REL::ID(1078413) };
