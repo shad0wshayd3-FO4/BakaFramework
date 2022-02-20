@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Patches/LoadEditorIDs.h"
-#include "Patches/RandomMods.h"
 
 namespace Patches
 {
@@ -9,12 +8,7 @@ namespace Patches
 	{
 		if (*Settings::Patches::EnableLoadingEditorIDs)
 		{
-			LoadEditorIDs::InstallHooks();
-		}
-
-		if (*Settings::Patches::EnableRandomMods)
-		{
-			RandomMods::InstallHooks();
+			LoadEditorIDs::Install();
 		}
 	}
 }
