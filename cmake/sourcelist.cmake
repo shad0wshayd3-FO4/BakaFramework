@@ -9,7 +9,6 @@ set(SOURCE_FILES
 	${ROOT_DIR}/src/c++/Misc/Fixes/OnStoryCraftItem.h
 	${ROOT_DIR}/src/c++/Misc/Patches.h
 	${ROOT_DIR}/src/c++/Misc/Patches/LoadEditorIDs.h
-	${ROOT_DIR}/src/c++/Misc/Patches/RandomMods.h
 	${ROOT_DIR}/src/c++/PCH.cpp
 	${ROOT_DIR}/src/c++/PCH.h
 	${ROOT_DIR}/src/c++/Scripts/ObScript.h
@@ -20,7 +19,6 @@ set(SOURCE_FILES
 	${ROOT_DIR}/src/c++/Scripts/ObScript/QuitGame.h
 	${ROOT_DIR}/src/c++/Scripts/ObScript/SpellHasCastingPerk.h
 	${ROOT_DIR}/src/c++/Scripts/Papyrus.h
-	${ROOT_DIR}/src/c++/Scripts/Papyrus/Actor.h
 	${ROOT_DIR}/src/c++/Scripts/Papyrus/BakaUtil.h
 	${ROOT_DIR}/src/c++/Scripts/Papyrus/ScriptObject.h
 	${ROOT_DIR}/src/c++/Scripts/Papyrus/Shared/FunctionArgs.h
