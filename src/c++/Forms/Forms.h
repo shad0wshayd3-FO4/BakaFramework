@@ -67,7 +67,7 @@ namespace Forms
 		std::uint32_t hkGameSetting()
 		{
 			RE::GameSettingCollection::InitCollection();
-			if (auto GameSettingCollection = RE::GameSettingCollection::GetSingleton(); GameSettingCollection)
+			if (auto GameSettingCollection = RE::GameSettingCollection::GetSingleton())
 			{
 				// Initializer override
 				GameSettingCollection->Add(&fBlockMax);

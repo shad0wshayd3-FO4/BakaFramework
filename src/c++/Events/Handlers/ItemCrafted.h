@@ -21,7 +21,7 @@ namespace Events::Handlers
 		static void Register()
 		{
 			RE::ItemCrafted::RegisterSink(GetSingleton());
-			if (auto UI = RE::UI::GetSingleton(); UI)
+			if (auto UI = RE::UI::GetSingleton())
 			{
 				UI->RegisterSink<RE::MenuOpenCloseEvent>(GetSingleton());
 			}
@@ -29,10 +29,10 @@ namespace Events::Handlers
 
 		virtual RE::BSEventNotifyControl ProcessEvent(const RE::ItemCrafted::Event& a_event, RE::BSTEventSource<RE::ItemCrafted::Event>*) override
 		{
-			if (auto StoryEventManager = RE::BGSStoryEventManager::GetSingleton(); StoryEventManager)
+			if (auto StoryEventManager = RE::BGSStoryEventManager::GetSingleton())
 			{
 				RE::BGSLocation* location{ nullptr };
-				if (auto parentCell = m_refr ? m_refr->GetParentCell() : nullptr; parentCell)
+				if (auto parentCell = m_refr ? m_refr->GetParentCell() : nullptr)
 				{
 					location = parentCell->GetLocation();
 				}
@@ -49,7 +49,7 @@ namespace Events::Handlers
 			{
 				if (a_event.opening)
 				{
-					if (auto UI = RE::UI::GetSingleton(); UI)
+					if (auto UI = RE::UI::GetSingleton())
 					{
 						auto menu = static_cast<RE::WorkbenchMenuBase*>(UI->GetMenu(a_event.menuName).get());
 						if (menu && menu->workbenchRef)

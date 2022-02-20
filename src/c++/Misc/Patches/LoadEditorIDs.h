@@ -7,7 +7,7 @@ namespace Patches::LoadEditorIDs
 		class Patch
 		{
 		public:
-			static const char* GetFormEditorID(RE::TESForm* a_this)
+			static const char* hkGet(RE::TESForm* a_this)
 			{
 				auto iter = rmap.find(a_this);
 				if (iter != rmap.end())
@@ -15,21 +15,21 @@ namespace Patches::LoadEditorIDs
 					return iter->second.c_str();
 				}
 
-				return func_get(a_this);
+				return ogGet(a_this);
 			}
 
-			static bool SetFormEditorID(RE::TESForm* a_this, const char* a_editor)
+			static bool hkSet(RE::TESForm* a_this, const char* a_editor)
 			{
 				if (a_this->formID < 0xFF000000 && !std::string_view(a_editor).empty())
 				{
 					AddToGameMap(a_this, a_editor);
 				}
 
-				return func_set(a_this, a_editor);
+				return ogSet(a_this, a_editor);
 			}
 
-			static inline REL::Relocation<decltype(&RE::TESForm::GetFormEditorID)> func_get;
-			static inline REL::Relocation<decltype(&RE::TESForm::SetFormEditorID)> func_set;
+			static inline REL::Relocation<decltype(&RE::TESForm::GetFormEditorID)> ogGet;
+			static inline REL::Relocation<decltype(&RE::TESForm::SetFormEditorID)> ogSet;
 
 		private:
 			static void AddToGameMap(RE::TESForm* a_this, const char* a_editorID)
@@ -43,7 +43,11 @@ namespace Patches::LoadEditorIDs
 						auto iter = map->find(a_editorID);
 						if (iter != map->end())
 						{
-							logger::warn(FMT_STRING("EditorID Conflict: {:08X} and {:08X} are both {:s}"sv), iter->second->GetFormID(), a_this->GetFormID(), a_editorID);
+							logger::warn(
+								FMT_STRING("EditorID Conflict: {:08X} and {:08X} are both {:s}"sv),
+								iter->second->GetFormID(),
+								a_this->GetFormID(),
+								a_editorID);
 						}
 					}
 
@@ -60,12 +64,12 @@ namespace Patches::LoadEditorIDs
 		static void InstallHook()
 		{
 			REL::Relocation<std::uintptr_t> vtbl{ Form::VTABLE[0] };
-			Patch::func_get = vtbl.write_vfunc(0x3A, Patch::GetFormEditorID);
-			Patch::func_set = vtbl.write_vfunc(0x3B, Patch::SetFormEditorID);
+			Patch::ogGet = vtbl.write_vfunc(0x3A, Patch::hkGet);
+			Patch::ogSet = vtbl.write_vfunc(0x3B, Patch::hkSet);
 		}
 	}
 
-	void InstallHooks()
+	void Install()
 	{
 		// InstallHook<RE::BGSKeyword>();
 		// InstallHook<RE::BGSLocationRefType>();

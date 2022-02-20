@@ -21,9 +21,9 @@ namespace Events::Handlers
 
 			virtual void Run() override
 			{
-				if (auto refr = m_refr.get(); refr)
+				if (auto refr = m_refr.get())
 				{
-					if (auto inventoryWeight = Forms::InventoryWeight_DO->GetForm<RE::ActorValueInfo>(); inventoryWeight)
+					if (auto inventoryWeight = Forms::InventoryWeight_DO->GetForm<RE::ActorValueInfo>())
 					{
 						refr->SetBaseActorValue(*inventoryWeight, refr->GetWeightInContainer());
 					}
@@ -48,13 +48,13 @@ namespace Events::Handlers
 		virtual RE::BSEventNotifyControl ProcessEvent(const RE::TESContainerChangedEvent& a_event, RE::BSTEventSource<RE::TESContainerChangedEvent>*) override
 		{
 			auto source = RE::TESForm::GetFormByID(a_event.oldContainerFormID);
-			if (auto refr = source ? source->As<RE::TESObjectREFR>() : nullptr; refr)
+			if (auto refr = source ? source->As<RE::TESObjectREFR>() : nullptr)
 			{
 				F4SE::GetTaskInterface()->AddTask(new WeightUpdate(refr));
 			}
 
 			auto target = RE::TESForm::GetFormByID(a_event.newContainerFormID);
-			if (auto refr = target ? target->As<RE::TESObjectREFR>() : nullptr; refr)
+			if (auto refr = target ? target->As<RE::TESObjectREFR>() : nullptr)
 			{
 				F4SE::GetTaskInterface()->AddTask(new WeightUpdate(refr));
 			}

@@ -15,7 +15,7 @@ namespace ObScript
 		ObScript::FreePlayer::Install();
 		ObScript::GetBaseObject::Install();
 		ObScript::GetDefaultObject::Install();
-		ObScript::SpellHasCastingPerk::Install();
 		ObScript::QuitGame::Install();
+		ObScript::SpellHasCastingPerk::Install();
 	}
 }
