@@ -27,6 +27,12 @@ namespace Papyrus
 				vm(a_vm)
 			{}
 
+			bool operator()(RE::BSScrapArray<RE::BSScript::Variable>& a_args)
+			{
+				args->GetArrayCopy(a_args, *vm);
+				return true;
+			}
+
 		protected:
 			// members
 			RE::BSScript::ArrayWrapper<RE::BSScript::Variable>* args;  // 00
