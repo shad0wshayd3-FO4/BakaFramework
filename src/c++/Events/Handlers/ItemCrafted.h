@@ -37,7 +37,8 @@ namespace Events::Handlers
 					location = parentCell->GetLocation();
 				}
 
-				StoryEventManager->AddEvent(RE::BGSCraftItemEvent{ m_refr.get(), location, a_event.recipe->GetCreatedItem() });
+				auto item = a_event.recipe ? a_event.recipe->GetCreatedItem() : nullptr;
+				StoryEventManager->AddEvent(RE::BGSCraftItemEvent{ m_refr.get(), location, item });
 			}
 
 			return RE::BSEventNotifyControl::kContinue;
