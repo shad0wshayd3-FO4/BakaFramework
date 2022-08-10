@@ -9,7 +9,7 @@ namespace Events
 {
 	void Register()
 	{
-		logger::debug("Registering Event Handlers."sv);
+		logger::debug("Registering Event Handlers.");
 
 		RE::CurrentRadiationSourceCount::GetEventSource()->RegisterSink(Handlers::CurrentRadiationSourceCountHandler::GetSingleton());
 		RE::PipboyLightEvent::GetEventSource()->RegisterSink(Handlers::PipboyLightEventHandler::GetSingleton());

@@ -2,9 +2,6 @@ if(NOT DEFINED ENV{STEAMWORKS_SDK})
 	message(FATAL_ERROR "environment variable STEAMWORKS_SDK is not set")
 endif()
 
-set(MAJOR 1)
-set(MINOR 34)
-
 cmake_path(SET STEAMWORKS_SDK NORMALIZE $ENV{STEAMWORKS_SDK}/steamworks_sdk_${MAJOR}${MINOR})
 if(NOT IS_DIRECTORY ${STEAMWORKS_SDK})
 	message(FATAL_ERROR "failed to find required version in STEAMWORKS_SDK")

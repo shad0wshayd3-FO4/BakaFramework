@@ -5,7 +5,7 @@
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": {
           "type": "STRING",
-          "value": "Debug"
+          "value": "Release"
         }
       },
       "errors": {
@@ -26,7 +26,7 @@
         },
         "VCPKG_OVERLAY_PORTS": {
           "type": "STRING",
-          "value": "${sourceDir}/cmake/ports/;${sourceDir}/external/CommonLibF4/cmake/ports/"
+          "value": "${sourceDir}/cmake/ports/;${sourceDir}/extern/CommonLibF4/cmake/ports/"
         },
         "VCPKG_OVERLAY_TRIPLETS": {
           "type": "STRING",
@@ -38,13 +38,9 @@
     },
     {
       "cacheVariables": {
-        "Boost_USE_STATIC_RUNTIME": {
-          "type": "BOOL",
-          "value": "OFF"
-        },
         "CMAKE_MSVC_RUNTIME_LIBRARY": {
           "type": "STRING",
-          "value": "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL"
+          "value": "MultiThreaded$<$<CONFIG:Debug>:Debug>"
         },
         "VCPKG_TARGET_TRIPLET": {
           "type": "STRING",
@@ -56,8 +52,8 @@
     },
     {
       "cacheVariables": {
-        "CMAKE_CXX_FLAGS_RELEASE": "/O2 /DNDEBUG",
-        "CMAKE_CXX_FLAGS": "/EHsc /MP /W4 /WX"
+        "CMAKE_CXX_FLAGS": "/EHsc /MP /W4 /WX",
+        "CMAKE_CXX_FLAGS_RELEASE": "/O2 /DNDEBUG"
       },
       "generator": "Visual Studio 17 2022",
       "inherits": [

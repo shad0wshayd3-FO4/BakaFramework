@@ -2,10 +2,14 @@
 charset = utf-8
 insert_final_newline = true
 
-[*.{h,cmake,cpp}]
+[*.{hpp,cpp}]
 indent_style = tab
 indent_size = 4
 
-[*.json]
+[{CMakeLists.txt,*.cmake,*.cmake.in}]
+indent_style = tab
+indent_size = 4
+
+[*.{json,yml}]
 indent_style = space
 indent_size = 2

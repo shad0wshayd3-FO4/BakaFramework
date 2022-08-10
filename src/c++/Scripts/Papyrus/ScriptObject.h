@@ -40,17 +40,17 @@ namespace Papyrus::ScriptObject
 			{
 				if (!a_intfc->OpenRecord('PLEC', 1))
 				{
-					logger::warn(FMT_STRING("{:s}: Failed to create record."sv), "PLEC"sv);
+					logger::warn(FMT_STRING("{:s}: Failed to create record."), "PLEC"sv);
 					return false;
 				}
 
 				if (!a_intfc->WriteRecordData(&valueCache, sizeof(valueCache)))
 				{
-					logger::warn(FMT_STRING("{:s}: Failed to write record data."sv), "PLEC"sv);
+					logger::warn(FMT_STRING("{:s}: Failed to write record data."), "PLEC"sv);
 					return false;
 				}
 
-				logger::info(FMT_STRING("{:s}: Saved."sv), "PLEC"sv);
+				logger::info(FMT_STRING("{:s}: Saved."), "PLEC"sv);
 			}
 
 			return result;
@@ -76,11 +76,11 @@ namespace Papyrus::ScriptObject
 						{
 							if (sizeof(valueCache) != a_intfc->ReadRecordData(&valueCache, sizeof(valueCache)))
 							{
-								logger::warn(FMT_STRING("{:s}: Failed to read record data."sv), "PLEC"sv);
+								logger::warn(FMT_STRING("{:s}: Failed to read record data."), "PLEC"sv);
 								return false;
 							}
 
-							logger::info(FMT_STRING("{:s}: Loaded."sv), "PLEC"sv);
+							logger::info(FMT_STRING("{:s}: Loaded."), "PLEC"sv);
 						}
 						break;
 

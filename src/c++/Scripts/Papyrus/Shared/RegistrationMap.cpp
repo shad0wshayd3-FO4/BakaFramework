@@ -14,14 +14,14 @@ namespace Papyrus
 			const RE::BSAutoLock locker{ _lock };
 			if (!a_intfc->OpenRecord(GetRecordType(), GetRecordVersion()))
 			{
-				logger::warn(FMT_STRING("{:s}: Failed to create record."sv), GetRecordName());
+				logger::warn(FMT_STRING("{:s}: Failed to create record."), GetRecordName());
 				return false;
 			}
 
 			std::uint32_t count{ 0 }, rsize{ _events.size() };
 			if (!a_intfc->WriteRecordData(&rsize, sizeof(rsize)))
 			{
-				logger::warn(FMT_STRING("{:s}: Failed to write record size."sv), GetRecordName());
+				logger::warn(FMT_STRING("{:s}: Failed to write record size."), GetRecordName());
 				return false;
 			}
 
@@ -29,21 +29,21 @@ namespace Papyrus
 			{
 				if (!a_intfc->WriteRecordData(&handle, sizeof(handle)))
 				{
-					logger::warn(FMT_STRING("{:s}: Failed to write registration hndl (idx#{:d}/{:d})."sv), GetRecordName(), count, rsize);
+					logger::warn(FMT_STRING("{:s}: Failed to write registration hndl (idx#{:d}/{:d})."), GetRecordName(), count, rsize);
 					return false;
 				}
 
 				auto nsze = name.size() + 1;
 				if (!a_intfc->WriteRecordData(&nsze, sizeof(nsze)) || !a_intfc->WriteRecordData(name.data(), nsze))
 				{
-					logger::warn(FMT_STRING("{:s}: Failed to write registration data (idx#{:d}/{:d})."sv), GetRecordName(), count, rsize);
+					logger::warn(FMT_STRING("{:s}: Failed to write registration data (idx#{:d}/{:d})."), GetRecordName(), count, rsize);
 					return false;
 				}
 
 				count++;
 			}
 
-			logger::info(FMT_STRING("{:s}: Saved {:d}/{:d} event registrations."sv), GetRecordName(), count, rsize);
+			logger::info(FMT_STRING("{:s}: Saved {:d}/{:d} event registrations."), GetRecordName(), count, rsize);
 			return true;
 		}
 
@@ -66,7 +66,7 @@ namespace Papyrus
 			std::uint32_t count{ 0 }, rsize{ 0 };
 			if (sizeof(rsize) != a_intfc->ReadRecordData(&rsize, sizeof(rsize)))
 			{
-				logger::warn(FMT_STRING("{:s}: Failed to read record size."sv), GetRecordName());
+				logger::warn(FMT_STRING("{:s}: Failed to read record size."), GetRecordName());
 				return false;
 			}
 
@@ -79,21 +79,21 @@ namespace Papyrus
 				std::uint64_t hndl{ 0 };
 				if (sizeof(hndl) != a_intfc->ReadRecordData(&hndl, sizeof(hndl)))
 				{
-					logger::warn(FMT_STRING("{:s}: Failed to read registration hndl (idx#{:d}/{:d})."sv), GetRecordName(), count, rsize);
+					logger::warn(FMT_STRING("{:s}: Failed to read registration hndl (idx#{:d}/{:d})."), GetRecordName(), count, rsize);
 					return false;
 				}
 
 				std::uint32_t nsze{ 0 };
 				if (sizeof(nsze) != a_intfc->ReadRecordData(&nsze, sizeof(nsze)))
 				{
-					logger::warn(FMT_STRING("{:s}: Failed to read registration size (idx#{:d}/{:d})."sv), GetRecordName(), count, rsize);
+					logger::warn(FMT_STRING("{:s}: Failed to read registration size (idx#{:d}/{:d})."), GetRecordName(), count, rsize);
 					return false;
 				}
 
 				name.reserve(nsze);
 				if (nsze != a_intfc->ReadRecordData(name.data(), nsze))
 				{
-					logger::warn(FMT_STRING("{:s}: Failed to read registration data (idx#{:d}/{:d})."sv), GetRecordName(), count, rsize);
+					logger::warn(FMT_STRING("{:s}: Failed to read registration data (idx#{:d}/{:d})."), GetRecordName(), count, rsize);
 					return false;
 				}
 
@@ -101,7 +101,7 @@ namespace Papyrus
 				count++;
 			}
 
-			logger::info(FMT_STRING("{:s}: Loaded {:d}/{:d} event registrations."sv), GetRecordName(), count, rsize);
+			logger::info(FMT_STRING("{:s}: Loaded {:d}/{:d} event registrations."), GetRecordName(), count, rsize);
 			return true;
 		}
 

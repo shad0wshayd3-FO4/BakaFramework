@@ -1,7 +1,7 @@
 #include "SteamAPI.h"
 
+#include <shellapi.h>
 #include <steam/steam_api.h>
-#include <windows.h>
 
 namespace SteamAPI
 {
@@ -50,7 +50,7 @@ namespace SteamAPI
 
 		if (a_fallback)
 		{
-			logger::debug("Overlay is disabled."sv);
+			logger::debug("Overlay is disabled.");
 			ShellExecuteA(NULL, NULL, a_url, NULL, NULL, SW_MAXIMIZE);
 		}
 	}

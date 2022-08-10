@@ -60,7 +60,7 @@ namespace Forms
 					"PAFrameMessage_DO",
 					RE::ENUM_FORM_ID::kMESG);
 
-			logger::debug("Injected DefaultObjects."sv);
+			logger::debug("Injected DefaultObjects.");
 			return 1;
 		}
 
@@ -76,7 +76,7 @@ namespace Forms
 				// TODO
 			}
 
-			logger::debug("Injected GMSTs."sv);
+			logger::debug("Injected GMSTs.");
 			return 1;
 		}
 	}

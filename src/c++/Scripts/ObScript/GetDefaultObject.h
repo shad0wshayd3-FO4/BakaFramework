@@ -29,11 +29,11 @@ namespace ObScript
 				it->parameters = params.data();
 				it->executeFunction = Execute;
 
-				logger::debug("Registered GetDefaultObject."sv);
+				logger::debug("Registered GetDefaultObject.");
 			}
 			else
 			{
-				logger::debug("Failed to register GetDefaultObject."sv);
+				logger::debug("Failed to register GetDefaultObject.");
 			}
 		}
 
@@ -62,14 +62,14 @@ namespace ObScript
 
 			if (!result)
 			{
-				logger::warn("GetDefaultObject::Execute: ParseParameters failed."sv);
+				logger::warn("GetDefaultObject::Execute: ParseParameters failed.");
 				return true;
 			}
 
 			// Check DefaultObject name string exists
 			if (dfobName[0] == '\0')
 			{
-				logger::warn("GetDefaultObject::Execute: No name."sv);
+				logger::warn("GetDefaultObject::Execute: No name.");
 				return true;
 			}
 
@@ -78,7 +78,7 @@ namespace ObScript
 				if (auto dfob = form->As<RE::BGSDefaultObject>(); dfob)
 				{
 					auto resultText = fmt::format(
-						FMT_STRING("GetDefaultObject ({:s}) >> 0x{:08X}\n"sv),
+						FMT_STRING("GetDefaultObject ({:s}) >> 0x{:08X}\n"),
 						dfob->formEditorID.c_str(),
 						dfob->form ? dfob->form->formID : 0);
 					RE::ConsoleLog::GetSingleton()->AddString(resultText.c_str());
@@ -87,7 +87,7 @@ namespace ObScript
 			}
 
 			auto resultText = fmt::format(
-				FMT_STRING("GetDefaultObject ({:s}) >> Does not exist.\n"sv),
+				FMT_STRING("GetDefaultObject ({:s}) >> Does not exist.\n"),
 				dfobName.data());
 			RE::ConsoleLog::GetSingleton()->AddString(resultText.c_str());
 			return true;

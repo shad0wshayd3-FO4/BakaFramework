@@ -29,11 +29,11 @@ namespace ObScript
 				it->parameters = params.data();
 				it->executeFunction = Execute;
 
-				logger::debug("Registered BetaComment."sv);
+				logger::debug("Registered BetaComment.");
 			}
 			else
 			{
-				logger::debug("Failed to register BetaComment."sv);
+				logger::debug("Failed to register BetaComment.");
 			}
 		}
 
@@ -62,14 +62,14 @@ namespace ObScript
 
 			if (!result)
 			{
-				logger::warn("BetaComment::Execute: ParseParameters failed."sv);
+				logger::warn("BetaComment::Execute: ParseParameters failed.");
 				return true;
 			}
 
 			// Check Comment string exists
 			if (rawComment[0] == '\0')
 			{
-				logger::warn("BetaComment::Execute: No comment."sv);
+				logger::warn("BetaComment::Execute: No comment.");
 				return true;
 			}
 
@@ -115,7 +115,7 @@ namespace ObScript
 			PrintRefrPositionInfo(line);
 			PrintCameraPositionInfo(line);
 
-			logger::debug(""sv);
+			logger::debug("");
 
 			// Print Comment
 			line << "\"" << rawComment.data() << "\"";
@@ -132,8 +132,8 @@ namespace ObScript
 		static bool PrintCurrentTime(std::stringstream& a_buf)
 		{
 			auto currentTime_t = std::time(nullptr);
-			auto currentTime = fmt::format(FMT_STRING("{:%m/%d/%y (%H:%M)}"sv), fmt::localtime(currentTime_t));
-			logger::debug(FMT_STRING("CurrentTime: {}"sv), currentTime);
+			auto currentTime = fmt::format(FMT_STRING("{:%m/%d/%y (%H:%M)}"), fmt::localtime(currentTime_t));
+			logger::debug(FMT_STRING("CurrentTime: {}"), currentTime);
 
 			a_buf << currentTime << _delim;
 			return true;
@@ -145,15 +145,15 @@ namespace ObScript
 			if (file)
 			{
 				auto fileName = file->GetFilename();
-				auto fileTime = fmt::format(FMT_STRING("{:%m/%d/%y (%H:%M)}"sv), fmt::localtime(GetFileTime(file)));
-				logger::debug(FMT_STRING("File Name: {}"sv), fileName);
-				logger::debug(FMT_STRING("File Time: {}"sv), fileTime);
+				auto fileTime = fmt::format(FMT_STRING("{:%m/%d/%y (%H:%M)}"), fmt::localtime(GetFileTime(file)));
+				logger::debug(FMT_STRING("File Name: {}"), fileName);
+				logger::debug(FMT_STRING("File Time: {}"), fileTime);
 
 				a_buf << fileName << _delim << fileTime << _delim;
 			}
 			else
 			{
-				logger::debug("Warning: No File."sv);
+				logger::debug("Warning: No File.");
 				a_buf << _delim << _delim;
 			}
 
@@ -164,14 +164,14 @@ namespace ObScript
 		{
 			const auto machineName = []() -> std::string
 			{
-				char buffer[F4SE::WinAPI::MAX_COMPUTERNAME_LENGTH + 1];
+				char buffer[16];
 				std::uint32_t bufferSize = sizeof(buffer) / sizeof(char);
 
 				auto result = F4SE::WinAPI::GetComputerName(buffer, &bufferSize);
 				return (result) ? buffer : "UNKNOWN"s;
 			}();
 
-			logger::debug(FMT_STRING("Machine Name: {}"sv), machineName);
+			logger::debug(FMT_STRING("Machine Name: {}"), machineName);
 
 			a_buf << machineName << _delim;
 			return true;
@@ -179,10 +179,10 @@ namespace ObScript
 
 		static bool PrintFormInfo(std::stringstream& a_buf)
 		{
-			auto formID = fmt::format(FMT_STRING("{:08X}"sv), m_refr->formID);
+			auto formID = fmt::format(FMT_STRING("{:08X}"), m_refr->formID);
 			auto formName = m_refr->GetFormEditorID();
-			logger::debug(FMT_STRING("FormID: {}"sv), formID);
-			logger::debug(FMT_STRING("Form Name: {}"sv), formName);
+			logger::debug(FMT_STRING("FormID: {}"), formID);
+			logger::debug(FMT_STRING("Form Name: {}"), formName);
 
 			a_buf << formID << _delim << formName << _delim;
 			return true;
@@ -195,20 +195,20 @@ namespace ObScript
 			auto cell = m_refr->GetParentCell();
 			if (cell)
 			{
-				auto cellID = fmt::format(FMT_STRING("{:08X}"sv), cell->formID);
+				auto cellID = fmt::format(FMT_STRING("{:08X}"), cell->formID);
 
 				if (cell->cellFlags.all(RE::TESObjectCELL::Flag::kInterior))
 				{
 					auto cellName = cell->GetFormEditorID();
-					logger::debug(FMT_STRING("Cell (Interior): {}"sv), cellName);
-					logger::debug(FMT_STRING("Cell FormID (Interior): {}"sv), cellID);
+					logger::debug(FMT_STRING("Cell (Interior): {}"), cellName);
+					logger::debug(FMT_STRING("Cell FormID (Interior): {}"), cellID);
 					temp << cellName << _delim << cellID << _delim;
 				}
 				else
 				{
 					if ((cell->formFlags >> 13) & 1)
 					{
-						logger::warn("BetaComment::PrintCellInfo: Unknown Edge Case."sv);
+						logger::warn("BetaComment::PrintCellInfo: Unknown Edge Case.");
 						temp << _delim << _delim;
 					}
 					else
@@ -216,19 +216,19 @@ namespace ObScript
 						auto cellX = cell->GetDataX();
 						auto cellY = cell->GetDataY();
 						auto cellName = fmt::format(
-							FMT_STRING("{} ({:d},{:d})"sv),
+							FMT_STRING("{} ({:d},{:d})"),
 							cell->worldSpace->GetFormEditorID(),
 							cellX,
 							cellY);
-						logger::debug(FMT_STRING("Cell (Exterior): {}"sv), cellName);
-						logger::debug(FMT_STRING("Cell FormID (Exterior): {}"sv), cellID);
+						logger::debug(FMT_STRING("Cell (Exterior): {}"), cellName);
+						logger::debug(FMT_STRING("Cell FormID (Exterior): {}"), cellID);
 						temp << cellName << _delim << cellID << _delim;
 					}
 				}
 			}
 			else
 			{
-				logger::debug("Cell Info: No Cell."sv);
+				logger::debug("Cell Info: No Cell.");
 				temp << _delim << _delim;
 			}
 
@@ -238,15 +238,15 @@ namespace ObScript
 
 		static bool PrintRefrPositionInfo(std::stringstream& a_buf)
 		{
-			auto locationX = fmt::format(FMT_STRING("{:.0f}"sv), m_refr->data.location.x);
-			auto locationY = fmt::format(FMT_STRING("{:.0f}"sv), m_refr->data.location.y);
-			auto locationZ = fmt::format(FMT_STRING("{:.0f}"sv), m_refr->data.location.z);
-			logger::debug(FMT_STRING("Refr Location: {}, {}, {}"sv), locationX, locationY, locationZ);
+			auto locationX = fmt::format(FMT_STRING("{:.0f}"), m_refr->data.location.x);
+			auto locationY = fmt::format(FMT_STRING("{:.0f}"), m_refr->data.location.y);
+			auto locationZ = fmt::format(FMT_STRING("{:.0f}"), m_refr->data.location.z);
+			logger::debug(FMT_STRING("Refr Location: {}, {}, {}"), locationX, locationY, locationZ);
 
-			auto angleX = fmt::format(FMT_STRING("{:.0f}"sv), m_refr->data.angle.x);
-			auto angleY = fmt::format(FMT_STRING("{:.0f}"sv), m_refr->data.angle.y);
-			auto angleZ = fmt::format(FMT_STRING("{:.0f}"sv), m_refr->data.angle.z);
-			logger::debug(FMT_STRING("Refr Angle: {}, {}, {}"sv), angleX, angleY, angleZ);
+			auto angleX = fmt::format(FMT_STRING("{:.0f}"), m_refr->data.angle.x);
+			auto angleY = fmt::format(FMT_STRING("{:.0f}"), m_refr->data.angle.y);
+			auto angleZ = fmt::format(FMT_STRING("{:.0f}"), m_refr->data.angle.z);
+			logger::debug(FMT_STRING("Refr Angle: {}, {}, {}"), angleX, angleY, angleZ);
 
 			a_buf
 				<< locationX << _delim
@@ -261,17 +261,17 @@ namespace ObScript
 		static bool PrintCameraPositionInfo(std::stringstream& a_buf)
 		{
 			auto rootCamera = RE::Main::WorldRootCamera();
-			auto cameraPositionX = fmt::format(FMT_STRING("{:.0f}"sv), rootCamera->world.translate.x);
-			auto cameraPositionY = fmt::format(FMT_STRING("{:.0f}"sv), rootCamera->world.translate.y);
-			auto cameraPositionZ = fmt::format(FMT_STRING("{:.0f}"sv), rootCamera->world.translate.z);
-			logger::debug(FMT_STRING("Camera Position: {}, {}, {}"sv), cameraPositionX, cameraPositionY, cameraPositionZ);
+			auto cameraPositionX = fmt::format(FMT_STRING("{:.0f}"), rootCamera->world.translate.x);
+			auto cameraPositionY = fmt::format(FMT_STRING("{:.0f}"), rootCamera->world.translate.y);
+			auto cameraPositionZ = fmt::format(FMT_STRING("{:.0f}"), rootCamera->world.translate.z);
+			logger::debug(FMT_STRING("Camera Position: {}, {}, {}"), cameraPositionX, cameraPositionY, cameraPositionZ);
 
 			float fCameraAngleX, fCameraAngleY, fCameraAngleZ;
 			rootCamera->parent->world.rotate.ToEulerAnglesXYZ(&fCameraAngleX, &fCameraAngleY, &fCameraAngleZ);
-			auto cameraAngleX = fmt::format(FMT_STRING("{:.0f}"sv), fCameraAngleX);
-			auto cameraAngleY = fmt::format(FMT_STRING("{:.0f}"sv), fCameraAngleY);
-			auto cameraAngleZ = fmt::format(FMT_STRING("{:.0f}"sv), fCameraAngleZ);
-			logger::debug(FMT_STRING("Camera Angle: {}, {}, {}"sv), cameraAngleX, cameraAngleY, cameraAngleZ);
+			auto cameraAngleX = fmt::format(FMT_STRING("{:.0f}"), fCameraAngleX);
+			auto cameraAngleY = fmt::format(FMT_STRING("{:.0f}"), fCameraAngleY);
+			auto cameraAngleZ = fmt::format(FMT_STRING("{:.0f}"), fCameraAngleZ);
+			logger::debug(FMT_STRING("Camera Angle: {}, {}, {}"), cameraAngleX, cameraAngleY, cameraAngleZ);
 
 			a_buf
 				<< cameraPositionX << _delim

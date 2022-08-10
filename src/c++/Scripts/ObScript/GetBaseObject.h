@@ -23,11 +23,11 @@ namespace ObScript
 				it->referenceFunction = true;
 				it->executeFunction = Execute;
 
-				logger::debug("Registered GetBaseObject."sv);
+				logger::debug("Registered GetBaseObject.");
 			}
 			else
 			{
-				logger::debug("Failed to register GetBaseObject."sv);
+				logger::debug("Failed to register GetBaseObject.");
 			}
 		}
 
@@ -44,18 +44,18 @@ namespace ObScript
 		{
 			if (!a_refObject)
 			{
-				logger::warn("GetBaseObject::Execute: No reference selected!"sv);
+				logger::warn("GetBaseObject::Execute: No reference selected!");
 				return true;
 			}
 
 			auto base = a_refObject->data.objectReference;
 			if (!base)
 			{
-				logger::warn("GetBaseObject::Execute: Selected reference has no base data."sv);
+				logger::warn("GetBaseObject::Execute: Selected reference has no base data.");
 				return true;
 			}
 
-			auto result = fmt::format(FMT_STRING("GetBaseObject >> {:08X}\n"sv), base->formID);
+			auto result = fmt::format(FMT_STRING("GetBaseObject >> {:08X}\n"), base->formID);
 			RE::ConsoleLog::GetSingleton()->AddString(result.c_str());
 			return true;
 		}

@@ -27,7 +27,7 @@ namespace Serialization
 		const auto serialization = F4SE::GetSerializationInterface();
 		if (!serialization)
 		{
-			logger::critical("Failed to register Serialization callbacks, marking as incompatible."sv);
+			logger::critical("Failed to register Serialization callbacks, marking as incompatible.");
 			return false;
 		}
 

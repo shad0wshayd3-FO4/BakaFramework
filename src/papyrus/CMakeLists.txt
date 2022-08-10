@@ -1,107 +1,60 @@
-set(ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../..")
-set(SCRIPT "${ROOT_DIR}/scripts/papyrus_cmake.py")
+set(ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../..)
+
+include(${ROOT_DIR}/extern/BethesdaCMakeModules/Modules/Papyrus.cmake)
+
+file(GLOB Papyrus_INPUT
+	LIST_DIRECTORIES false
+	CONFIGURE_DEPENDS
+	${CMAKE_CURRENT_SOURCE_DIR}/*.psc
+)
+
+add_papyrus(
+	"Papyrus"
+	GAME
+		${Fallout4Path}
+	MODE
+		"Fallout4"
+	IMPORTS
+		${Fallout4Path}/Data/Scripts/Source/User
+		${Fallout4Path}/Data/Scripts/Source/CreationClub
+		${Fallout4Path}/Data/Scripts/Source/DLC06
+		${Fallout4Path}/Data/Scripts/Source/DLC05
+		${Fallout4Path}/Data/Scripts/Source/DLC04
+		${Fallout4Path}/Data/Scripts/Source/DLC03
+		${Fallout4Path}/Data/Scripts/Source/DLC02
+		${Fallout4Path}/Data/Scripts/Source/DLC01
+		${Fallout4Path}/Data/Scripts/Source/Base
+	SOURCES
+		${Papyrus_INPUT}
+)
 
 source_group(
-	TREE "${ROOT_DIR}"
-	FILES "${SCRIPT}"
+	"Scripts"
+	FILES
+		${Papyrus_INPUT}
 )
 
-macro(papyrus_target TARGET)
-	set(_PREFIX "papyrus_target")
-	cmake_parse_arguments(${_PREFIX} "" "TARGET_DEPENDS" "DEPENDS;OUTPUT" ${ARGN})
-
-	if(DEFINED ${_PREFIX}_UNPARSED_ARGUMENTS)
-		foreach(_ARG ${${_PREFIX}_UNPARSED_ARGUMENTS})
-			message(WARNING "Unused argument: ${_ARG}")
+if (COPY_BUILD)
+	if (DEFINED Fallout4Path)
+		foreach(FILE IN LISTS Papyrus_INPUT)
+			add_custom_command(
+				TARGET "Papyrus"
+				POST_BUILD
+				COMMAND ${CMAKE_COMMAND} -E copy ${FILE} ${Fallout4Path}/Data/Scripts/Source/Baka/
+			)
 		endforeach()
-	endif()
 
-	set(_DUMMY "${CMAKE_CURRENT_BINARY_DIR}/papyrus_${TARGET}_ready")
-
-	add_custom_target(
-		"papyrus_${TARGET}"
-		ALL
-		DEPENDS
-			"${_DUMMY}"
-		SOURCES
-			"${SCRIPT}"
-	)
-
-	add_custom_command(
-		OUTPUT
-			"${_DUMMY}"
-			${${_PREFIX}_OUTPUT}
-		COMMAND
-			"$<TARGET_FILE:Python3::Interpreter>"
-			"${SCRIPT}"
-			"--bin-dir=${CMAKE_CURRENT_BINARY_DIR}"
-			"--fo4-dir=${Fallout4Path}"
-			"--src-dir=${ROOT_DIR}"
-			"--target=${TARGET}"
-		COMMAND
-			"${CMAKE_COMMAND}" -E touch "${_DUMMY}"
-		DEPENDS
-			${${_PREFIX}_DEPENDS}
-		WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
-		VERBATIM
-	)
-
-	if(DEFINED ${_PREFIX}_TARGET_DEPENDS)
-		add_dependencies("papyrus_${TARGET}" "papyrus_${${_PREFIX}_TARGET_DEPENDS}")
-	endif()
-
-	unset(_DUMMY)
-	unset(${_PREFIX}_TARGET_DEPENDS)
-	unset(${_PREFIX}_DEPENDS)
-	unset(${_PREFIX}_OUTPUT)
-	unset(_PREFIX)
-endmacro()
-
-cmake_path(SET VANILLA_ARCHIVE NORMALIZE "${Fallout4Path}/Data/Scripts/Source/Base/Base.zip")
-papyrus_target(
-	"copy_vanilla"
-	DEPENDS
-		"${VANILLA_ARCHIVE}"
-)
-
-include("${ROOT_DIR}/cmake/sourcelist_papyrus.cmake")
-
-set(PAPYRUS_COMPILE_IN ${SOURCE_FILES})
-list(TRANSFORM PAPYRUS_COMPILE_IN PREPEND "${ROOT_DIR}/src/papyrus/")
-list(TRANSFORM PAPYRUS_COMPILE_IN APPEND ".psc")
-
-set(PAPYRUS_COMPILE_OUT ${SOURCE_FILES})
-list(TRANSFORM PAPYRUS_COMPILE_OUT PREPEND "${CMAKE_CURRENT_BINARY_DIR}/bin/")
-list(TRANSFORM PAPYRUS_COMPILE_OUT APPEND ".pex")
-
-papyrus_target(
-	"compile"
-	TARGET_DEPENDS "copy_vanilla"
-	DEPENDS
-		${PAPYRUS_COMPILE_IN}
-	OUTPUT
-		${PAPYRUS_COMPILE_OUT}
-)
-
-set(PAPYRUS_PSC_FILES ${PAPYRUS_COMPILE_IN} PARENT_SCOPE)
-set(PAPYRUS_PEX_FILES ${PAPYRUS_COMPILE_OUT} PARENT_SCOPE)
-
-if("${COPY_OUTPUT}")
-	foreach(FILE IN LISTS PAPYRUS_COMPILE_OUT)
-		add_custom_command(
-			TARGET "papyrus_compile"
-			POST_BUILD
-			COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${FILE}" "${Fallout4Path}/Data/Scripts/"
-			VERBATIM
+		foreach(FILE IN LISTS Papyrus_OUTPUT)
+			add_custom_command(
+				TARGET "Papyrus"
+				POST_BUILD
+				COMMAND ${CMAKE_COMMAND} -E copy ${FILE} ${Fallout4Path}/Data/Scripts/
+			)
+		endforeach()
+	else ()
+		message(
+			WARNING
+			"Variable ${Fallout4Path} is not defined. Skipping post-build copy command."
 		)
-	endforeach()
-
-	foreach(FILE IN LISTS PAPYRUS_COMPILE_IN)
-		add_custom_command(
-			TARGET "papyrus_compile"
-			POST_BUILD
-			COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${FILE}" "${Fallout4Path}/Data/Scripts/Source/Baka/"
-			VERBATIM
-		)
-	endforeach()
+	endif()
 endif()

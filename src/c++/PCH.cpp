@@ -1,8 +1,6 @@
 #include "PCH.h"
 
-#include <Windows.h>
-
-#undef GetComputerName
+#include <winbase.h>
 
 namespace F4SE
 {
@@ -19,9 +17,6 @@ namespace F4SE
 		}
 	}
 }
-
-#ifdef F4SE_SUPPORT_XBYAK
-#	include <xbyak/xbyak.h>
 
 namespace stl
 {
@@ -58,4 +53,3 @@ namespace stl
 		asm_jump(a_from, a_size, a_to);
 	}
 }
-#endif

@@ -34,7 +34,8 @@ namespace Settings
 	{
 		try
 		{
-			const auto table = toml::parse_file(fmt::format(FMT_STRING("Data/F4SE/Plugins/{}.toml"sv), Plugin::NAME));
+			const auto table = toml::parse_file(
+				fmt::format(FMT_STRING("Data/F4SE/Plugins/{:s}.toml"), Version::PROJECT));
 			for (const auto& setting : ISetting::get_settings())
 			{
 				setting->load(table);
@@ -47,7 +48,7 @@ namespace Settings
 				<< "Error parsing file \'" << *e.source().path << "\':\n"
 				<< '\t' << e.description() << '\n'
 				<< "\t\t(" << e.source().begin << ')';
-			logger::error(FMT_STRING("{}"sv), ss.str());
+			logger::error(FMT_STRING("{:s}"), ss.str());
 			stl::report_and_fail("Failed to load settings."sv);
 		}
 		catch (const std::exception& e)
