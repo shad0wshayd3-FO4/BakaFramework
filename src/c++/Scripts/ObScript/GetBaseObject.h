@@ -13,7 +13,7 @@ namespace ObScript
 				functions.end(),
 				[&](auto&& a_elem)
 				{
-					return _stricmp(a_elem.functionName, "PyConsole") == 0;
+					return _stricmp(a_elem.functionName, "IgnoreRenderPass") == 0;
 				});
 
 			if (it != functions.end())

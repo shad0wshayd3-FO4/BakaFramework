@@ -5,7 +5,7 @@ namespace Fixes
 	class OnStoryCraftItem
 	{
 	public:
-		static void hkStoryEventArgumentConverter(
+		static void StoryEventArgumentConverter(
 			void* a_this,
 			const RE::BGSStoryEvent& a_event,
 			RE::BSScript::IVirtualMachine& a_vm,
@@ -13,7 +13,7 @@ namespace Fixes
 			const char* a_arg2,
 			[[maybe_unused]] const char* a_arg3)
 		{
-			ogStoryEventArgumentConverter(a_this, a_event, a_vm, a_arg1, a_arg2, "O1");
+			_StoryEventArgumentConverter(a_this, a_event, a_vm, a_arg1, a_arg2, "O1");
 		}
 
 		static void Install()
@@ -21,10 +21,10 @@ namespace Fixes
 			REL::Relocation<std::uintptr_t> target{ REL::ID(1026783), 0xD26 };
 
 			auto& trampoline = F4SE::GetTrampoline();
-			ogStoryEventArgumentConverter =
-				trampoline.write_call<5>(target.address(), hkStoryEventArgumentConverter);
+			_StoryEventArgumentConverter =
+				trampoline.write_call<5>(target.address(), StoryEventArgumentConverter);
 		}
 
-		static inline REL::Relocation<decltype(&OnStoryCraftItem::hkStoryEventArgumentConverter)> ogStoryEventArgumentConverter;
+		static inline REL::Relocation<decltype(&OnStoryCraftItem::StoryEventArgumentConverter)> _StoryEventArgumentConverter;
 	};
 }
