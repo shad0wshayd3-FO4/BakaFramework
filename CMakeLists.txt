@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.22)
 set(NAME "BakaFramework")
-set(VERSION 1.7.1)
+set(VERSION 1.7.2)
 
 # ---- Options ----
 
