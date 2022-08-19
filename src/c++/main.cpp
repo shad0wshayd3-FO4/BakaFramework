@@ -17,7 +17,7 @@ namespace
 			stl::report_and_fail("Failed to find standard logging directory"sv);
 		}
 
-		*path /= fmt::format(FMT_STRING("{:s}.log"), Version::PROJECT);
+		*path /= fmt::format(FMT_STRING("{:s}.log"sv), Version::PROJECT);
 		auto sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(path->string(), true);
 
 		auto log = std::make_shared<spdlog::logger>("global log"s, std::move(sink));
@@ -31,7 +31,7 @@ namespace
 		spdlog::set_default_logger(std::move(log));
 		spdlog::set_pattern("[%m/%d/%Y - %T] [%^%l%$] %v"s);
 
-		logger::info(FMT_STRING("{:s} v{:s}"), Version::PROJECT, Version::NAME);
+		logger::info(FMT_STRING("{:s} v{:s}"sv), Version::PROJECT, Version::NAME);
 	}
 
 	void MessageHandler(F4SE::MessagingInterface::Message* a_msg)
@@ -45,19 +45,19 @@ namespace
 		{
 			case F4SE::MessagingInterface::kPostLoad:
 				{
-					logger::debug("PostLoad");
+					logger::debug("PostLoad"sv);
 					break;
 				}
 
 			case F4SE::MessagingInterface::kPostPostLoad:
 				{
-					logger::debug("PostPostLoad");
+					logger::debug("PostPostLoad"sv);
 					break;
 				}
 
 			case F4SE::MessagingInterface::kGameLoaded:
 				{
-					logger::debug("GameLoaded");
+					logger::debug("GameLoaded"sv);
 
 					if (*Settings::Features::EnablePAStorage)
 					{
@@ -71,13 +71,13 @@ namespace
 				{
 					if (static_cast<bool>(a_msg->data))
 					{
-						logger::debug("GameDataReady - Loaded");
+						logger::debug("GameDataReady - Loaded"sv);
 
 						Events::Register();
 					}
 					else
 					{
-						logger::debug("GameDataReady - Unloaded");
+						logger::debug("GameDataReady - Unloaded"sv);
 
 						ObScript::Help::ClearCellMap();
 					}
@@ -102,7 +102,7 @@ extern "C" DLLEXPORT bool F4SEAPI F4SEPlugin_Query(const F4SE::QueryInterface* a
 	{
 		stl::report_and_fail(
 			fmt::format(
-				FMT_STRING("{:s} does not support runtime v{:s}."),
+				FMT_STRING("{:s} does not support runtime v{:s}."sv),
 				Version::PROJECT,
 				rtv.string()));
 	}
@@ -115,8 +115,8 @@ extern "C" DLLEXPORT bool F4SEAPI F4SEPlugin_Load(const F4SE::LoadInterface* a_F
 	Settings::Load();
 	InitializeLog();
 
-	logger::info(FMT_STRING("{:s} loaded."), Version::PROJECT);
-	logger::debug("Debug logging enabled.");
+	logger::info(FMT_STRING("{:s} loaded."sv), Version::PROJECT);
+	logger::debug("Debug logging enabled."sv);
 
 	F4SE::Init(a_F4SE);
 	F4SE::AllocTrampoline(1u << 10);
@@ -126,14 +126,14 @@ extern "C" DLLEXPORT bool F4SEAPI F4SEPlugin_Load(const F4SE::LoadInterface* a_F
 	const auto messaging = F4SE::GetMessagingInterface();
 	if (!messaging || !messaging->RegisterListener(MessageHandler))
 	{
-		logger::critical("Failed to get F4SE messaging interface, marking as incompatible.");
+		logger::critical("Failed to register messaging handler, marking as incompatible."sv);
 		return false;
 	}
 
 	const auto papyrus = F4SE::GetPapyrusInterface();
 	if (!papyrus || !papyrus->Register(Papyrus::RegisterFunctions))
 	{
-		logger::critical("Failed to register Papyrus functions, marking as incompatible.");
+		logger::critical("Failed to register Papyrus functions, marking as incompatible."sv);
 		return false;
 	}
 
@@ -142,8 +142,6 @@ extern "C" DLLEXPORT bool F4SEAPI F4SEPlugin_Load(const F4SE::LoadInterface* a_F
 	Patches::Install();
 	ObScript::Install();
 	Workshop::PlacementMode::Hooks::Install();
-
-	logger::info("Plugin loaded successfully.");
 
 	return true;
 }

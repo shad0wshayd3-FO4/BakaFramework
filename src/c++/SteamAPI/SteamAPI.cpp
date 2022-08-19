@@ -50,7 +50,7 @@ namespace SteamAPI
 
 		if (a_fallback)
 		{
-			logger::debug("Overlay is disabled.");
+			logger::debug("Overlay is disabled."sv);
 			ShellExecuteA(NULL, NULL, a_url, NULL, NULL, SW_MAXIMIZE);
 		}
 	}

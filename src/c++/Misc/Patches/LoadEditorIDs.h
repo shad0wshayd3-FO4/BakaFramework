@@ -222,7 +222,7 @@ namespace Patches
 			InstallHook<RE::BGSLensFlare>();
 			InstallHook<RE::BGSGodRays>();
 
-			logger::debug("Installed Patch: LoadEditorIDs");
+			logger::debug("Installed Patch: LoadEditorIDs"sv);
 		}
 	};
 }

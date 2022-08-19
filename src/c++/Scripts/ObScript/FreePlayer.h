@@ -22,11 +22,11 @@ namespace ObScript
 				it->helpString = HelpString().data();
 				it->executeFunction = Execute;
 
-				logger::debug("Registered FreePlayer.");
+				logger::debug("Registered FreePlayer."sv);
 			}
 			else
 			{
-				logger::debug("Failed to register FreePlayer.");
+				logger::debug("Failed to register FreePlayer."sv);
 			}
 		}
 
@@ -50,7 +50,7 @@ namespace ObScript
 			static auto help = []()
 			{
 				std::string buf;
-				buf += "";
+				buf += ""sv;
 				return buf;
 			}();
 			return help;

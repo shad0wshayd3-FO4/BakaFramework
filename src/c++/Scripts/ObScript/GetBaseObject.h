@@ -23,11 +23,11 @@ namespace ObScript
 				it->referenceFunction = true;
 				it->executeFunction = Execute;
 
-				logger::debug("Registered GetBaseObject.");
+				logger::debug("Registered GetBaseObject."sv);
 			}
 			else
 			{
-				logger::debug("Failed to register GetBaseObject.");
+				logger::debug("Failed to register GetBaseObject."sv);
 			}
 		}
 
@@ -44,18 +44,18 @@ namespace ObScript
 		{
 			if (!a_refObject)
 			{
-				logger::warn("GetBaseObject::Execute: No reference selected!");
+				logger::warn("GetBaseObject::Execute: No reference selected!"sv);
 				return true;
 			}
 
 			auto base = a_refObject->data.objectReference;
 			if (!base)
 			{
-				logger::warn("GetBaseObject::Execute: Selected reference has no base data.");
+				logger::warn("GetBaseObject::Execute: Selected reference has no base data."sv);
 				return true;
 			}
 
-			auto result = fmt::format(FMT_STRING("GetBaseObject >> {:08X}\n"), base->formID);
+			auto result = fmt::format(FMT_STRING("GetBaseObject >> {:08X}\n"sv), base->formID);
 			RE::ConsoleLog::GetSingleton()->AddString(result.c_str());
 			return true;
 		}
@@ -65,7 +65,7 @@ namespace ObScript
 			static auto help = []()
 			{
 				std::string buf;
-				buf += "Print the FormID of an Object Reference's base Form.";
+				buf += "Print the FormID of an Object Reference's base Form."sv;
 				return buf;
 			}();
 			return help;

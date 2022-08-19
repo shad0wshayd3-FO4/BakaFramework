@@ -22,11 +22,11 @@ namespace ObScript
 				it->helpString = HelpString().data();
 				it->executeFunction = Execute;
 
-				logger::debug("Registered QuitGame.");
+				logger::debug("Registered QuitGame."sv);
 			}
 			else
 			{
-				logger::debug("Failed to register QuitGame.");
+				logger::debug("Failed to register QuitGame."sv);
 			}
 		}
 
@@ -49,7 +49,7 @@ namespace ObScript
 			static auto help = []()
 			{
 				std::string buf;
-				buf += "Exit game without going through menus.";
+				buf += "Exit game without going through menus."sv;
 				return buf;
 			}();
 			return help;
