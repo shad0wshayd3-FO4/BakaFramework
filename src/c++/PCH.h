@@ -36,5 +36,5 @@ namespace F4SE
 	}
 }
 
-#include "Version.h"
 #include "Settings.h"
+#include "Version.h"
