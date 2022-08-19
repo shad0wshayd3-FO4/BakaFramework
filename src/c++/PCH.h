@@ -36,5 +36,7 @@ namespace F4SE
 	}
 }
 
-#include "Settings.h"
+// clang-format off
 #include "Version.h"
+#include "Settings.h"
+// clang-format on
