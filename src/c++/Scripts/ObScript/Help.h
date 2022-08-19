@@ -38,6 +38,11 @@ namespace ObScript
 			}
 		}
 
+		static void ClearCellMap()
+		{
+			m_CellMap.clear();
+		}
+
 	private:
 		class detail
 		{
@@ -355,7 +360,13 @@ namespace ObScript
 			if (auto TESDataHandler = RE::TESDataHandler::GetSingleton())
 			{
 				auto formType = RE::TESForm::GetFormTypeFromString(m_FormTFilter);
-				if (formType != RE::ENUM_FORM_ID::kNONE)
+				if (formType == RE::ENUM_FORM_ID::kGLOB)
+				{
+					return;
+				}
+
+				if (formType != RE::ENUM_FORM_ID::kNONE &&
+					formType != RE::ENUM_FORM_ID::kCELL)
 				{
 					auto& forms = TESDataHandler->formArrays[stl::to_underlying(formType)];
 					for (auto iter : forms)
@@ -368,6 +379,12 @@ namespace ObScript
 					auto [forms, lock] = RE::TESForm::GetAllForms();
 					for (auto& iter : *forms)
 					{
+						if (formType == RE::ENUM_FORM_ID::kCELL &&
+							iter.second->formType != RE::ENUM_FORM_ID::kCELL)
+						{
+							continue;
+						}
+
 						ShowHelp_Forms_Match(iter.second);
 					}
 				}
@@ -384,7 +401,7 @@ namespace ObScript
 			}
 		}
 
-		static void ShowHelp_Cells_Print(const char* a_edid, const char* a_fileName)
+		static void ShowHelp_Cells_Print(const std::string_view& a_edid, const std::string_view& a_fileName)
 		{
 			if (!m_ExtCellHeader)
 			{
@@ -394,7 +411,7 @@ namespace ObScript
 
 			if (!detail::strempty(a_fileName))
 			{
-				auto match = fmt::format(FMT_STRING("{:s} CELL: {:s}'\n"), a_fileName, a_edid);
+				auto match = fmt::format(FMT_STRING("{:s} CELL: {:s}\n"), a_fileName, a_edid);
 				RE::ConsoleLog::GetSingleton()->AddString(match.data());
 			}
 			else
@@ -408,6 +425,7 @@ namespace ObScript
 		{
 			if (!a_file->OpenTES(RE::NiFile::OpenMode::kReadOnly, false))
 			{
+				logger::warn(FMT_STRING("failed to open file: {:s}"), a_file->filename);
 				return;
 			}
 
@@ -415,19 +433,44 @@ namespace ObScript
 			{
 				if (a_file->currentform.form == 'LLEC')
 				{
+					char edid[512]{ '\0' };
+					bool gotEDID{ false };
+
+					std::uint16_t data{ 0 };
+					bool gotDATA{ false };
+
+					std::uint32_t cidx{ 0 };
+					cidx += a_file->compileIndex << 24;
+					cidx += a_file->smallFileCompileIndex << 12;
+
 					do
 					{
-						if (a_file->GetTESChunk() == 'DIDE')
+						switch (a_file->GetTESChunk())
 						{
-							char edid[512];
-							a_file->GetChunkData(edid);
+							case 'DIDE':
+								gotEDID = a_file->GetChunkData(edid);
+								if (gotEDID && gotDATA && ((data & 1) == 0))
+								{
+									m_CellMap.insert_or_assign(
+										std::make_pair(cidx, edid),
+										a_file->filename);
+									continue;
+								}
+								break;
 
-							if (edid && detail::strvicmp(edid, m_MatchString))
-							{
-								ShowHelp_Cells_Print(edid, a_file->filename);
-							}
+							case 'ATAD':
+								gotDATA = a_file->GetChunkData(&data, 0);
+								if (gotEDID && gotDATA && ((data & 1) == 0))
+								{
+									m_CellMap.insert_or_assign(
+										std::make_pair(cidx, edid),
+										a_file->filename);
+									continue;
+								}
+								break;
 
-							break;
+							default:
+								break;
 						}
 					}
 					while (a_file->NextChunk());
@@ -435,12 +478,14 @@ namespace ObScript
 			}
 			while (a_file->NextForm(true));
 
-			a_file->CloseTES(false);
+			if (!a_file->CloseTES(false))
+			{
+				logger::warn(FMT_STRING("failed to close file: {:s}"), a_file->filename);
+			}
 		}
 
-		static void ShowHelp_Cells()
+		static void ShowHelp_Cells_Build()
 		{
-			auto FormEnumString = RE::TESForm::GetFormEnumString();
 			auto TESDataHandler = RE::TESDataHandler::GetSingleton();
 			for (auto iter : TESDataHandler->compiledFileCollection.files)
 			{
@@ -450,6 +495,22 @@ namespace ObScript
 			for (auto iter : TESDataHandler->compiledFileCollection.smallFiles)
 			{
 				ShowHelp_Cells_Match(iter);
+			}
+		}
+
+		static void ShowHelp_Cells()
+		{
+			if (m_CellMap.empty())
+			{
+				ShowHelp_Cells_Build();
+			}
+
+			for (auto& iter : m_CellMap)
+			{
+				if (detail::strvicmp(iter.first.second, m_MatchString))
+				{
+					ShowHelp_Cells_Print(iter.first.second, iter.second);
+				}
 			}
 		}
 
@@ -466,5 +527,6 @@ namespace ObScript
 		inline static bool m_ExtCellHeader{ false };
 
 		inline static RE::BSTArray<RE::TESForm*> m_Forms;
+		inline static std::map<std::pair<std::uint32_t, const std::string>, std::string_view> m_CellMap;
 	};
 }

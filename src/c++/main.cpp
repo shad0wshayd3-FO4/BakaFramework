@@ -78,6 +78,8 @@ namespace
 					else
 					{
 						logger::debug("GameDataReady - Unloaded");
+
+						ObScript::Help::ClearCellMap();
 					}
 
 					break;
