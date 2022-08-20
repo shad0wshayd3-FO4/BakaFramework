@@ -35,10 +35,9 @@ namespace ObScript
 		{
 			RE::ConsoleLog::GetSingleton()->AddString("Bye.\n");
 			std::thread([&]()
-						{
+			            {
 							std::this_thread::sleep_for(std::chrono::milliseconds(100));
-							RE::Main::GetSingleton()->quitGame = true;
-						})
+							RE::Main::GetSingleton()->quitGame = true; })
 				.detach();
 
 			return true;

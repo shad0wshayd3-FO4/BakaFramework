@@ -22,8 +22,8 @@ namespace
 
 		auto log = std::make_shared<spdlog::logger>("global log"s, std::move(sink));
 		auto lvl = *Settings::General::EnableDebugLogging
-					   ? spdlog::level::trace
-					   : spdlog::level::info;
+		               ? spdlog::level::trace
+		               : spdlog::level::info;
 
 		log->set_level(lvl);
 		log->flush_on(lvl);

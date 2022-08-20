@@ -19,7 +19,7 @@ namespace ObScript
 			if (it != functions.end())
 			{
 				static std::array params{
-					RE::SCRIPT_PARAMETER{ "String", RE::SCRIPT_PARAM_TYPE::kChar, false },
+					RE::SCRIPT_PARAMETER{"String", RE::SCRIPT_PARAM_TYPE::kChar, false},
 				};
 
 				*it = RE::SCRIPT_FUNCTION{ LONG_NAME.data(), SHORT_NAME.data(), it->output };
@@ -305,6 +305,7 @@ namespace ObScript
 					std::uint32_t LowPart;
 					std::uint32_t HighPart;
 				} s;
+
 				std::uint64_t QuadPart;
 			} ull;
 
@@ -317,9 +318,9 @@ namespace ObScript
 		static constexpr auto LONG_NAME = "BetaComment"sv;
 		static constexpr auto SHORT_NAME = "BC"sv;
 
-		static inline RE::TESObjectREFR* m_refr{ nullptr };
-		static inline char _delim{ '\t' };
+		inline static RE::TESObjectREFR* m_refr{ nullptr };
+		inline static char _delim{ '\t' };
 
-		static inline std::ofstream _file;
+		inline static std::ofstream _file;
 	};
 }

@@ -19,9 +19,9 @@ namespace ObScript
 			if (it != functions.end())
 			{
 				static std::array params{
-					RE::SCRIPT_PARAMETER{ "matchstring (optional)", RE::SCRIPT_PARAM_TYPE::kChar, true },
-					RE::SCRIPT_PARAMETER{ "filter (optional)", RE::SCRIPT_PARAM_TYPE::kInt, true },
-					RE::SCRIPT_PARAMETER{ "form type (optional)", RE::SCRIPT_PARAM_TYPE::kChar, true },
+					RE::SCRIPT_PARAMETER{"matchstring (optional)", RE::SCRIPT_PARAM_TYPE::kChar, true},
+					RE::SCRIPT_PARAMETER{ "filter (optional)",     RE::SCRIPT_PARAM_TYPE::kInt,  true},
+					RE::SCRIPT_PARAMETER{ "form type (optional)",  RE::SCRIPT_PARAM_TYPE::kChar, true},
 				};
 
 				*it = RE::SCRIPT_FUNCTION{ "Help", "", it->output };
@@ -197,9 +197,7 @@ namespace ObScript
 			auto nick = a_function.shortName;
 			auto help = a_function.helpString;
 
-			if ((name && detail::strvicmp(name, m_MatchString)) ||
-				(nick && detail::strvicmp(nick, m_MatchString)) ||
-				(help && detail::strvicmp(help, m_MatchString)))
+			if ((name && detail::strvicmp(name, m_MatchString)) || (nick && detail::strvicmp(nick, m_MatchString)) || (help && detail::strvicmp(help, m_MatchString)))
 			{
 				ShowHelp_Funcs_Print(a_function);
 			}
@@ -305,8 +303,7 @@ namespace ObScript
 						auto edid = a_form->GetFormEditorID();
 						auto name = RE::TESFullName::GetFullName(*a_form);
 
-						if ((edid && detail::strvicmp(edid, m_MatchString)) ||
-							(!name.empty() && detail::strvicmp(name, m_MatchString)))
+						if ((edid && detail::strvicmp(edid, m_MatchString)) || (!name.empty() && detail::strvicmp(name, m_MatchString)))
 						{
 							m_Forms.emplace_back(a_form);
 						}
@@ -326,8 +323,7 @@ namespace ObScript
 					return;
 				}
 
-				if (formType != RE::ENUM_FORM_ID::kNONE &&
-					formType != RE::ENUM_FORM_ID::kCELL)
+				if (formType != RE::ENUM_FORM_ID::kNONE && formType != RE::ENUM_FORM_ID::kCELL)
 				{
 					auto& forms = TESDataHandler->formArrays[stl::to_underlying(formType)];
 					for (auto iter : forms)
@@ -340,8 +336,7 @@ namespace ObScript
 					auto [forms, lock] = RE::TESForm::GetAllForms();
 					for (auto& iter : *forms)
 					{
-						if (formType == RE::ENUM_FORM_ID::kCELL &&
-							iter.second->formType != RE::ENUM_FORM_ID::kCELL)
+						if (formType == RE::ENUM_FORM_ID::kCELL && iter.second->formType != RE::ENUM_FORM_ID::kCELL)
 						{
 							continue;
 						}

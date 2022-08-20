@@ -25,6 +25,6 @@ namespace Fixes
 				trampoline.write_call<5>(target.address(), StoryEventArgumentConverter);
 		}
 
-		static inline REL::Relocation<decltype(&OnStoryCraftItem::StoryEventArgumentConverter)> _StoryEventArgumentConverter;
+		inline static REL::Relocation<decltype(&OnStoryCraftItem::StoryEventArgumentConverter)> _StoryEventArgumentConverter;
 	};
 }

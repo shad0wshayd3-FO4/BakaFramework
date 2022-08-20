@@ -23,6 +23,7 @@ namespace Papyrus
 		{
 		public:
 			FunctionArgsBase() = delete;
+
 			FunctionArgsBase(RE::BSScript::IVirtualMachine* a_vm) :
 				vm(a_vm)
 			{}
@@ -36,8 +37,9 @@ namespace Papyrus
 		protected:
 			// members
 			RE::BSScript::ArrayWrapper<RE::BSScript::Variable>* args;  // 00
-			RE::BSScript::IVirtualMachine* vm;						   // 08
+			RE::BSScript::IVirtualMachine* vm;                         // 08
 		};
+
 		static_assert(sizeof(FunctionArgsBase) == 0x10);
 
 		inline RE::BSTThreadScrapFunction<bool(RE::BSScrapArray<RE::BSScript::Variable>&)>
@@ -55,6 +57,7 @@ namespace Papyrus
 	{
 	public:
 		FunctionArgs() = delete;
+
 		FunctionArgs(RE::BSScript::IVirtualMachine* a_vm, Args... a_args) :
 			FunctionArgsBase(a_vm)
 		{
@@ -67,5 +70,6 @@ namespace Papyrus
 			return detail::CreateThreadScrapFunction(*this);
 		}
 	};
+
 	static_assert(sizeof(FunctionArgs<std::monostate>) == 0x10);
 }

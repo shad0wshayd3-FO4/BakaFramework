@@ -29,7 +29,7 @@ namespace Workshop
 					return PlacementMode::IsActive() ? false : func();
 				}
 
-				static inline REL::Relocation<decltype(&thunk)> func;
+				inline static REL::Relocation<decltype(&thunk)> func;
 			};
 
 			template<std::uint64_t id, std::ptrdiff_t offset>
@@ -60,7 +60,7 @@ namespace Workshop
 					return func(a_workshop, a_refr);
 				}
 
-				static inline REL::Relocation<decltype(&thunk)> func;
+				inline static REL::Relocation<decltype(&thunk)> func;
 			};
 
 			template<std::uint64_t id, std::ptrdiff_t offset>
@@ -96,7 +96,7 @@ namespace Workshop
 					return func(a_soundName);
 				}
 
-				static inline REL::Relocation<decltype(&thunk)> func;
+				inline static REL::Relocation<decltype(&thunk)> func;
 			};
 
 			template<std::uint64_t id, std::ptrdiff_t offset>
@@ -117,7 +117,7 @@ namespace Workshop
 					return PlacementMode::IsActive() ? 0 : func(a_this);
 				}
 
-				static inline REL::Relocation<decltype(&thunk)> func;
+				inline static REL::Relocation<decltype(&thunk)> func;
 			};
 
 			template<std::uint64_t id, std::ptrdiff_t offset>
@@ -143,7 +143,7 @@ namespace Workshop
 					func(a_this, a_stringingWire);
 				}
 
-				static inline REL::Relocation<decltype(&thunk)> func;
+				inline static REL::Relocation<decltype(&thunk)> func;
 			};
 
 			static void Install()
@@ -208,7 +208,7 @@ namespace Workshop
 				stl::asm_replace(targetUIQ.address(), 0x1C7, reinterpret_cast<std::uintptr_t>(hkUIQualifier));
 			}
 
-			static inline REL::Relocation<RE::SettingT<RE::GameSettingCollection>*> sPADisallowed{ REL::ID(1053596) };
+			inline static REL::Relocation<RE::SettingT<RE::GameSettingCollection>*> sPADisallowed{ REL::ID(1053596) };
 
 		private:
 			static bool hkCompareImpl(RE::ExtraStartingWorldOrCell* a_this, const RE::ExtraStartingWorldOrCell& a_compare)
@@ -218,16 +218,12 @@ namespace Workshop
 					return true;
 				}
 
-				if (a_this->type != RE::ExtraStartingWorldOrCell::TYPE ||
-					a_compare.type != RE::ExtraStartingWorldOrCell::TYPE)
+				if (a_this->type != RE::ExtraStartingWorldOrCell::TYPE || a_compare.type != RE::ExtraStartingWorldOrCell::TYPE)
 				{
 					return true;
 				}
 
-				if (a_this->startingWorldOrCell->GetFormType() == RE::ENUM_FORM_ID::kCELL ||
-					a_this->startingWorldOrCell->GetFormType() == RE::ENUM_FORM_ID::kWRLD ||
-					a_compare.startingWorldOrCell->GetFormType() == RE::ENUM_FORM_ID::kCELL ||
-					a_compare.startingWorldOrCell->GetFormType() == RE::ENUM_FORM_ID::kWRLD)
+				if (a_this->startingWorldOrCell->GetFormType() == RE::ENUM_FORM_ID::kCELL || a_this->startingWorldOrCell->GetFormType() == RE::ENUM_FORM_ID::kWRLD || a_compare.startingWorldOrCell->GetFormType() == RE::ENUM_FORM_ID::kCELL || a_compare.startingWorldOrCell->GetFormType() == RE::ENUM_FORM_ID::kWRLD)
 				{
 					return false;
 				}
@@ -239,14 +235,7 @@ namespace Workshop
 			{
 				if (a_event && PlacementMode::IsActive())
 				{
-					if (a_event->QUserEvent() == "XButton" ||
-						a_event->QUserEvent() == "YButton" ||
-						a_event->QUserEvent() == "LShoulder" ||
-						a_event->QUserEvent() == "RShoulder" ||
-						a_event->QUserEvent() == "LTrigger" ||
-						a_event->QUserEvent() == "RTrigger" ||
-						a_event->QUserEvent() == "Sprint" ||
-						a_event->QUserEvent() == "Jump")
+					if (a_event->QUserEvent() == "XButton" || a_event->QUserEvent() == "YButton" || a_event->QUserEvent() == "LShoulder" || a_event->QUserEvent() == "RShoulder" || a_event->QUserEvent() == "LTrigger" || a_event->QUserEvent() == "RTrigger" || a_event->QUserEvent() == "Sprint" || a_event->QUserEvent() == "Jump")
 					{
 						return;
 					}
@@ -308,7 +297,7 @@ namespace Workshop
 				}
 			}
 
-			static inline REL::Relocation<decltype(&hkHandleEvent)> ogHandleEvent;
+			inline static REL::Relocation<decltype(&hkHandleEvent)> ogHandleEvent;
 		};
 
 		[[nodiscard]] static PlacementMode* GetSingleton()
@@ -372,8 +361,7 @@ namespace Workshop
 
 		static bool CreateToken(RE::TESObjectREFR* a_refr)
 		{
-			if (a_refr &&
-				a_refr->HasKeyword(RE::TESForm::GetFormByID<RE::BGSKeyword>(0x0003430B)))
+			if (a_refr && a_refr->HasKeyword(RE::TESForm::GetFormByID<RE::BGSKeyword>(0x0003430B)))
 			{
 				auto token = Forms::PAFrameToken_DO->GetForm<RE::TESObjectARMO>();
 				if (!token)
@@ -441,9 +429,7 @@ namespace Workshop
 				return false;
 			}
 
-			if (a_refr &&
-				a_refr->data.objectReference &&
-				a_refr->data.objectReference == token)
+			if (a_refr && a_refr->data.objectReference && a_refr->data.objectReference == token)
 			{
 				if (!a_refr->extraList)
 				{

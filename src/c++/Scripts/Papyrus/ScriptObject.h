@@ -30,7 +30,9 @@ namespace Papyrus::ScriptObject
 		}
 
 		virtual constexpr std::uint32_t GetRecordVersion() override { return 1; }
+
 		virtual constexpr std::uint32_t GetRecordType() override { return 'PLEH'; }
+
 		virtual constexpr std::string_view GetRecordName() override { return "PLEH"sv; }
 
 		virtual bool Save(const F4SE::SerializationInterface* a_intfc) override
