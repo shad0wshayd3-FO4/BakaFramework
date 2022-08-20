@@ -48,7 +48,7 @@ namespace Patches
 					if (iter != map->end())
 					{
 						logger::warn(
-							FMT_STRING("EditorID Conflict: {:08X} and {:08X} are both {:s}"),
+							FMT_STRING("EditorID Conflict: {:08X} and {:08X} are both {:s}"sv),
 							iter->second->GetFormID(),
 							a_this->GetFormID(),
 							a_editorID);

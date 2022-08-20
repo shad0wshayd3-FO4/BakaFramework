@@ -268,45 +268,6 @@ namespace ObScript
 
 		static void ShowHelp_Forms_Print()
 		{
-			/*
-			std::sort(
-				m_Forms.begin(),
-				m_Forms.end(),
-				[&](const RE::TESForm* lhs, const RE::TESForm* rhs)
-				{
-					if (!lhs)
-					{
-						return false;
-					}
-
-					if (!rhs)
-					{
-						return false;
-					}
-
-					auto unk1 = FormEnumString[lhs->formType.underlying()].unk10;
-					auto unk2 = FormEnumString[rhs->formType.underlying()].unk10;
-					if (unk1 != unk2)
-					{
-						return (unk1 < unk2);
-					}
-
-					auto edid1 = lhs->GetFormEditorID();
-					auto edid2 = rhs->GetFormEditorID();
-					if (_stricmp(edid1, edid2) > 0)
-					{
-						return false;
-					}
-
-					if (lhs->formID != rhs->formID)
-					{
-						return (lhs->formID < rhs->formID);
-					}
-
-					return false;
-				});
-			*/
-
 			auto highIdx = m_Forms.size() - 1;
 			auto functor = RE::TESForm::FormSortFunc();
 			detail::ArrayQuickSortRecursive(m_Forms, functor, 0, highIdx);
