@@ -19,7 +19,7 @@ namespace ObScript
 			if (it != functions.end())
 			{
 				static std::array params{
-					RE::SCRIPT_PARAMETER{"Perk", RE::SCRIPT_PARAM_TYPE::kPerk, false},
+					RE::SCRIPT_PARAMETER{ "Perk", RE::SCRIPT_PARAM_TYPE::kPerk, false },
 				};
 
 				*it = RE::SCRIPT_FUNCTION{ LONG_NAME.data(), SHORT_NAME.data(), it->output };
