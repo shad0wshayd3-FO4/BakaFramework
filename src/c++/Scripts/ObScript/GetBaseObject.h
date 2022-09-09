@@ -44,19 +44,19 @@ namespace ObScript
 		{
 			if (!a_refObject)
 			{
-				logger::warn("GetBaseObject::Execute: No reference selected!"sv);
 				return true;
 			}
 
 			auto base = a_refObject->data.objectReference;
 			if (!base)
 			{
-				logger::warn("GetBaseObject::Execute: Selected reference has no base data."sv);
 				return true;
 			}
 
-			auto result = fmt::format(FMT_STRING("GetBaseObject >> {:08X}\n"sv), base->formID);
-			RE::ConsoleLog::GetSingleton()->AddString(result.c_str());
+			auto result = fmt::format(
+				FMT_STRING("GetBaseObject >> {:08X}"sv),
+				base->formID);
+			RE::ConsoleLog::GetSingleton()->PrintLine(result.data());
 			return true;
 		}
 
@@ -65,7 +65,7 @@ namespace ObScript
 			static auto help = []()
 			{
 				std::string buf;
-				buf += "Print the FormID of an Object Reference's base Form."sv;
+				buf += "Print the FormID of an ObjectReference's base Form."sv;
 				return buf;
 			}();
 			return help;

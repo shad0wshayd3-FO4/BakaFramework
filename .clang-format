@@ -1,6 +1,6 @@
 AccessModifierOffset: -4
 AlignAfterOpenBracket: AlwaysBreak
-AlignArrayOfStructures: Left
+AlignArrayOfStructures: None
 AlignConsecutiveAssignments: None
 AlignConsecutiveBitFields: Consecutive
 AlignConsecutiveDeclarations: None
@@ -41,7 +41,7 @@ BraceWrapping:
   SplitEmptyFunction: False
   SplitEmptyRecord: False
   SplitEmptyNamespace: False
-BreakBeforeBinaryOperators: NonAssignment
+BreakBeforeBinaryOperators: None
 BreakBeforeBraces: Custom
 BreakBeforeTernaryOperators: True
 BreakConstructorInitializers: AfterColon

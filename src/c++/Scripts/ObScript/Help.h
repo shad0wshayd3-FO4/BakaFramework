@@ -19,9 +19,9 @@ namespace ObScript
 			if (it != functions.end())
 			{
 				static std::array params{
-					RE::SCRIPT_PARAMETER{"matchstring (optional)", RE::SCRIPT_PARAM_TYPE::kChar, true},
-					RE::SCRIPT_PARAMETER{ "filter (optional)",     RE::SCRIPT_PARAM_TYPE::kInt,  true},
-					RE::SCRIPT_PARAMETER{ "form type (optional)",  RE::SCRIPT_PARAM_TYPE::kChar, true},
+					RE::SCRIPT_PARAMETER{ "matchstring (optional)", RE::SCRIPT_PARAM_TYPE::kChar, true },
+					RE::SCRIPT_PARAMETER{ "filter (optional)", RE::SCRIPT_PARAM_TYPE::kInt, true },
+					RE::SCRIPT_PARAMETER{ "form type (optional)", RE::SCRIPT_PARAM_TYPE::kChar, true },
 				};
 
 				*it = RE::SCRIPT_FUNCTION{ "Help", "", it->output };
@@ -47,11 +47,31 @@ namespace ObScript
 		class detail
 		{
 		public:
-			static void ArrayQuickSortRecursive(RE::BSTArray<RE::TESForm*>& a_array, const RE::TESForm::FormSortFunc& a_functor, std::uint32_t a_lowIndex, std::uint32_t a_highIndex)
+			static void SortFormArray(std::vector<RE::TESForm*>& a_forms)
 			{
-				using func_t = decltype(&detail::ArrayQuickSortRecursive);
-				REL::Relocation<func_t> func{ REL::ID(1361344) };
-				return func(a_array, a_functor, a_lowIndex, a_highIndex);
+				std::sort(
+					a_forms.begin(),
+					a_forms.end(),
+					[](const RE::TESForm* a_lhs, const RE::TESForm* a_rhs)
+					{
+						auto FormEnumString = RE::TESForm::GetFormEnumString();
+						auto L_FORM = FormEnumString[a_lhs->formType.underlying()].formCode;
+						auto R_FORM = FormEnumString[a_rhs->formType.underlying()].formCode;
+						if (L_FORM != R_FORM)
+						{
+							return L_FORM < R_FORM;
+						}
+
+						auto L_EDID = a_lhs->GetFormEditorID();
+						auto R_EDID = a_rhs->GetFormEditorID();
+						auto C_EDID = _stricmp(L_EDID, R_EDID);
+						if (C_EDID != 0)
+						{
+							return C_EDID < 0;
+						}
+
+						return a_lhs->formID < a_rhs->formID;
+					});
 			}
 
 			static bool strempty(const std::string_view& a_string)
@@ -110,6 +130,7 @@ namespace ObScript
 			{
 				case 0:
 					ShowHelp_Funcs();
+					ShowHelp_Settings();
 					ShowHelp_Globs();
 					ShowHelp_Forms();
 					ShowHelp_Usage();
@@ -121,6 +142,7 @@ namespace ObScript
 					break;
 
 				case 2:
+					ShowHelp_Settings();
 					ShowHelp_Usage();
 					break;
 
@@ -163,26 +185,26 @@ namespace ObScript
 			{
 				if (nick && !detail::strempty(nick))
 				{
-					match = fmt::format(FMT_STRING("{:s} ({:s}) -> {:s}\n"), name, nick, help);
+					match = fmt::format(FMT_STRING("{:s} ({:s}) -> {:s}"sv), name, nick, help);
 				}
 				else
 				{
-					match = fmt::format(FMT_STRING("{:s} -> {:s}\n"), name, help);
+					match = fmt::format(FMT_STRING("{:s} -> {:s}"sv), name, help);
 				}
 			}
 			else
 			{
 				if (nick && !detail::strempty(nick))
 				{
-					match = fmt::format(FMT_STRING("{:s} ({:s})\n"), name, nick);
+					match = fmt::format(FMT_STRING("{:s} ({:s})"sv), name, nick);
 				}
 				else
 				{
-					match = fmt::format(FMT_STRING("{:s}\n"), name);
+					match = fmt::format(FMT_STRING("{:s}"sv), name);
 				}
 			}
 
-			RE::ConsoleLog::GetSingleton()->AddString(match.data());
+			RE::ConsoleLog::GetSingleton()->PrintLine(match.data());
 		}
 
 		static void ShowHelp_Funcs_Match(RE::SCRIPT_FUNCTION a_function)
@@ -205,18 +227,157 @@ namespace ObScript
 
 		static void ShowHelp_Funcs()
 		{
-			RE::ConsoleLog::GetSingleton()->AddString("----CONSOLE COMMANDS--------------------\n");
+			RE::ConsoleLog::GetSingleton()->PrintLine("----CONSOLE COMMANDS--------------------");
 			for (auto& iter : RE::SCRIPT_FUNCTION::GetConsoleFunctions())
 			{
-				// logger::info("cfunc {:s}", iter.functionName);
 				ShowHelp_Funcs_Match(iter);
 			}
 
-			RE::ConsoleLog::GetSingleton()->AddString("----SCRIPT FUNCTIONS--------------------\n");
+			RE::ConsoleLog::GetSingleton()->PrintLine("----SCRIPT FUNCTIONS--------------------");
 			for (auto& iter : RE::SCRIPT_FUNCTION::GetScriptFunctions())
 			{
-				// logger::info("sfunc {:s}", iter.functionName);
 				ShowHelp_Funcs_Match(iter);
+			}
+		}
+
+		static void ShowHelp_Settings_Print(RE::Setting* a_setting)
+		{
+			std::string match;
+			switch (a_setting->GetType())
+			{
+				case RE::Setting::SETTING_TYPE::kBinary:
+					match = fmt::format(
+						FMT_STRING("{:s} = {:s}"sv),
+						a_setting->GetKey(),
+						a_setting->GetBinary());
+					break;
+
+				case RE::Setting::SETTING_TYPE::kChar:
+					match = fmt::format(
+						FMT_STRING("{:s} = {:d}"sv),
+						a_setting->GetKey(),
+						a_setting->GetChar());
+					break;
+
+				case RE::Setting::SETTING_TYPE::kUChar:
+					match = fmt::format(
+						FMT_STRING("{:s} = {:d}"sv),
+						a_setting->GetKey(),
+						a_setting->GetUChar());
+					break;
+
+				case RE::Setting::SETTING_TYPE::kInt:
+					match = fmt::format(
+						FMT_STRING("{:s} = {:d}"sv),
+						a_setting->GetKey(),
+						a_setting->GetInt());
+					break;
+
+				case RE::Setting::SETTING_TYPE::kUInt:
+					match = fmt::format(
+						FMT_STRING("{:s} = {:d}"sv),
+						a_setting->GetKey(),
+						a_setting->GetUInt());
+					break;
+
+				case RE::Setting::SETTING_TYPE::kFloat:
+					match = fmt::format(
+						FMT_STRING("{:s} = {:0.2f}"sv),
+						a_setting->GetKey(),
+						a_setting->GetFloat());
+					break;
+
+				case RE::Setting::SETTING_TYPE::kString:
+					match = fmt::format(
+						FMT_STRING("{:s} = {:s}"sv),
+						a_setting->GetKey(),
+						a_setting->GetString());
+					break;
+
+				case RE::Setting::SETTING_TYPE::kRGB:
+					{
+						auto color = a_setting->GetRGB();
+						match = fmt::format(
+							FMT_STRING("{:s} = R:{:d} G:{:d} B:{:d}"sv),
+							a_setting->GetKey(),
+							color[0],
+							color[1],
+							color[2]);
+					}
+					break;
+
+				case RE::Setting::SETTING_TYPE::kRGBA:
+					{
+						auto color = a_setting->GetRGBA();
+						match = fmt::format(
+							FMT_STRING("{:s} = R:{:d} G:{:d} B:{:d} A:{:d}"sv),
+							a_setting->GetKey(),
+							color[0],
+							color[1],
+							color[2],
+							color[3]);
+					}
+					break;
+
+				default:
+					match = fmt::format(
+						FMT_STRING("{:s} = <UNKNOWN>"sv),
+						a_setting->GetKey());
+					break;
+			}
+
+			RE::ConsoleLog::GetSingleton()->PrintLine(match.data());
+		}
+
+		static void ShowHelp_Settings_Match(RE::Setting* a_setting)
+		{
+			if (detail::strempty(m_MatchString))
+			{
+				ShowHelp_Settings_Print(a_setting);
+				return;
+			}
+
+			auto name = a_setting->GetKey();
+			if (!name.empty() && detail::strvicmp(name, m_MatchString))
+			{
+				ShowHelp_Settings_Print(a_setting);
+			}
+		}
+
+		static void ShowHelp_Settings()
+		{
+			RE::ConsoleLog::GetSingleton()->PrintLine("----GAME SETTINGS-----------------------");
+			if (auto GameSettingCollection = RE::GameSettingCollection::GetSingleton())
+			{
+				for (auto& iter : GameSettingCollection->settings)
+				{
+					ShowHelp_Settings_Match(iter.second);
+				}
+			}
+
+			RE::ConsoleLog::GetSingleton()->PrintLine("----INI SETTINGS------------------------");
+			if (auto INISettingCollection = RE::INISettingCollection::GetSingleton())
+			{
+				if (auto INIPrefSettingCollection = RE::INIPrefSettingCollection::GetSingleton())
+				{
+					for (auto& iter : INISettingCollection->settings)
+					{
+						if (auto it = std::find_if(
+								INIPrefSettingCollection->settings.begin(),
+								INIPrefSettingCollection->settings.end(),
+								[&](auto&& a_elem)
+								{
+									return iter->GetKey() == a_elem->GetKey();
+								});
+						    it != INIPrefSettingCollection->settings.end())
+						{
+							ShowHelp_Settings_Match(*it);
+							continue;
+						}
+
+						ShowHelp_Settings_Match(iter);
+					}
+				}
 			}
 		}
 
@@ -233,8 +394,8 @@ namespace ObScript
 				return;
 			}
 
-			auto match = fmt::format(FMT_STRING("{:s} = {:0.2f}\n"), edid, a_global->value);
-			RE::ConsoleLog::GetSingleton()->AddString(match.data());
+			auto match = fmt::format(FMT_STRING("{:s} = {:0.2f}"sv), edid, a_global->value);
+			RE::ConsoleLog::GetSingleton()->PrintLine(match.data());
 		}
 
 		static void ShowHelp_Globs_Match(RE::TESGlobal* a_global)
@@ -254,7 +415,7 @@ namespace ObScript
 
 		static void ShowHelp_Globs()
 		{
-			RE::ConsoleLog::GetSingleton()->AddString("----GLOBAL VARIABLES--------------------\n");
+			RE::ConsoleLog::GetSingleton()->PrintLine("----GLOBAL VARIABLES--------------------");
 			if (auto TESDataHandler = RE::TESDataHandler::GetSingleton())
 			{
 				for (auto& iter : TESDataHandler->GetFormArray<RE::TESGlobal>())
@@ -266,9 +427,7 @@ namespace ObScript
 
 		static void ShowHelp_Forms_Print()
 		{
-			auto highIdx = m_Forms.size() - 1;
-			auto functor = RE::TESForm::FormSortFunc();
-			detail::ArrayQuickSortRecursive(m_Forms, functor, 0, highIdx);
+			detail::SortFormArray(m_Forms);
 
 			auto FormEnumString = RE::TESForm::GetFormEnumString();
 			for (auto& iter : m_Forms)
@@ -277,8 +436,8 @@ namespace ObScript
 				auto edid = iter->GetFormEditorID();
 				auto name = RE::TESFullName::GetFullName(*iter);
 
-				auto match = fmt::format(FMT_STRING("{:s}: {:s} ({:08X}) '{:s}'\n"), form, edid, iter->formID, name);
-				RE::ConsoleLog::GetSingleton()->AddString(match.data());
+				auto match = fmt::format(FMT_STRING("{:s}: {:s} ({:08X}) '{:s}'"sv), form, edid, iter->formID, name);
+				RE::ConsoleLog::GetSingleton()->PrintLine(match.data());
 			}
 		}
 
@@ -314,7 +473,7 @@ namespace ObScript
 
 		static void ShowHelp_Forms()
 		{
-			RE::ConsoleLog::GetSingleton()->AddString("----OTHER FORMS-------------------------\n");
+			RE::ConsoleLog::GetSingleton()->PrintLine("----OTHER FORMS-------------------------");
 			if (auto TESDataHandler = RE::TESDataHandler::GetSingleton())
 			{
 				auto formType = RE::TESForm::GetFormTypeFromString(m_FormTFilter);
@@ -361,19 +520,19 @@ namespace ObScript
 		{
 			if (!m_ExtCellHeader)
 			{
-				RE::ConsoleLog::GetSingleton()->AddString("----EXTERIOR CELLS----------------------\n");
+				RE::ConsoleLog::GetSingleton()->PrintLine("----EXTERIOR CELLS----------------------");
 				m_ExtCellHeader = true;
 			}
 
 			if (!detail::strempty(a_fileName))
 			{
-				auto match = fmt::format(FMT_STRING("{:s} CELL: {:s}\n"), a_fileName, a_edid);
-				RE::ConsoleLog::GetSingleton()->AddString(match.data());
+				auto match = fmt::format(FMT_STRING("{:s} CELL: {:s}"sv), a_fileName, a_edid);
+				RE::ConsoleLog::GetSingleton()->PrintLine(match.data());
 			}
 			else
 			{
-				auto match = fmt::format(FMT_STRING("CELL: {:s}'\n"), a_edid);
-				RE::ConsoleLog::GetSingleton()->AddString(match.data());
+				auto match = fmt::format(FMT_STRING("CELL: {:s}"sv), a_edid);
+				RE::ConsoleLog::GetSingleton()->PrintLine(match.data());
 			}
 		}
 
@@ -381,7 +540,7 @@ namespace ObScript
 		{
 			if (!a_file->OpenTES(RE::NiFile::OpenMode::kReadOnly, false))
 			{
-				logger::warn(FMT_STRING("failed to open file: {:s}"), a_file->filename);
+				logger::warn(FMT_STRING("failed to open file: {:s}"sv), a_file->filename);
 				return;
 			}
 
@@ -404,23 +563,19 @@ namespace ObScript
 						switch (a_file->GetTESChunk())
 						{
 							case 'DIDE':
-								gotEDID = a_file->GetChunkData(edid);
+								gotEDID = a_file->GetChunkData(edid, a_file->actualChunkSize);
 								if (gotEDID && gotDATA && ((data & 1) == 0))
 								{
-									m_CellMap.insert_or_assign(
-										std::make_pair(cidx, edid),
-										a_file->filename);
+									m_CellMap.insert_or_assign(std::make_pair(cidx, edid), a_file->filename);
 									continue;
 								}
 								break;
 
 							case 'ATAD':
-								gotDATA = a_file->GetChunkData(&data, 0);
+								gotDATA = a_file->GetChunkData(&data, a_file->actualChunkSize);
 								if (gotEDID && gotDATA && ((data & 1) == 0))
 								{
-									m_CellMap.insert_or_assign(
-										std::make_pair(cidx, edid),
-										a_file->filename);
+									m_CellMap.insert_or_assign(std::make_pair(cidx, edid), a_file->filename);
 									continue;
 								}
 								break;
@@ -436,7 +591,7 @@ namespace ObScript
 
 			if (!a_file->CloseTES(false))
 			{
-				logger::warn(FMT_STRING("failed to close file: {:s}"), a_file->filename);
+				logger::warn(FMT_STRING("failed to close file: {:s}"sv), a_file->filename);
 			}
 		}
 
@@ -472,9 +627,9 @@ namespace ObScript
 
 		static void ShowHelp_Usage()
 		{
-			RE::ConsoleLog::GetSingleton()->AddString("usage: help <matchstring> <filter> <form type>\n");
-			RE::ConsoleLog::GetSingleton()->AddString("filters: 0-all 1-functions, 2-settings, 3-globals, 4-other forms\n");
-			RE::ConsoleLog::GetSingleton()->AddString("form type is 4 characters and is ignored unless the filter is 4.\n");
+			RE::ConsoleLog::GetSingleton()->PrintLine("usage: help <matchstring> <filter> <form type>");
+			RE::ConsoleLog::GetSingleton()->PrintLine("filters: 0-all 1-functions, 2-settings, 3-globals, 4-other forms");
+			RE::ConsoleLog::GetSingleton()->PrintLine("form type is 4 characters and is ignored unless the filter is 4.");
 		}
 
 	protected:
@@ -482,7 +637,7 @@ namespace ObScript
 		inline static char m_FormTFilter[512];
 		inline static bool m_ExtCellHeader{ false };
 
-		inline static RE::BSTArray<RE::TESForm*> m_Forms;
+		inline static std::vector<RE::TESForm*> m_Forms;
 		inline static std::map<std::pair<std::uint32_t, const std::string>, std::string_view> m_CellMap;
 	};
 }

@@ -62,14 +62,12 @@ namespace ObScript
 
 			if (!result)
 			{
-				logger::warn("BetaComment::Execute: ParseParameters failed."sv);
 				return true;
 			}
 
 			// Check Comment string exists
 			if (rawComment[0] == '\0')
 			{
-				logger::warn("BetaComment::Execute: No comment."sv);
 				return true;
 			}
 
@@ -77,7 +75,7 @@ namespace ObScript
 			m_refr = a_refObject;
 			if (!m_refr)
 			{
-				RE::ConsoleLog::GetSingleton()->AddString("Using Player for BetaComment.\n");
+				RE::ConsoleLog::GetSingleton()->PrintLine("Using Player for BetaComment.");
 				m_refr = RE::PlayerCharacter::GetSingleton();
 			}
 
@@ -316,7 +314,7 @@ namespace ObScript
 		}
 
 		static constexpr auto LONG_NAME = "BetaComment"sv;
-		static constexpr auto SHORT_NAME = "BC"sv;
+		static constexpr auto SHORT_NAME = "bc"sv;
 
 		inline static RE::TESObjectREFR* m_refr{ nullptr };
 		inline static char _delim{ '\t' };

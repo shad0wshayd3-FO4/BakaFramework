@@ -19,7 +19,7 @@ namespace ObScript
 			if (it != functions.end())
 			{
 				static std::array params{
-					RE::SCRIPT_PARAMETER{"String", RE::SCRIPT_PARAM_TYPE::kChar, false},
+					RE::SCRIPT_PARAMETER{ "String", RE::SCRIPT_PARAM_TYPE::kChar, false },
 				};
 
 				*it = RE::SCRIPT_FUNCTION{ LONG_NAME.data(), SHORT_NAME.data(), it->output };
@@ -48,9 +48,8 @@ namespace ObScript
 			float&,
 			std::uint32_t& a_offset)
 		{
-			// ParseParameters
-			std::array<char, 0x200> dfobName{ '\0' };
-			auto result = RE::Script::ParseParameters(
+			char dfobName[512]{ '\0' };
+			RE::Script::ParseParameters(
 				a_parameters,
 				a_compiledParams,
 				a_offset,
@@ -58,38 +57,30 @@ namespace ObScript
 				a_container,
 				a_script,
 				a_scriptLocals,
-				dfobName.data());
+				dfobName);
 
-			if (!result)
-			{
-				logger::warn("GetDefaultObject::Execute: ParseParameters failed."sv);
-				return true;
-			}
-
-			// Check DefaultObject name string exists
 			if (dfobName[0] == '\0')
 			{
-				logger::warn("GetDefaultObject::Execute: No name."sv);
 				return true;
 			}
 
-			if (auto form = RE::TESForm::GetFormByEditorID(dfobName.data()))
+			if (auto form = RE::TESForm::GetFormByEditorID(dfobName))
 			{
 				if (auto dfob = form->As<RE::BGSDefaultObject>(); dfob)
 				{
-					auto resultText = fmt::format(
-						FMT_STRING("GetDefaultObject ({:s}) >> 0x{:08X}\n"sv),
-						dfob->formEditorID.c_str(),
+					auto result = fmt::format(
+						FMT_STRING("GetDefaultObject ({:s}) >> 0x{:08X}"sv),
+						dfob->formEditorID,
 						dfob->form ? dfob->form->formID : 0);
-					RE::ConsoleLog::GetSingleton()->AddString(resultText.c_str());
+					RE::ConsoleLog::GetSingleton()->PrintLine(result.data());
 					return true;
 				}
 			}
 
-			auto resultText = fmt::format(
-				FMT_STRING("GetDefaultObject ({:s}) >> Does not exist.\n"sv),
-				dfobName.data());
-			RE::ConsoleLog::GetSingleton()->AddString(resultText.c_str());
+			auto result = fmt::format(
+				FMT_STRING("GetDefaultObject ({:s}) >> Does not exist."sv),
+				dfobName);
+			RE::ConsoleLog::GetSingleton()->PrintLine(result.data());
 			return true;
 		}
 

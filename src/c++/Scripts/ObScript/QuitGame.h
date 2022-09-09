@@ -33,11 +33,13 @@ namespace ObScript
 	private:
 		static bool Execute(const RE::SCRIPT_PARAMETER*, const char*, RE::TESObjectREFR*, RE::TESObjectREFR*, RE::Script*, RE::ScriptLocals*, float&, std::uint32_t&)
 		{
-			RE::ConsoleLog::GetSingleton()->AddString("Bye.\n");
-			std::thread([&]()
-			            {
-							std::this_thread::sleep_for(std::chrono::milliseconds(100));
-							RE::Main::GetSingleton()->quitGame = true; })
+			RE::ConsoleLog::GetSingleton()->PrintLine("Bye.");
+			std::thread(
+				[&]()
+				{
+					std::this_thread::sleep_for(std::chrono::milliseconds(100));
+					RE::Main::GetSingleton()->quitGame = true;
+				})
 				.detach();
 
 			return true;
