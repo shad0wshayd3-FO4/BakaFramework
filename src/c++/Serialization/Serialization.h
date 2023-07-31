@@ -1,19 +1,24 @@
 #pragma once
 
+#include "Scripts/Papyrus/BakaUtil.h"
+
 namespace Serialization
 {
 	namespace
 	{
-		void RevertCallback([[maybe_unused]] const F4SE::SerializationInterface* a_intfc)
+		void RevertCallback(const F4SE::SerializationInterface* a_intfc)
 		{
+			Papyrus::BakaUtil::detail::PipboyLightEventMap::Revert(a_intfc);
 		}
 
-		void SaveCallback([[maybe_unused]] const F4SE::SerializationInterface* a_intfc)
+		void SaveCallback(const F4SE::SerializationInterface* a_intfc)
 		{
+			Papyrus::BakaUtil::detail::PipboyLightEventMap::Save(a_intfc);
 		}
 
-		void LoadCallback([[maybe_unused]] const F4SE::SerializationInterface* a_intfc)
+		void LoadCallback(const F4SE::SerializationInterface* a_intfc)
 		{
+			Papyrus::BakaUtil::detail::PipboyLightEventMap::Load(a_intfc);
 		}
 	}
 

@@ -26,13 +26,16 @@ namespace Papyrus::BakaUtil
 						return;
 					}
 
+					if (!object->type)
+					{
+						return;
+					}
+
 					const RE::BSAutoLock lock{ spin };
 					GameVM->handlePolicy.PersistHandle(object->GetHandle());
 					map.emplace(
 						object->GetHandle(),
-						object->type
-							? object->type->GetName()
-							: "");
+						object->type->GetName());
 				}
 			}
 
@@ -72,20 +75,104 @@ namespace Papyrus::BakaUtil
 				}
 
 				const RE::BSAutoLock lock{ spin };
-				for (auto& iter : map)
+				for (auto& [handle, string] : map)
 				{
 					VM->DispatchMethodCall(
-						iter.first,
-						iter.second,
+						handle,
+						string,
 						"OnPipboyLightEvent"sv,
 						nullptr,
 						a_value);
 				}
 			}
 
+			static void Revert([[maybe_unused]] const F4SE::SerializationInterface* a_intfc)
+			{
+				if (auto GameVM = RE::GameVM::GetSingleton())
+				{
+					const RE::BSAutoLock lock{ spin };
+					for (auto& [handle, string] : map)
+					{
+						GameVM->handlePolicy.ReleaseHandle(handle);
+					}
+
+					map.clear();
+				}
+			}
+
+			static void Save([[maybe_unused]] const F4SE::SerializationInterface* a_intfc)
+			{
+				const RE::BSAutoLock lock{ spin };
+				a_intfc->OpenRecord('PLEH', 2);
+
+				std::uint32_t size{ map.size() };
+				a_intfc->WriteRecordData(&size, sizeof(size));
+
+				for (auto& [handle, string] : map)
+				{
+					a_intfc->WriteRecordData(&handle, sizeof(handle));
+					std::uint32_t length{ string.size() };
+					a_intfc->WriteRecordData(&length, sizeof(length));
+					a_intfc->WriteRecordData(string.data(), length);
+				}
+			}
+
+			static void Load([[maybe_unused]] const F4SE::SerializationInterface* a_intfc)
+			{
+				Revert(a_intfc);
+
+				const RE::BSAutoLock lock{ spin };
+				if (auto GameVM = RE::GameVM::GetSingleton())
+				{
+					std::uint32_t sig{ 0 }, ver{ 0 }, len{ 0 };
+					while (a_intfc->GetNextRecordInfo(sig, ver, len))
+					{
+						if (sig != 'PLEH')
+						{
+							continue;
+						}
+
+						if (ver != 2)
+						{
+							continue;
+						}
+
+						std::uint32_t size{ 0 };
+						a_intfc->ReadRecordData(&size, sizeof(size));
+
+						for (std::uint32_t i = 0; i < size; i++)
+						{
+							std::uint64_t handle{ 0 };
+							a_intfc->ReadRecordData(&handle, sizeof(handle));
+
+							auto resolve = a_intfc->ResolveHandle(handle);
+							if (!resolve)
+							{
+								continue;
+							}
+
+							std::uint32_t length{ 0 };
+							a_intfc->ReadRecordData(&length, sizeof(length));
+
+							std::string string;
+							string.reserve(length);
+							a_intfc->ReadRecordData(string.data(), length);
+
+							handle = resolve.value();
+							GameVM->handlePolicy.PersistHandle(handle);
+							map.emplace(
+								handle,
+								string.c_str());
+						}
+
+						return;
+					}
+				}
+			}
+
 		private:
 			inline static RE::BSSpinLock spin;
-			inline static RE::BSTHashMap<std::uint64_t, const char*> map;
+			inline static RE::BSTHashMap<std::uint64_t, RE::BSFixedString> map;
 		};
 
 		class PipboyLightEventHandler :
