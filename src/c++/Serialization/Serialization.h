@@ -6,19 +6,19 @@ namespace Serialization
 {
 	namespace
 	{
-		void RevertCallback(const F4SE::SerializationInterface* a_intfc)
+		void RevertCallback([[maybe_unused]] const F4SE::SerializationInterface* a_intfc)
 		{
-			Papyrus::BakaUtil::detail::PipboyLightEventMap::Revert(a_intfc);
+			Papyrus::BakaUtil::detail::PipboyLightEventHandler::GetSingleton()->Revert();
 		}
 
 		void SaveCallback(const F4SE::SerializationInterface* a_intfc)
 		{
-			Papyrus::BakaUtil::detail::PipboyLightEventMap::Save(a_intfc);
+			Papyrus::BakaUtil::detail::PipboyLightEventHandler::GetSingleton()->Save(a_intfc);
 		}
 
 		void LoadCallback(const F4SE::SerializationInterface* a_intfc)
 		{
-			Papyrus::BakaUtil::detail::PipboyLightEventMap::Load(a_intfc);
+			Papyrus::BakaUtil::detail::PipboyLightEventHandler::GetSingleton()->Load(a_intfc);
 		}
 	}
 
