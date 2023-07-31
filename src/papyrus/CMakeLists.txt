@@ -16,6 +16,7 @@ add_papyrus(
 		"Fallout4"
 	IMPORTS
 		${Fallout4Path}/Data/Scripts/Source/User
+		${Fallout4Path}/Data/Scripts/Source/F4SE
 		${Fallout4Path}/Data/Scripts/Source/CreationClub
 		${Fallout4Path}/Data/Scripts/Source/DLC06
 		${Fallout4Path}/Data/Scripts/Source/DLC05

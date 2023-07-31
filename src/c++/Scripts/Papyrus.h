@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Papyrus/BakaUtil.h"
-#include "Papyrus/ScriptObject.h"
 #include "Papyrus/StringUtil.h"
 
 namespace Papyrus
@@ -9,15 +8,13 @@ namespace Papyrus
 	bool RegisterFunctions(RE::BSScript::IVirtualMachine* a_VM)
 	{
 		// BakaUtil
-		a_VM->BindNativeMethod(BakaUtil::SCRIPT_NAME, "CreatePowerArmorToken", BakaUtil::CreatePowerArmorToken, true);
-		a_VM->BindNativeMethod(BakaUtil::SCRIPT_NAME, "HandlePowerArmorToken", BakaUtil::HandlePowerArmorToken, true);
+		// a_VM->BindNativeMethod(BakaUtil::SCRIPT_NAME, "CreatePowerArmorToken", BakaUtil::CreatePowerArmorToken, true);
+		// a_VM->BindNativeMethod(BakaUtil::SCRIPT_NAME, "HandlePowerArmorToken", BakaUtil::HandlePowerArmorToken, true);
 		a_VM->BindNativeMethod(BakaUtil::SCRIPT_NAME, "FilterReferencesByKeywords", BakaUtil::FilterReferencesByKeywords, true);
 		a_VM->BindNativeMethod(BakaUtil::SCRIPT_NAME, "OpenWebPage", BakaUtil::OpenWebPage, true);
-
-		// ScriptObject
-		a_VM->BindNativeMethod(ScriptObject::SCRIPT_NAME, "RegisterForPipboyLightEvent", ScriptObject::RegisterForPipboyLightEvent, true);
-		a_VM->BindNativeMethod(ScriptObject::SCRIPT_NAME, "UnregisterForPipboyLightEvent", ScriptObject::UnregisterForPipboyLightEvent, true);
-		RE::PipboyLightEvent::GetEventSource()->RegisterSink(ScriptObject::PipboyLightEventHandler::GetSingleton());
+		a_VM->BindNativeMethod(BakaUtil::SCRIPT_NAME, "RegisterForPipboyLightEvent", BakaUtil::RegisterForPipboyLightEvent, true);
+		a_VM->BindNativeMethod(BakaUtil::SCRIPT_NAME, "UnregisterForPipboyLightEvent", BakaUtil::UnregisterForPipboyLightEvent, true);
+		RE::PipboyLightEvent::GetEventSource()->RegisterSink(BakaUtil::detail::PipboyLightEventHandler::GetSingleton());
 
 		// StringUtil
 		a_VM->BindNativeMethod(StringUtil::SCRIPT_NAME, "GetLength", StringUtil::GetLength, true);

@@ -12,3 +12,7 @@ ObjectReference[] Function FilterReferencesByKeywords(ObjectReference[] aaRefere
 
 { Open the passed URL in the Steam Overlay, or the user's desktop browser if the overlay is unavailable, and abFallback is true }
 Function OpenWebPage(string asURL, bool abFallback) Native Global
+
+Function RegisterForPipboyLightEvent(Var akObject) Native Global
+
+Function UnregisterForPipboyLightEvent(Var akObject) Native Global
