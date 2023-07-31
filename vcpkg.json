@@ -6,7 +6,7 @@
     "autotoml",
     "boost-stl-interfaces",
     "fmt",
-    "mmio",
+    "rsm-mmio",
     "spdlog",
     "steamworks-sdk",
     "xbyak"

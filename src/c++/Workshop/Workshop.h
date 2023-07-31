@@ -1,3 +1,4 @@
+/*
 #pragma once
 
 namespace Workshop
@@ -631,3 +632,4 @@ namespace Workshop
 		bool m_hasSound{ false };
 	};
 }
+*/

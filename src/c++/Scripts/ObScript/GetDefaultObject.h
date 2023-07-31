@@ -70,7 +70,7 @@ namespace ObScript
 				{
 					auto result = fmt::format(
 						FMT_STRING("GetDefaultObject ({:s}) >> 0x{:08X}"sv),
-						dfob->formEditorID,
+						dfob->formEditorID.c_str(),
 						dfob->form ? dfob->form->formID : 0);
 					RE::ConsoleLog::GetSingleton()->PrintLine(result.data());
 					return true;

@@ -48,7 +48,6 @@ namespace ObScript
 			float&,
 			std::uint32_t& a_offset)
 		{
-			// ParseParameters
 			std::array<char, 0x200> rawComment{ '\0' };
 			auto result = RE::Script::ParseParameters(
 				a_parameters,
@@ -65,13 +64,11 @@ namespace ObScript
 				return true;
 			}
 
-			// Check Comment string exists
 			if (rawComment[0] == '\0')
 			{
 				return true;
 			}
 
-			// Determine reference to use
 			m_refr = a_refObject;
 			if (!m_refr)
 			{
@@ -264,8 +261,8 @@ namespace ObScript
 			auto cameraPositionZ = fmt::format(FMT_STRING("{:.0f}"sv), rootCamera->world.translate.z);
 			logger::debug(FMT_STRING("Camera Position: {:s}, {:s}, {:s}"sv), cameraPositionX, cameraPositionY, cameraPositionZ);
 
-			float fCameraAngleX, fCameraAngleY, fCameraAngleZ;
-			rootCamera->parent->world.rotate.ToEulerAnglesXYZ(&fCameraAngleX, &fCameraAngleY, &fCameraAngleZ);
+			float fCameraAngleX{ 0.0f }, fCameraAngleY{ 0.0f }, fCameraAngleZ{ 0.0f };
+			rootCamera->parent->world.rotate.ToEulerAnglesXYZ(fCameraAngleX, fCameraAngleY, fCameraAngleZ);
 			auto cameraAngleX = fmt::format(FMT_STRING("{:.0f}"sv), fCameraAngleX);
 			auto cameraAngleY = fmt::format(FMT_STRING("{:.0f}"sv), fCameraAngleY);
 			auto cameraAngleZ = fmt::format(FMT_STRING("{:.0f}"sv), fCameraAngleZ);

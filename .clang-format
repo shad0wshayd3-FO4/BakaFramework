@@ -7,7 +7,6 @@ AlignConsecutiveDeclarations: None
 AlignConsecutiveMacros: None
 AlignEscapedNewlines: Right
 AlignOperands: Align
-AlignTrailingComments: True
 AllowAllArgumentsOnNextLine: False
 AllowAllParametersOfDeclarationOnNextLine: False
 AllowShortBlocksOnASingleLine: Never
@@ -75,7 +74,6 @@ ReferenceAlignment: Left
 ReflowComments: False
 SeparateDefinitionBlocks: Always
 SortIncludes: CaseInsensitive
-SortUsingDeclarations: True
 SpaceAfterCStyleCast: False
 SpaceAfterLogicalNot: False
 SpaceAfterTemplateKeyword: False

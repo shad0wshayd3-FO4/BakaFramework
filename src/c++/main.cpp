@@ -5,7 +5,7 @@
 #include "Scripts/ObScript.h"
 #include "Scripts/Papyrus.h"
 #include "Serialization/Serialization.h"
-#include "Workshop/Workshop.h"
+// #include "Workshop/Workshop.h"
 
 namespace
 {
@@ -59,10 +59,12 @@ namespace
 				{
 					logger::debug("GameLoaded"sv);
 
+					/*
 					if (*Settings::Features::EnablePAStorage)
 					{
 						Workshop::PlacementMode::ApplyPerk();
 					}
+					*/
 
 					break;
 				}
@@ -141,7 +143,9 @@ extern "C" DLLEXPORT bool F4SEAPI F4SEPlugin_Load(const F4SE::LoadInterface* a_F
 	Fixes::Install();
 	Patches::Install();
 	ObScript::Install();
-	Workshop::PlacementMode::Hooks::Install();
+	// Workshop::PlacementMode::Hooks::Install();
+
+	logger::info("Plugin loaded successfully."sv);
 
 	return true;
 }
