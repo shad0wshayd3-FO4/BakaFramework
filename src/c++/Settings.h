@@ -25,11 +25,6 @@ namespace Settings
 		inline bSetting EnableEDIDConflictCheck{ "Patches"s, "EnableEditorIDConflictCheck"s, false, true };
 	}
 
-	namespace Features
-	{
-		inline bSetting EnablePAStorage{ "Features"s, "EnablePowerArmorStorage"s, true, true };
-	}
-
 	inline void Load()
 	{
 		try

@@ -3,8 +3,6 @@
 #include "Scripts/Papyrus/Shared/RegistrationMap.h"
 #include "SteamAPI/SteamAPI.h"
 
-//#include "Workshop/Workshop.h"
-
 namespace Papyrus::BakaUtil
 {
 	namespace detail
@@ -38,18 +36,6 @@ namespace Papyrus::BakaUtil
 	}
 
 	constexpr auto SCRIPT_NAME{ "BakaUtil"sv };
-
-	/*
-	bool CreatePowerArmorToken(std::monostate, RE::TESObjectREFR* a_refr)
-	{
-		return Workshop::PlacementMode::CreateToken(a_refr);
-	}
-
-	bool HandlePowerArmorToken(std::monostate, RE::TESObjectREFR* a_refr)
-	{
-		return Workshop::PlacementMode::HandleToken(a_refr);
-	}
-	*/
 
 	std::vector<RE::TESObjectREFR*> FilterReferencesByKeywords(
 		std::monostate,

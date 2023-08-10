@@ -5,10 +5,6 @@ namespace Forms
 	RE::BGSDefaultObject* InventoryWeight_DO{ nullptr };
 	RE::BGSDefaultObject* PipboyLightActive_DO{ nullptr };
 	RE::BGSDefaultObject* RadiationSourceCount_DO{ nullptr };
-	RE::BGSDefaultObject* PAFrameWorkshop_DO{ nullptr };
-	RE::BGSDefaultObject* PAFrameToken_DO{ nullptr };
-	RE::BGSDefaultObject* PAFramePerk_DO{ nullptr };
-	RE::BGSDefaultObject* PAFrameMessage_DO{ nullptr };
 
 	namespace
 	{
@@ -39,26 +35,6 @@ namespace Forms
 				RE::DefaultObjectFormFactory::Create(
 					"RadiationSourceCount_DO",
 					RE::ENUM_FORM_ID::kAVIF);
-
-			PAFrameWorkshop_DO =
-				RE::DefaultObjectFormFactory::Create(
-					"PAFrameWorkshop_DO",
-					RE::ENUM_FORM_ID::kCONT);
-
-			PAFrameToken_DO =
-				RE::DefaultObjectFormFactory::Create(
-					"PAFrameToken_DO",
-					RE::ENUM_FORM_ID::kARMO);
-
-			PAFramePerk_DO =
-				RE::DefaultObjectFormFactory::Create(
-					"PAFramePerk_DO",
-					RE::ENUM_FORM_ID::kPERK);
-
-			PAFrameMessage_DO =
-				RE::DefaultObjectFormFactory::Create(
-					"PAFrameMessage_DO",
-					RE::ENUM_FORM_ID::kMESG);
 
 			logger::debug("Injected DefaultObjects."sv);
 			return 1;

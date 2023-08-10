@@ -6,8 +6,6 @@
 #include "Scripts/Papyrus.h"
 #include "Serialization/Serialization.h"
 
-// #include "Workshop/Workshop.h"
-
 namespace
 {
 	void InitializeLog()
@@ -44,44 +42,14 @@ namespace
 
 		switch (a_msg->type)
 		{
-			case F4SE::MessagingInterface::kPostLoad:
-				{
-					logger::debug("PostLoad"sv);
-					break;
-				}
-
-			case F4SE::MessagingInterface::kPostPostLoad:
-				{
-					logger::debug("PostPostLoad"sv);
-					break;
-				}
-
-			case F4SE::MessagingInterface::kGameLoaded:
-				{
-					logger::debug("GameLoaded"sv);
-
-					/*
-					if (*Settings::Features::EnablePAStorage)
-					{
-						Workshop::PlacementMode::ApplyPerk();
-					}
-					*/
-
-					break;
-				}
-
 			case F4SE::MessagingInterface::kGameDataReady:
 				{
 					if (static_cast<bool>(a_msg->data))
 					{
-						logger::debug("GameDataReady - Loaded"sv);
-
 						Events::Register();
 					}
 					else
 					{
-						logger::debug("GameDataReady - Unloaded"sv);
-
 						ObScript::Help::ClearCellMap();
 					}
 
@@ -144,7 +112,6 @@ extern "C" DLLEXPORT bool F4SEAPI F4SEPlugin_Load(const F4SE::LoadInterface* a_F
 	Fixes::Install();
 	Patches::Install();
 	ObScript::Install();
-	// Workshop::PlacementMode::Hooks::Install();
 
 	logger::info("Plugin loaded successfully."sv);
 
