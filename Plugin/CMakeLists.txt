@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.21)
 
 # info
 project(
-	BakaPluginTemplate
+	BakaFramework
 	VERSION 1.0.0
 	LANGUAGES CXX
 )
