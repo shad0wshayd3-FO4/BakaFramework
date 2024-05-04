@@ -1,0 +1,16 @@
+[
+    {
+        "action": "base",
+        "params": [
+            "{target_base}",
+            "{env:Fallout4Path}\\Data\\F4SE\\Plugins\\"
+        ]
+    },
+    {
+        "action": "copy",
+        "params": [
+            "{cmake_output}\\*",
+            "{dist}\\"
+        ]
+    }
+]

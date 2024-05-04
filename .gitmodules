@@ -1,6 +1,6 @@
-[submodule "extern/BethesdaCMakeModules"]
-	path = extern/BethesdaCMakeModules
-	url = https://github.com/shad0wshayd3/BethesdaCMakeModules.git
 [submodule "extern/CommonLibF4"]
 	path = extern/CommonLibF4
 	url = https://github.com/shad0wshayd3/CommonLibF4.git
+[submodule "extern/DKUtil"]
+	path = extern/DKUtil
+	url = https://github.com/shad0wshayd3/DKUtil.git

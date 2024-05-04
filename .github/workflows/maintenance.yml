@@ -1,33 +1,24 @@
-name: Scripted maintenance
+name: Maintenance
 
-on: [ push, pull_request_target ]
+on: [push]
 
 jobs:
   maintenance:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
+    
+    - uses: DoozyX/clang-format-lint-action@v0.16.2
       with:
-        ref: ${{ github.head_ref }}
+        source: '.'
+        exclude: './docs'
+        extensions: 'c,cc,cpp,cppm,cxx,h,hpp,hxx,inl,inc,ixx,mxx'
+        clangFormatVersion: 16
+        inplace: True
 
-    - name: Cache LLVM and Clang
-      id: cache-llvm
-      uses: actions/cache@v2
+    - uses: EndBug/add-and-commit@v9
       with:
-        path: ${{ runner.temp }}/llvm
-        key: llvm-14
-
-    - name: Install LLVM and Clang
-      uses: KyleMayes/install-llvm-action@v1
-      with:
-        version: "14"
-        directory: ${{ runner.temp }}/llvm
-        cached: ${{ steps.cache-llvm.outputs.cache-hit }}
-
-    - name: Run clang-format
-      run: find -type f \( -name *.h -o -name *.cpp \) | xargs clang-format -style=file -i
-
-    - uses: stefanzweifel/git-auto-commit-action@v4
-      with:
-        commit_message: maintenance
+        committer_name: clang-format
+        committer_email: 41898282+github-actions[bot]@users.noreply.github.com
+        message: 'chore: style formatting'
