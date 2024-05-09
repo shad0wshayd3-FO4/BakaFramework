@@ -2,61 +2,61 @@
 
 namespace ObScript
 {
-	class QuitGame
-	{
-	public:
-		static void Install()
-		{
-			const auto functions = RE::SCRIPT_FUNCTION::GetConsoleFunctions();
-			const auto it = std::find_if(
-				functions.begin(),
-				functions.end(),
-				[&](auto&& a_elem)
-				{
-					return _stricmp(a_elem.functionName, "QuitGame") == 0;
-				});
+    class QuitGame
+    {
+    public:
+        static void Install()
+        {
+            const auto functions = RE::SCRIPT_FUNCTION::GetConsoleFunctions();
+            const auto it = std::find_if(
+                functions.begin(),
+                functions.end(),
+                [&](auto&& a_elem)
+                {
+                    return _stricmp(a_elem.functionName, "QuitGame") == 0;
+                });
 
-			if (it != functions.end())
-			{
-				*it = RE::SCRIPT_FUNCTION{ LONG_NAME.data(), SHORT_NAME.data(), it->output };
-				it->helpString = HelpString().data();
-				it->executeFunction = Execute;
+            if (it != functions.end())
+            {
+                *it = RE::SCRIPT_FUNCTION{ LONG_NAME.data(), SHORT_NAME.data(), it->output };
+                it->helpString = HelpString().data();
+                it->executeFunction = Execute;
 
-				DEBUG("Registered QuitGame."sv);
-			}
-			else
-			{
-				DEBUG("Failed to register QuitGame."sv);
-			}
-		}
+                DEBUG("Registered QuitGame."sv);
+            }
+            else
+            {
+                DEBUG("Failed to register QuitGame."sv);
+            }
+        }
 
-	private:
-		static bool Execute(const RE::SCRIPT_PARAMETER*, const char*, RE::TESObjectREFR*, RE::TESObjectREFR*, RE::Script*, RE::ScriptLocals*, float&, std::uint32_t&)
-		{
-			RE::ConsoleLog::GetSingleton()->PrintLine("Bye.");
-			std::thread(
-				[&]()
-				{
-					std::this_thread::sleep_for(std::chrono::milliseconds(100));
-					RE::Main::GetSingleton()->quitGame = true;
-				})
-				.detach();
+    private:
+        static bool Execute(const RE::SCRIPT_PARAMETER*, const char*, RE::TESObjectREFR*, RE::TESObjectREFR*, RE::Script*, RE::ScriptLocals*, float&, std::uint32_t&)
+        {
+            RE::ConsoleLog::GetSingleton()->PrintLine("Bye.");
+            std::thread(
+                [&]()
+                {
+                    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+                    RE::Main::GetSingleton()->quitGame = true;
+                })
+                .detach();
 
-			return true;
-		}
+            return true;
+        }
 
-		[[nodiscard]] static const std::string& HelpString()
-		{
-			static auto help = []()
-			{
-				std::string buf;
-				buf += "Exit game without going through menus."sv;
-				return buf;
-			}();
-			return help;
-		}
+        [[nodiscard]] static const std::string& HelpString()
+        {
+            static auto help = []()
+            {
+                std::string buf;
+                buf += "Exit game without going through menus."sv;
+                return buf;
+            }();
+            return help;
+        }
 
-		static constexpr auto LONG_NAME = "QuitGame"sv;
-		static constexpr auto SHORT_NAME = "qqq"sv;
-	};
+        static constexpr auto LONG_NAME = "QuitGame"sv;
+        static constexpr auto SHORT_NAME = "qqq"sv;
+    };
 }

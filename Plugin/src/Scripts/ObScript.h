@@ -10,14 +10,14 @@
 
 namespace ObScript
 {
-	void Install()
-	{
-		ObScript::BetaComment::Install();
-		ObScript::FreePlayer::Install();
-		ObScript::GetBaseObject::Install();
-		ObScript::GetDefaultObject::Install();
-		ObScript::Help::Install();
-		ObScript::QuitGame::Install();
-		ObScript::SpellHasCastingPerk::Install();
-	}
+    void Install()
+    {
+        ObScript::BetaComment::Install();
+        ObScript::FreePlayer::Install();
+        ObScript::GetBaseObject::Install();
+        ObScript::GetDefaultObject::Install();
+        ObScript::Help::Install();
+        ObScript::QuitGame::Install();
+        ObScript::SpellHasCastingPerk::Install();
+    }
 }
