@@ -30,11 +30,11 @@ namespace ObScript
 				it->parameters = params.data();
 				it->executeFunction = Execute;
 
-				logger::debug("Registered Help."sv);
+				DEBUG("Registered Help."sv);
 			}
 			else
 			{
-				logger::debug("Failed to register Help."sv);
+				DEBUG("Failed to register Help."sv);
 			}
 		}
 
@@ -185,22 +185,22 @@ namespace ObScript
 			{
 				if (nick && !detail::strempty(nick))
 				{
-					match = fmt::format(FMT_STRING("{:s} ({:s}) -> {:s}"sv), name, nick, help);
+					match = fmt::format("{:s} ({:s}) -> {:s}"sv, name, nick, help);
 				}
 				else
 				{
-					match = fmt::format(FMT_STRING("{:s} -> {:s}"sv), name, help);
+					match = fmt::format("{:s} -> {:s}"sv, name, help);
 				}
 			}
 			else
 			{
 				if (nick && !detail::strempty(nick))
 				{
-					match = fmt::format(FMT_STRING("{:s} ({:s})"sv), name, nick);
+					match = fmt::format("{:s} ({:s})"sv, name, nick);
 				}
 				else
 				{
-					match = fmt::format(FMT_STRING("{:s}"sv), name);
+					match = fmt::format("{:s}"sv, name);
 				}
 			}
 
@@ -247,49 +247,49 @@ namespace ObScript
 			{
 				case RE::Setting::SETTING_TYPE::kBinary:
 					match = fmt::format(
-						FMT_STRING("{:s} = {:s}"sv),
+						"{:s} = {:s}"sv,
 						a_setting->GetKey(),
 						a_setting->GetBinary());
 					break;
 
 				case RE::Setting::SETTING_TYPE::kChar:
 					match = fmt::format(
-						FMT_STRING("{:s} = {:d}"sv),
+						"{:s} = {:d}"sv,
 						a_setting->GetKey(),
 						a_setting->GetChar());
 					break;
 
 				case RE::Setting::SETTING_TYPE::kUChar:
 					match = fmt::format(
-						FMT_STRING("{:s} = {:d}"sv),
+						"{:s} = {:d}"sv,
 						a_setting->GetKey(),
 						a_setting->GetUChar());
 					break;
 
 				case RE::Setting::SETTING_TYPE::kInt:
 					match = fmt::format(
-						FMT_STRING("{:s} = {:d}"sv),
+						"{:s} = {:d}"sv,
 						a_setting->GetKey(),
 						a_setting->GetInt());
 					break;
 
 				case RE::Setting::SETTING_TYPE::kUInt:
 					match = fmt::format(
-						FMT_STRING("{:s} = {:d}"sv),
+						"{:s} = {:d}"sv,
 						a_setting->GetKey(),
 						a_setting->GetUInt());
 					break;
 
 				case RE::Setting::SETTING_TYPE::kFloat:
 					match = fmt::format(
-						FMT_STRING("{:s} = {:0.2f}"sv),
+						"{:s} = {:0.2f}"sv,
 						a_setting->GetKey(),
 						a_setting->GetFloat());
 					break;
 
 				case RE::Setting::SETTING_TYPE::kString:
 					match = fmt::format(
-						FMT_STRING("{:s} = {:s}"sv),
+						"{:s} = {:s}"sv,
 						a_setting->GetKey(),
 						a_setting->GetString());
 					break;
@@ -298,7 +298,7 @@ namespace ObScript
 					{
 						auto color = a_setting->GetRGB();
 						match = fmt::format(
-							FMT_STRING("{:s} = R:{:d} G:{:d} B:{:d}"sv),
+							"{:s} = R:{:d} G:{:d} B:{:d}"sv,
 							a_setting->GetKey(),
 							color[0],
 							color[1],
@@ -310,7 +310,7 @@ namespace ObScript
 					{
 						auto color = a_setting->GetRGBA();
 						match = fmt::format(
-							FMT_STRING("{:s} = R:{:d} G:{:d} B:{:d} A:{:d}"sv),
+							"{:s} = R:{:d} G:{:d} B:{:d} A:{:d}"sv,
 							a_setting->GetKey(),
 							color[0],
 							color[1],
@@ -320,9 +320,7 @@ namespace ObScript
 					break;
 
 				default:
-					match = fmt::format(
-						FMT_STRING("{:s} = <UNKNOWN>"sv),
-						a_setting->GetKey());
+					match = fmt::format("{:s} = <UNKNOWN>"sv, a_setting->GetKey());
 					break;
 			}
 
@@ -394,7 +392,7 @@ namespace ObScript
 				return;
 			}
 
-			auto match = fmt::format(FMT_STRING("{:s} = {:0.2f}"sv), edid, a_global->value);
+			auto match = fmt::format("{:s} = {:0.2f}"sv, edid, a_global->value);
 			RE::ConsoleLog::GetSingleton()->PrintLine(match.data());
 		}
 
@@ -436,7 +434,7 @@ namespace ObScript
 				auto edid = iter->GetFormEditorID();
 				auto name = RE::TESFullName::GetFullName(*iter);
 
-				auto match = fmt::format(FMT_STRING("{:s}: {:s} ({:08X}) '{:s}'"sv), form, edid, iter->formID, name);
+				auto match = fmt::format("{:s}: {:s} ({:08X}) '{:s}'"sv, form, edid, iter->formID, name);
 				RE::ConsoleLog::GetSingleton()->PrintLine(match.data());
 			}
 		}
@@ -484,7 +482,7 @@ namespace ObScript
 
 				if (formType != RE::ENUM_FORM_ID::kNONE && formType != RE::ENUM_FORM_ID::kCELL)
 				{
-					auto& forms = TESDataHandler->formArrays[stl::to_underlying(formType)];
+					auto& forms = TESDataHandler->formArrays[F4SE::stl::to_underlying(formType)];
 					for (auto iter : forms)
 					{
 						ShowHelp_Forms_Match(iter);
@@ -526,12 +524,12 @@ namespace ObScript
 
 			if (!detail::strempty(a_fileName))
 			{
-				auto match = fmt::format(FMT_STRING("{:s} CELL: {:s}"sv), a_fileName, a_edid);
+				auto match = fmt::format("{:s} CELL: {:s}"sv, a_fileName, a_edid);
 				RE::ConsoleLog::GetSingleton()->PrintLine(match.data());
 			}
 			else
 			{
-				auto match = fmt::format(FMT_STRING("CELL: {:s}"sv), a_edid);
+				auto match = fmt::format("CELL: {:s}"sv, a_edid);
 				RE::ConsoleLog::GetSingleton()->PrintLine(match.data());
 			}
 		}
@@ -540,7 +538,7 @@ namespace ObScript
 		{
 			if (!a_file->OpenTES(RE::NiFile::OpenMode::kReadOnly, false))
 			{
-				logger::warn(FMT_STRING("failed to open file: {:s}"sv), a_file->filename);
+				WARN("failed to open file: {:s}"sv, a_file->filename);
 				return;
 			}
 
@@ -591,7 +589,7 @@ namespace ObScript
 
 			if (!a_file->CloseTES(false))
 			{
-				logger::warn(FMT_STRING("failed to close file: {:s}"sv), a_file->filename);
+				WARN("failed to close file: {:s}"sv, a_file->filename);
 			}
 		}
 

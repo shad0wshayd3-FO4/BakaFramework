@@ -28,11 +28,11 @@ namespace ObScript
 				it->executeFunction = Execute;
 				it->conditionFunction = Condition;
 
-				logger::debug("Registered SpellHasCastingPerk."sv);
+				DEBUG("Registered SpellHasCastingPerk."sv);
 			}
 			else
 			{
-				logger::debug("Failed to register SpellHasCastingPerk."sv);
+				DEBUG("Failed to register SpellHasCastingPerk."sv);
 			}
 		}
 

@@ -23,11 +23,11 @@ namespace ObScript
 				it->referenceFunction = true;
 				it->executeFunction = Execute;
 
-				logger::debug("Registered GetBaseObject."sv);
+				DEBUG("Registered GetBaseObject."sv);
 			}
 			else
 			{
-				logger::debug("Failed to register GetBaseObject."sv);
+				DEBUG("Failed to register GetBaseObject."sv);
 			}
 		}
 
@@ -53,9 +53,7 @@ namespace ObScript
 				return true;
 			}
 
-			auto result = fmt::format(
-				FMT_STRING("GetBaseObject >> {:08X}"sv),
-				base->formID);
+			auto result = fmt::format("GetBaseObject >> {:08X}"sv, base->formID);
 			RE::ConsoleLog::GetSingleton()->PrintLine(result.data());
 			return true;
 		}

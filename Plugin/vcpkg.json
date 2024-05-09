@@ -1,5 +1,5 @@
 {
-  "name": "bakaplugintemplate",
+  "name": "bakaframework",
   "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
   "dependencies": [
     "boost-stl-interfaces",
@@ -8,6 +8,7 @@
     "rsm-mmio",
     "simpleini",
     "spdlog",
+    "steamworks-sdk",
     "tomlplusplus",
     "xbyak"
   ],

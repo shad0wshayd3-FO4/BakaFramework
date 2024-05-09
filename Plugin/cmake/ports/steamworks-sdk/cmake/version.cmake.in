@@ -1,0 +1,2 @@
+set(MAJOR @MAJOR@)
+set(MINOR @MINOR@)

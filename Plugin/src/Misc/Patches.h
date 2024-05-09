@@ -6,7 +6,7 @@ namespace Patches
 {
 	void Install()
 	{
-		if (*Settings::Patches::EnableLoadingEditorIDs)
+		if (*Config::Patches::bEnableLoadingEditorIDs)
 		{
 			LoadEditorIDs::Install();
 		}

@@ -42,13 +42,13 @@ namespace Patches
 			const RE::BSAutoWriteLock locker{ lock.get() };
 			if (map)
 			{
-				if (*Settings::Patches::EnableEDIDConflictCheck)
+				if (*Config::Patches::bEnableEDIDConflictCheck)
 				{
 					auto iter = map->find(a_editorID);
 					if (iter != map->end())
 					{
-						logger::warn(
-							FMT_STRING("EditorID Conflict: {:08X} and {:08X} are both {:s}"sv),
+						WARN(
+							"EditorID Conflict: {:08X} and {:08X} are both {:s}"sv,
 							iter->second->GetFormID(),
 							a_this->GetFormID(),
 							a_editorID);
@@ -222,7 +222,7 @@ namespace Patches
 			InstallHook<RE::BGSLensFlare>();
 			InstallHook<RE::BGSGodRays>();
 
-			logger::debug("Installed Patch: LoadEditorIDs"sv);
+			DEBUG("Installed Patch: LoadEditorIDs"sv);
 		}
 	};
 }

@@ -22,11 +22,11 @@ namespace ObScript
 				it->helpString = HelpString().data();
 				it->executeFunction = Execute;
 
-				logger::debug("Registered QuitGame."sv);
+				DEBUG("Registered QuitGame."sv);
 			}
 			else
 			{
-				logger::debug("Failed to register QuitGame."sv);
+				DEBUG("Failed to register QuitGame."sv);
 			}
 		}
 
