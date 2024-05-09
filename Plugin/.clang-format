@@ -1,7 +1,7 @@
 ---
 AccessModifierOffset: -4
-AlignAfterOpenBracket: DontAlign
-AlignArrayOfStructures: Right
+AlignAfterOpenBracket: Align
+AlignArrayOfStructures: Left
 AlignConsecutiveAssignments:
   Enabled: false
 AlignConsecutiveBitFields:
@@ -10,15 +10,14 @@ AlignConsecutiveDeclarations:
   Enabled: false
 AlignConsecutiveMacros:
   Enabled: true
-AlignConsecutiveShortCaseStatements:
-  Enabled: false
 AlignEscapedNewlines: Left
 AlignOperands: AlignAfterOperator
 AlignTrailingComments:
   Kind: Always
+  OverEmptyLines: 0
 AllowAllArgumentsOnNextLine: false
 AllowAllParametersOfDeclarationOnNextLine: false
-AllowShortBlocksOnASingleLine: Empty
+AllowShortBlocksOnASingleLine: Never
 AllowShortCaseLabelsOnASingleLine: false
 AllowShortEnumsOnASingleLine: false
 AllowShortFunctionsOnASingleLine: Inline
@@ -52,7 +51,7 @@ BraceWrapping:
 BreakAfterAttributes: Never
 BreakBeforeBinaryOperators: None
 BreakBeforeBraces: Custom
-BreakBeforeConceptDeclarations: Never
+BreakBeforeConceptDeclarations: Always
 BreakBeforeInlineASMColon: Never
 BreakBeforeTernaryOperators: true
 BreakConstructorInitializers: AfterColon
@@ -69,10 +68,10 @@ EmptyLineAfterAccessModifier: Never
 EmptyLineBeforeAccessModifier: Always
 FixNamespaceComments: false
 IncludeBlocks: Preserve
-IndentAccessModifiers: true
+IndentAccessModifiers: false
 IndentCaseBlocks: false
 IndentCaseLabels: false
-IndentExternBlock: Indent
+IndentExternBlock: AfterExternBlock
 IndentGotoLabels: false
 IndentPPDirectives: AfterHash
 IndentRequiresClause: true
@@ -80,22 +79,21 @@ IndentWidth: 4
 IndentWrappedFunctionNames: true
 InsertBraces: false
 InsertNewlineAtEOF: true
-KeepEmptyLinesAtEOF: true
 KeepEmptyLinesAtTheStartOfBlocks: false
 LambdaBodyIndentation: Signature
 Language: Cpp
 LineEnding: CRLF
 MaxEmptyLinesToKeep: 1
 NamespaceIndentation: All
+PPIndentWidth: 4
 PackConstructorInitializers: Never
 PointerAlignment: Left
-PPIndentWidth: -1
-ReferenceAlignment: Left
+QualifierAlignment: Leave
+ReferenceAlignment: Pointer
 ReflowComments: false
 RemoveBracesLLVM: false
-RemoveParentheses: Leave
 RemoveSemicolon: false
-RequiresClausePosition: SingleLine
+RequiresClausePosition: OwnLine
 RequiresExpressionIndentation: OuterScope
 SeparateDefinitionBlocks: Always
 SortIncludes: CaseSensitive
@@ -109,18 +107,20 @@ SpaceBeforeCaseColon: false
 SpaceBeforeCpp11BracedList: false
 SpaceBeforeCtorInitializerColon: true
 SpaceBeforeInheritanceColon: true
-SpaceBeforeJsonColon: false
 SpaceBeforeParens: ControlStatements
 SpaceBeforeRangeBasedForLoopColon: true
 SpaceBeforeSquareBrackets: false
 SpaceInEmptyBlock: false
 SpacesBeforeTrailingComments: 2
+SpaceInEmptyParentheses: false
 SpacesInAngles: Never
+SpacesInCStyleCastParentheses: false
+SpacesInConditionalStatement: false
 SpacesInContainerLiterals: false
 SpacesInLineCommentPrefix:
   Minimum: 1
   Maximum: -1
-SpacesInParens: Never
+SpacesInParentheses: false
 SpacesInSquareBrackets: false
 Standard: Latest
 TabWidth: 4

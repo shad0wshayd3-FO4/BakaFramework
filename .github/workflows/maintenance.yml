@@ -14,7 +14,7 @@ jobs:
         source: '.'
         exclude: './docs'
         extensions: 'c,cc,cpp,cppm,cxx,h,hpp,hxx,inl,inc,ixx,mxx'
-        clangFormatVersion: 17
+        clangFormatVersion: 16
         inplace: True
 
     - uses: EndBug/add-and-commit@v9
