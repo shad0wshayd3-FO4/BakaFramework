@@ -4,11 +4,11 @@
 
 namespace Patches
 {
-    void Install()
-    {
-        if (*Config::Patches::bEnableLoadingEditorIDs)
-        {
-            LoadEditorIDs::Install();
-        }
-    }
+	void Install()
+	{
+		if (*Config::Patches::bEnableLoadingEditorIDs)
+		{
+			LoadEditorIDs::Install();
+		}
+	}
 }

@@ -130,16 +130,16 @@ using namespace std::literals;
 // F4SEPlugin_Version
 DLLEXPORT constinit auto F4SEPlugin_Version = []() noexcept
 {
-    F4SE::PluginVersionData data{};
+	F4SE::PluginVersionData data{};
 
-    data.PluginVersion(Plugin::Version);
-    data.PluginName(Plugin::NAME);
-    data.AuthorName(Plugin::AUTHOR);
-    data.UsesAddressLibrary(true);
-    data.UsesSigScanning(false);
-    data.IsLayoutDependent(true);
-    data.HasNoStructUse(false);
-    data.CompatibleVersions({ F4SE::RUNTIME_LATEST });
+	data.PluginVersion(Plugin::Version);
+	data.PluginName(Plugin::NAME);
+	data.AuthorName(Plugin::AUTHOR);
+	data.UsesAddressLibrary(true);
+	data.UsesSigScanning(false);
+	data.IsLayoutDependent(true);
+	data.HasNoStructUse(false);
+	data.CompatibleVersions({ F4SE::RUNTIME_LATEST });
 
-    return data;
+	return data;
 }();
