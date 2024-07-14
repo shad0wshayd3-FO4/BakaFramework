@@ -36,6 +36,18 @@ namespace Patches
 		}
 
 	private:
+		static std::string_view GetFileName(RE::TESForm* a_form)
+		{
+			try
+			{
+				return a_form->GetFile() ? a_form->GetFile()->GetFilename() : "unknown"sv;
+			}
+			catch (const std::exception& e)
+			{
+				ERROR("{}", e.what());
+				return "error"sv;
+			}
+		}
 		static void AddToGameMap(RE::TESForm* a_this, const char* a_editorID)
 		{
 			const auto& [map, lock] = RE::TESForm::GetAllFormsByEditorID();
@@ -45,11 +57,15 @@ namespace Patches
 				if (*Config::Patches::bEnableEDIDConflictCheck)
 				{
 					auto iter = map->find(a_editorID);
-					if (iter != map->end())
+					if (iter != map->end() && iter->second->GetFormID() && iter->second->GetFormID() != a_this->GetFormID())
 					{
+						auto name = iter->second->GetFile() ? iter->second->GetFile()->GetFilename() : "unknown";
+						auto name2 = a_this->GetFile() ? a_this->GetFile()->GetFilename() : "unknown";
 						WARN(
-							"EditorID Conflict: {:08X} and {:08X} are both {:s}"sv,
+							"EditorID Conflict: {}:{:08X} and {}:{:08X} are both {:s}"sv,
+							GetFileName(iter->second),
 							iter->second->GetFormID(),
+							GetFileName(a_this),
 							a_this->GetFormID(),
 							a_editorID);
 						return;
