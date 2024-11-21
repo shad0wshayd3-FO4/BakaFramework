@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Config/Config.h"
+
 namespace Patches
 {
 	class LoadEditorIDs
@@ -42,12 +44,12 @@ namespace Patches
 			const RE::BSAutoWriteLock locker{ lock.get() };
 			if (map)
 			{
-				if (*Config::Patches::bEnableEDIDConflictCheck)
+				if (Config::Patches::bEnableEDIDConflictCheck.GetValue())
 				{
 					auto iter = map->find(a_editorID);
 					if (iter != map->end())
 					{
-						WARN(
+						F4SE::log::warn(
 							"EditorID Conflict: {:08X} and {:08X} are both {:s}"sv,
 							iter->second->GetFormID(),
 							a_this->GetFormID(),
@@ -222,7 +224,7 @@ namespace Patches
 			InstallHook<RE::BGSLensFlare>();
 			InstallHook<RE::BGSGodRays>();
 
-			DEBUG("Installed Patch: LoadEditorIDs"sv);
+			F4SE::log::debug("Installed Patch: LoadEditorIDs"sv);
 		}
 	};
 }

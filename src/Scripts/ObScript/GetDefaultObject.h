@@ -29,11 +29,11 @@ namespace ObScript
 				it->parameters = params.data();
 				it->executeFunction = Execute;
 
-				DEBUG("Registered GetDefaultObject."sv);
+				F4SE::log::debug("Registered GetDefaultObject."sv);
 			}
 			else
 			{
-				DEBUG("Failed to register GetDefaultObject."sv);
+				F4SE::log::debug("Failed to register GetDefaultObject."sv);
 			}
 		}
 
@@ -68,7 +68,7 @@ namespace ObScript
 			{
 				if (auto dfob = form->As<RE::BGSDefaultObject>(); dfob)
 				{
-					auto result = fmt::format(
+					auto result = std::format(
 						"GetDefaultObject ({:s}) >> 0x{:08X}"sv,
 						dfob->formEditorID.c_str(),
 						dfob->form ? dfob->form->formID : 0);
@@ -77,7 +77,7 @@ namespace ObScript
 				}
 			}
 
-			auto result = fmt::format("GetDefaultObject ({:s}) >> Does not exist."sv, dfobName);
+			auto result = std::format("GetDefaultObject ({:s}) >> Does not exist."sv, dfobName);
 			RE::ConsoleLog::GetSingleton()->PrintLine(result.data());
 			return true;
 		}

@@ -1,22 +1,20 @@
 #pragma once
 
-class Config
+namespace Config
 {
-public:
-	class Patches
+	namespace Patches
 	{
-	public:
-		inline static DKUtil::Alias::Boolean bEnableLoadingEditorIDs{ "bEnableLoadingEditorIDs", "Patches" };
-		inline static DKUtil::Alias::Boolean bEnableEDIDConflictCheck{ "bEnableEDIDConflictCheck", "Patches" };
-		inline static DKUtil::Alias::String sBetaCommentFileName{ "sBetaCommentFileName", "Patches" };
-	};
+		static REX::INI::Bool bEnableLoadingEditorIDs{ "bEnableLoadingEditorIDs", "Patches", true };
+		static REX::INI::Bool bEnableEDIDConflictCheck{ "bEnableEDIDConflictCheck", "Patches", false };
+		static REX::INI::Str sBetaCommentFileName{ "sBetaCommentFileName", "Patches", "BetaComment.txt"s };
+	}
 
 	static void Load()
 	{
-		static auto Config = COMPILE_PROXY("BakaFramework.ini");
-		Config.Bind(Patches::bEnableLoadingEditorIDs, true);
-		Config.Bind(Patches::bEnableEDIDConflictCheck, false);
-		Config.Bind(Patches::sBetaCommentFileName, "BetaComment.txt");
-		Config.Load();
+		const auto ini = REX::INI::SettingStore::GetSingleton();
+		ini->Init(
+			"Data/F4SE/plugins/BakaFramework.ini",
+			"Data/F4SE/plugins/BakaFrameworkCustom.ini");
+		ini->Load();
 	}
-};
+}

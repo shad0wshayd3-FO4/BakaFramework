@@ -9,7 +9,7 @@ namespace SteamAPI
 	{
 		ISteamFriends* SteamFriends()
 		{
-			auto handle = GetModuleHandleW(L"steam_api64");
+			auto handle = REX::W32::GetModuleHandleW(L"steam_api64");
 			if (handle == NULL)
 			{
 				return nullptr;
@@ -23,7 +23,7 @@ namespace SteamAPI
 
 		ISteamUtils* SteamUtils()
 		{
-			auto handle = GetModuleHandleW(L"steam_api64");
+			auto handle = REX::W32::GetModuleHandleW(L"steam_api64");
 			if (handle == NULL)
 			{
 				return nullptr;
@@ -31,7 +31,7 @@ namespace SteamAPI
 
 			using func_t = decltype(&::SteamUtils);
 			auto func =
-				reinterpret_cast<func_t>(GetProcAddress(handle, "SteamUtils"));
+				reinterpret_cast<func_t>(REX::W32::GetProcAddress(handle, "SteamUtils"));
 			return (func != NULL) ? func() : nullptr;
 		}
 	}
@@ -50,8 +50,8 @@ namespace SteamAPI
 
 		if (a_fallback)
 		{
-			DEBUG("Overlay is disabled."sv);
-			ShellExecuteA(NULL, NULL, a_url, NULL, NULL, SW_MAXIMIZE);
+			F4SE::log::debug("Overlay is disabled."sv);
+			REX::W32::ShellExecuteA(NULL, NULL, a_url, NULL, NULL, SW_MAXIMIZE);
 		}
 	}
 }

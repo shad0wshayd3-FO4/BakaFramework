@@ -22,11 +22,11 @@ namespace ObScript
 				it->helpString = HelpString().data();
 				it->executeFunction = Execute;
 
-				DEBUG("Registered FreePlayer."sv);
+				F4SE::log::debug("Registered FreePlayer."sv);
 			}
 			else
 			{
-				DEBUG("Failed to register FreePlayer."sv);
+				F4SE::log::debug("Failed to register FreePlayer."sv);
 			}
 		}
 

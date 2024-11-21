@@ -2,9 +2,9 @@
 
 namespace Forms
 {
-	RE::BGSDefaultObject* InventoryWeight_DO{ nullptr };
-	RE::BGSDefaultObject* PipboyLightActive_DO{ nullptr };
-	RE::BGSDefaultObject* RadiationSourceCount_DO{ nullptr };
+	static RE::BGSDefaultObject* InventoryWeight_DO{ nullptr };
+	static RE::BGSDefaultObject* PipboyLightActive_DO{ nullptr };
+	static RE::BGSDefaultObject* RadiationSourceCount_DO{ nullptr };
 
 	void Install()
 	{
@@ -23,6 +23,6 @@ namespace Forms
 				"RadiationSourceCount_DO",
 				RE::ENUM_FORM_ID::kAVIF);
 
-		DEBUG("Injected DefaultObjects."sv);
+		F4SE::log::debug("Injected DefaultObjects."sv);
 	}
 };
