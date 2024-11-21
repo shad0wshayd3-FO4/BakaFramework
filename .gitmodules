@@ -1,0 +1,3 @@
+[submodule "extern/commonlibf4"]
+	path = extern/commonlibf4
+	url = https://github.com/shad0wshayd3-FO4/CommonLibF4.git
