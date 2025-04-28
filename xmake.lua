@@ -2,7 +2,7 @@
 set_xmakever("2.9.4")
 
 -- include local folders
-includes("extern/commonlibf4")
+includes("lib/commonlibf4")
 
 -- set project
 set_project("BakaFramework")
