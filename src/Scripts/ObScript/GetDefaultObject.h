@@ -1,100 +1,62 @@
 #pragma once
 
-namespace ObScript
+namespace ObScript::GetDefaultObject
 {
-	class GetDefaultObject
+	static bool Execute(
+		[[maybe_unused]] const RE::SCRIPT_PARAMETER* a_parameters,
+		[[maybe_unused]] const char*                 a_compiledParams,
+		[[maybe_unused]] RE::TESObjectREFR*          a_refObject,
+		[[maybe_unused]] RE::TESObjectREFR*          a_container,
+		[[maybe_unused]] RE::Script*                 a_script,
+		[[maybe_unused]] RE::ScriptLocals*           a_scriptLocals,
+		[[maybe_unused]] float&                      a_result,
+		[[maybe_unused]] std::uint32_t&              a_offset)
 	{
-	public:
-		static void Install()
+		char a_name[512]{ '\0' };
+		RE::Script::ParseParameters(
+			a_parameters,
+			a_compiledParams,
+			a_offset,
+			a_refObject,
+			a_container,
+			a_script,
+			a_scriptLocals,
+			a_name);
+
+		std::string_view name = a_name;
+		if (name.empty())
 		{
-			const auto functions = RE::SCRIPT_FUNCTION::GetConsoleFunctions();
-			const auto it = std::find_if(
-				functions.begin(),
-				functions.end(),
-				[&](auto&& a_elem)
-				{
-					return _stricmp(a_elem.functionName, "DumpSoundMap") == 0;
-				});
-
-			if (it != functions.end())
-			{
-				static std::array params{
-					RE::SCRIPT_PARAMETER{"String", RE::SCRIPT_PARAM_TYPE::kChar, false},
-				};
-
-				*it = RE::SCRIPT_FUNCTION{ LONG_NAME.data(), SHORT_NAME.data(), it->output };
-				it->helpString = HelpString().data();
-				it->referenceFunction = false;
-				it->paramCount = static_cast<std::uint16_t>(params.size());
-				it->parameters = params.data();
-				it->executeFunction = Execute;
-
-				REX::DEBUG("Registered GetDefaultObject."sv);
-			}
-			else
-			{
-				REX::DEBUG("Failed to register GetDefaultObject."sv);
-			}
-		}
-
-	private:
-		static bool Execute(
-			const RE::SCRIPT_PARAMETER* a_parameters,
-			const char* a_compiledParams,
-			RE::TESObjectREFR* a_refObject,
-			RE::TESObjectREFR* a_container,
-			RE::Script* a_script,
-			RE::ScriptLocals* a_scriptLocals,
-			float&,
-			std::uint32_t& a_offset)
-		{
-			char dfobName[512]{ '\0' };
-			RE::Script::ParseParameters(
-				a_parameters,
-				a_compiledParams,
-				a_offset,
-				a_refObject,
-				a_container,
-				a_script,
-				a_scriptLocals,
-				dfobName);
-
-			if (dfobName[0] == '\0')
-			{
-				return true;
-			}
-
-			if (auto form = RE::TESForm::GetFormByEditorID(dfobName))
-			{
-				if (auto dfob = form->As<RE::BGSDefaultObject>(); dfob)
-				{
-					auto result = std::format(
-						"GetDefaultObject ({:s}) >> 0x{:08X}"sv,
-						dfob->formEditorID.c_str(),
-						dfob->form ? dfob->form->formID : 0);
-					RE::ConsoleLog::GetSingleton()->PrintLine(result.data());
-					return true;
-				}
-			}
-
-			auto result = std::format("GetDefaultObject ({:s}) >> Does not exist."sv, dfobName);
-			RE::ConsoleLog::GetSingleton()->PrintLine(result.data());
 			return true;
 		}
 
-		[[nodiscard]] static const std::string& HelpString()
+		if (auto form = RE::TESForm::GetFormByEditorID(a_name))
 		{
-			static auto help = []()
+			if (auto defaultObject = form->As<RE::BGSDefaultObject>())
 			{
-				std::string buf;
-				buf += "Print the FormID contained by a DefaultObject Form. "sv;
-				buf += "[GetDefaultObject \"InventoryWeight_DO\"]"sv;
-				return buf;
-			}();
-			return help;
+				RE::ConsoleLog::GetSingleton()->Log("GetDefaultObject ({}) >> {:08X}"sv,
+					defaultObject->GetFormEditorID(), defaultObject->form ? defaultObject->form->GetFormID() : 0);
+				return true;
+			}
 		}
 
-		static constexpr auto LONG_NAME = "GetDefaultObject"sv;
-		static constexpr auto SHORT_NAME = "gdo"sv;
-	};
+		RE::ConsoleLog::GetSingleton()->Log("DefaultObject \"{}\" Does Not Exist"sv, a_name);
+		return true;
+	}
+
+	inline void Install()
+	{
+		if (auto func = RE::SCRIPT_FUNCTION::LocateConsoleCommand("DumpSoundMap"sv))
+		{
+			static RE::SCRIPT_PARAMETER params[] = {
+				{ "String", RE::SCRIPT_PARAM_TYPE::kChar, false },
+			};
+
+			func->functionName = "GetDefaultObject";
+			func->shortName = "gdo";
+			func->helpString = "Print the FormID contained by a DefaultObject form. [GetDefaultObject \"PowerArmorDefaultBatteryObject_DO\"]";
+			func->referenceFunction = false;
+			func->SetParameters(params);
+			func->executeFunction = &Execute;
+		}
+	}
 }

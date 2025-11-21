@@ -8,15 +8,15 @@ namespace Events
 {
 	void Register()
 	{
-		REX::DEBUG("Registering Event Handlers."sv);
-
 		RE::CurrentRadiationSourceCount::GetEventSource()->RegisterSink(Handlers::CurrentRadiationSourceCountHandler::GetSingleton());
 		RE::PipboyLightEvent::GetEventSource()->RegisterSink(Handlers::PipboyLightEventHandler::GetSingleton());
-		RE::ItemCrafted::RegisterSink(Handlers::ItemCraftedHandler::GetSingleton());
-
+		
 		if (auto UI = RE::UI::GetSingleton())
 		{
+			RE::ItemCrafted::RegisterSink(Handlers::ItemCraftedHandler::GetSingleton());
 			UI->RegisterSink<RE::MenuOpenCloseEvent>(Handlers::ItemCraftedHandler::GetSingleton());
 		}
+
+		REX::DEBUG("Registered Event Handlers."sv);
 	}
 }

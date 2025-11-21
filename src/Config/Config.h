@@ -6,7 +6,7 @@ namespace Config
 	{
 		static REX::INI::Bool bEnableLoadingEditorIDs{ "bEnableLoadingEditorIDs", "Patches", true };
 		static REX::INI::Bool bEnableEDIDConflictCheck{ "bEnableEDIDConflictCheck", "Patches", false };
-		static REX::INI::Str sBetaCommentFileName{ "sBetaCommentFileName", "Patches", "BetaComment.txt"s };
+		static REX::INI::Str  sBetaCommentFileName{ "sBetaCommentFileName", "Patches", "BetaComment.txt"s };
 	}
 
 	static void Load()

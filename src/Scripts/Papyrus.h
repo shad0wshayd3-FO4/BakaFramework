@@ -8,25 +8,24 @@ namespace Papyrus
 	bool RegisterFunctions(RE::BSScript::IVirtualMachine* a_VM)
 	{
 		// BakaUtil
-		a_VM->BindNativeMethod(BakaUtil::SCRIPT_NAME, "FilterReferencesByKeywords", BakaUtil::FilterReferencesByKeywords, true);
-		a_VM->BindNativeMethod(BakaUtil::SCRIPT_NAME, "OpenWebPage", BakaUtil::OpenWebPage, true);
-		a_VM->BindNativeMethod(BakaUtil::SCRIPT_NAME, "RegisterForPipboyLightEvent", BakaUtil::RegisterForPipboyLightEvent, true);
-		a_VM->BindNativeMethod(BakaUtil::SCRIPT_NAME, "UnregisterForPipboyLightEvent", BakaUtil::UnregisterForPipboyLightEvent, true);
-		RE::PipboyLightEvent::GetEventSource()->RegisterSink(BakaUtil::detail::PipboyLightEventHandler::GetSingleton());
+		a_VM->BindNativeMethod("BakaUtil"sv, "FilterReferencesByKeywords"sv, BakaUtil::FilterReferencesByKeywords, true);
+		a_VM->BindNativeMethod("BakaUtil"sv, "RegisterForPipboyLightEvent"sv, BakaUtil::RegisterForPipboyLightEvent, true);
+		a_VM->BindNativeMethod("BakaUtil"sv, "UnregisterForPipboyLightEvent"sv, BakaUtil::UnregisterForPipboyLightEvent, true);
+		RE::PipboyLightEvent::GetEventSource()->RegisterSink(BakaUtil::PipboyLightEventHandler::GetSingleton());
 
 		// StringUtil
-		a_VM->BindNativeMethod(StringUtil::SCRIPT_NAME, "GetLength", StringUtil::GetLength, true);
-		a_VM->BindNativeMethod(StringUtil::SCRIPT_NAME, "GetNthCharacter", StringUtil::GetNthCharacter, true);
-		a_VM->BindNativeMethod(StringUtil::SCRIPT_NAME, "IsLetter", StringUtil::IsLetter, true);
-		a_VM->BindNativeMethod(StringUtil::SCRIPT_NAME, "IsDigit", StringUtil::IsDigit, true);
-		a_VM->BindNativeMethod(StringUtil::SCRIPT_NAME, "IsPunctuation", StringUtil::IsPunctuation, true);
-		a_VM->BindNativeMethod(StringUtil::SCRIPT_NAME, "IsPrintable", StringUtil::IsPrintable, true);
-		a_VM->BindNativeMethod(StringUtil::SCRIPT_NAME, "AsInt", StringUtil::AsInt, true);
-		a_VM->BindNativeMethod(StringUtil::SCRIPT_NAME, "AsChar", StringUtil::AsChar, true);
-		a_VM->BindNativeMethod(StringUtil::SCRIPT_NAME, "Find", StringUtil::Find, true);
-		a_VM->BindNativeMethod(StringUtil::SCRIPT_NAME, "Substring", StringUtil::Substring, true);
-		a_VM->BindNativeMethod(StringUtil::SCRIPT_NAME, "StringToArray", StringUtil::StringToStringArray, true);
-		a_VM->BindNativeMethod(StringUtil::SCRIPT_NAME, "ArrayToString", StringUtil::StringArrayToString, true);
+		a_VM->BindNativeMethod("StringUtil"sv, "GetLength"sv, StringUtil::GetLength, true);
+		a_VM->BindNativeMethod("StringUtil"sv, "GetNthCharacter"sv, StringUtil::GetNthCharacter, true);
+		a_VM->BindNativeMethod("StringUtil"sv, "IsLetter"sv, StringUtil::IsLetter, true);
+		a_VM->BindNativeMethod("StringUtil"sv, "IsDigit"sv, StringUtil::IsDigit, true);
+		a_VM->BindNativeMethod("StringUtil"sv, "IsPunctuation"sv, StringUtil::IsPunctuation, true);
+		a_VM->BindNativeMethod("StringUtil"sv, "IsPrintable"sv, StringUtil::IsPrintable, true);
+		a_VM->BindNativeMethod("StringUtil"sv, "AsInt"sv, StringUtil::AsInt, true);
+		a_VM->BindNativeMethod("StringUtil"sv, "AsChar"sv, StringUtil::AsChar, true);
+		a_VM->BindNativeMethod("StringUtil"sv, "Find"sv, StringUtil::Find, true);
+		a_VM->BindNativeMethod("StringUtil"sv, "Substring"sv, StringUtil::Substring, true);
+		a_VM->BindNativeMethod("StringUtil"sv, "StringToArray"sv, StringUtil::StringToStringArray, true);
+		a_VM->BindNativeMethod("StringUtil"sv, "ArrayToString"sv, StringUtil::StringArrayToString, true);
 
 		return true;
 	}

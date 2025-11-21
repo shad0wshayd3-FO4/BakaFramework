@@ -11,29 +11,32 @@ namespace Patches
 		{
 			const auto& [map, lock] = RE::TESForm::GetAllFormsByEditorID();
 			const RE::BSAutoWriteLock locker{ lock.get() };
-			if (map)
+			
+			if (!map)
 			{
-				if (Config::Patches::bEnableEDIDConflictCheck)
-				{
-					auto iter = map->find(a_edid);
-					if (iter != map->end())
-					{
-						const auto lhs = a_this->GetFormID();
-						const auto rhs = iter->second->GetFormID();
-						if (lhs != rhs)
-						{
-							REX::WARN("EditorID Conflict: {:08X} and {:08X} are both {}"sv, lhs, rhs, a_edid);
-						}
-						return;
-					}
-				}
-
-				map->emplace(a_edid, a_this);
-				rmap.emplace(a_this->formID, a_edid);
+				return;
 			}
+
+			if (Config::Patches::bEnableEDIDConflictCheck)
+			{
+				auto it = map->find(a_edid);
+				if (it != map->end())
+				{
+					const auto lhs = it->second->GetFormID();
+					const auto rhs = a_this->GetFormID();
+					if (lhs != rhs)
+					{
+						REX::WARN("EditorID Conflict: {:08X} and {:08X} are both {}"sv, lhs, rhs, a_edid);
+					}
+					return;
+				}
+			}
+
+			map->emplace(a_edid, a_this);
+			rmap.emplace(a_this->formID, a_edid);
 		}
 
-		inline static std::unordered_map<std::uint32_t, std::string> rmap;
+		inline static std::unordered_map<RE::TESFormID, std::string> rmap;
 
 	private:
 		template <class T>

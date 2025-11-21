@@ -32,7 +32,7 @@ namespace Events::Handlers
 
 		virtual RE::BSEventNotifyControl ProcessEvent(const RE::MenuOpenCloseEvent& a_event, RE::BSTEventSource<RE::MenuOpenCloseEvent>*) override
 		{
-			if (a_event.menuName == "ExamineMenu" || a_event.menuName == "CookingMenu" || a_event.menuName == "RobotModMenu")
+			if (a_event.menuName == "ExamineMenu"sv || a_event.menuName == "CookingMenu"sv || a_event.menuName == "RobotModMenu"sv)
 			{
 				if (a_event.opening)
 				{

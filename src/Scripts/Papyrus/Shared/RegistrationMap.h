@@ -9,7 +9,7 @@ namespace Papyrus::Shared
 
 		virtual std::uint32_t GetRecordSig() = 0;
 		virtual std::uint32_t GetRecordVer() = 0;
-		virtual const char* GetEventName() = 0;
+		virtual const char*   GetEventName() = 0;
 
 		void Register(const RE::BSScript::Variable* a_variable)
 		{
@@ -170,7 +170,7 @@ namespace Papyrus::Shared
 		}
 
 	private:
-		RE::BSSpinLock spin;
+		RE::BSSpinLock                                   spin;
 		RE::BSTHashMap<std::uint64_t, RE::BSFixedString> map;
 	};
 }
