@@ -22,20 +22,17 @@ namespace Serialization
 		}
 	}
 
-	bool Register()
+	void Register()
 	{
 		const auto serialization = F4SE::GetSerializationInterface();
 		if (!serialization)
 		{
-			F4SE::log::critical("Failed to register Serialization callbacks, marking as incompatible."sv);
-			return false;
+			REX::CRITICAL("Failed to register Serialization callbacks, marking as incompatible."sv);
 		}
 
 		serialization->SetUniqueID(static_cast<std::uint32_t>('BFRM'));
 		serialization->SetRevertCallback(RevertCallback);
 		serialization->SetSaveCallback(SaveCallback);
 		serialization->SetLoadCallback(LoadCallback);
-
-		return true;
 	}
 }

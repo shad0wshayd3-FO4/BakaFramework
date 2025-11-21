@@ -31,11 +31,11 @@ namespace ObScript
 				it->parameters = params.data();
 				it->executeFunction = Execute;
 
-				F4SE::log::debug("Registered BetaComment."sv);
+				REX::DEBUG("Registered BetaComment."sv);
 			}
 			else
 			{
-				F4SE::log::debug("Failed to register BetaComment."sv);
+				REX::DEBUG("Failed to register BetaComment."sv);
 			}
 		}
 
@@ -112,7 +112,7 @@ namespace ObScript
 			PrintRefrPositionInfo(line);
 			PrintCameraPositionInfo(line);
 
-			F4SE::log::debug(""sv);
+			REX::DEBUG(""sv);
 
 			// Print Comment
 			line << "\"" << rawComment.data() << "\"";
@@ -130,7 +130,7 @@ namespace ObScript
 		{
 			auto currentTime_t = std::time(nullptr);
 			auto currentTime = std::format("{:%m/%d/%y (%H:%M)}"sv, currentTime_t);
-			F4SE::log::debug("CurrentTime: {:s}"sv, currentTime);
+			REX::DEBUG("CurrentTime: {:s}"sv, currentTime);
 
 			a_buf << currentTime << _delim;
 			return true;
@@ -143,14 +143,14 @@ namespace ObScript
 			{
 				auto fileName = file->GetFilename();
 				auto fileTime = std::format("{:%m/%d/%y (%H:%M)}"sv, GetFileTime(file));
-				F4SE::log::debug("File Name: {:s}"sv, fileName);
-				F4SE::log::debug("File Time: {:s}"sv, fileTime);
+				REX::DEBUG("File Name: {:s}"sv, fileName);
+				REX::DEBUG("File Time: {:s}"sv, fileTime);
 
 				a_buf << fileName << _delim << fileTime << _delim;
 			}
 			else
 			{
-				F4SE::log::debug("Warning: No File."sv);
+				REX::DEBUG("Warning: No File."sv);
 				a_buf << _delim << _delim;
 			}
 
@@ -167,7 +167,7 @@ namespace ObScript
 				return (result) ? buffer : "UNKNOWN"s;
 			}();
 
-			F4SE::log::debug("Machine Name: {:s}"sv, machineName);
+			REX::DEBUG("Machine Name: {:s}"sv, machineName);
 
 			a_buf << machineName << _delim;
 			return true;
@@ -177,8 +177,8 @@ namespace ObScript
 		{
 			auto formID = std::format("{:08X}"sv, m_refr->formID);
 			auto formName = m_refr->GetFormEditorID();
-			F4SE::log::debug("FormID: {:s}"sv, formID);
-			F4SE::log::debug("Form Name: {:s}"sv, formName);
+			REX::DEBUG("FormID: {:s}"sv, formID);
+			REX::DEBUG("Form Name: {:s}"sv, formName);
 
 			a_buf << formID << _delim << formName << _delim;
 			return true;
@@ -196,15 +196,15 @@ namespace ObScript
 				if (cell->cellFlags.all(RE::TESObjectCELL::Flag::kInterior))
 				{
 					auto cellName = cell->GetFormEditorID();
-					F4SE::log::debug("Cell (Interior): {:s}"sv, cellName);
-					F4SE::log::debug("Cell FormID (Interior): {:s}"sv, cellID);
+					REX::DEBUG("Cell (Interior): {:s}"sv, cellName);
+					REX::DEBUG("Cell FormID (Interior): {:s}"sv, cellID);
 					temp << cellName << _delim << cellID << _delim;
 				}
 				else
 				{
 					if ((cell->formFlags >> 13) & 1)
 					{
-						F4SE::log::warn("BetaComment::PrintCellInfo: Unknown Edge Case."sv);
+						REX::WARN("BetaComment::PrintCellInfo: Unknown Edge Case."sv);
 						temp << _delim << _delim;
 					}
 					else
@@ -216,15 +216,15 @@ namespace ObScript
 							cell->worldSpace->GetFormEditorID(),
 							cellX,
 							cellY);
-						F4SE::log::debug("Cell (Exterior): {:s}"sv, cellName);
-						F4SE::log::debug("Cell FormID (Exterior): {:s}"sv, cellID);
+						REX::DEBUG("Cell (Exterior): {:s}"sv, cellName);
+						REX::DEBUG("Cell FormID (Exterior): {:s}"sv, cellID);
 						temp << cellName << _delim << cellID << _delim;
 					}
 				}
 			}
 			else
 			{
-				F4SE::log::debug("Cell Info: No Cell."sv);
+				REX::DEBUG("Cell Info: No Cell."sv);
 				temp << _delim << _delim;
 			}
 
@@ -237,12 +237,12 @@ namespace ObScript
 			auto locationX = std::format("{:.0f}"sv, m_refr->data.location.x);
 			auto locationY = std::format("{:.0f}"sv, m_refr->data.location.y);
 			auto locationZ = std::format("{:.0f}"sv, m_refr->data.location.z);
-			F4SE::log::debug("Refr Location: {:s}, {:s}, {:s}"sv, locationX, locationY, locationZ);
+			REX::DEBUG("Refr Location: {:s}, {:s}, {:s}"sv, locationX, locationY, locationZ);
 
 			auto angleX = std::format("{:.0f}"sv, m_refr->data.angle.x);
 			auto angleY = std::format("{:.0f}"sv, m_refr->data.angle.y);
 			auto angleZ = std::format("{:.0f}"sv, m_refr->data.angle.z);
-			F4SE::log::debug("Refr Angle: {:s}, {:s}, {:s}"sv, angleX, angleY, angleZ);
+			REX::DEBUG("Refr Angle: {:s}, {:s}, {:s}"sv, angleX, angleY, angleZ);
 
 			a_buf
 				<< locationX << _delim
@@ -260,14 +260,14 @@ namespace ObScript
 			auto cameraPositionX = std::format("{:.0f}"sv, rootCamera->world.translate.x);
 			auto cameraPositionY = std::format("{:.0f}"sv, rootCamera->world.translate.y);
 			auto cameraPositionZ = std::format("{:.0f}"sv, rootCamera->world.translate.z);
-			F4SE::log::debug("Camera Position: {:s}, {:s}, {:s}"sv, cameraPositionX, cameraPositionY, cameraPositionZ);
+			REX::DEBUG("Camera Position: {:s}, {:s}, {:s}"sv, cameraPositionX, cameraPositionY, cameraPositionZ);
 
 			float fCameraAngleX{ 0.0f }, fCameraAngleY{ 0.0f }, fCameraAngleZ{ 0.0f };
 			rootCamera->parent->world.rotate.ToEulerAnglesXYZ(fCameraAngleX, fCameraAngleY, fCameraAngleZ);
 			auto cameraAngleX = std::format("{:.0f}"sv, fCameraAngleX);
 			auto cameraAngleY = std::format("{:.0f}"sv, fCameraAngleY);
 			auto cameraAngleZ = std::format("{:.0f}"sv, fCameraAngleZ);
-			F4SE::log::debug("Camera Angle: {:s}, {:s}, {:s}"sv, cameraAngleX, cameraAngleY, cameraAngleZ);
+			REX::DEBUG("Camera Angle: {:s}, {:s}, {:s}"sv, cameraAngleX, cameraAngleY, cameraAngleZ);
 
 			a_buf
 				<< cameraPositionX << _delim
@@ -285,7 +285,7 @@ namespace ObScript
 			{
 				std::string buf;
 				buf += "Add comment to "sv;
-				buf += *Config::Patches::sBetaCommentFileName;
+				buf += Config::Patches::sBetaCommentFileName;
 				buf += ". [bc \"This is clipping.\"]"sv;
 				return buf;
 			}();
@@ -305,8 +305,8 @@ namespace ObScript
 				std::uint64_t QuadPart;
 			} ull;
 
-			ull.s.LowPart = a_file->fileInfo.modifyTime.dwLowDateTime;
-			ull.s.HighPart = a_file->fileInfo.modifyTime.dwHighDateTime;
+			ull.s.LowPart = a_file->fileInfo.modifyTime.lo;
+			ull.s.HighPart = a_file->fileInfo.modifyTime.hi;
 
 			return static_cast<std::time_t>(ull.QuadPart / 10000000ULL - 11644473600ULL);
 		}

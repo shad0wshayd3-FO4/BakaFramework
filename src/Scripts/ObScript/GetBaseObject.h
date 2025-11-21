@@ -23,11 +23,11 @@ namespace ObScript
 				it->referenceFunction = true;
 				it->executeFunction = Execute;
 
-				F4SE::log::debug("Registered GetBaseObject."sv);
+				REX::DEBUG("Registered GetBaseObject."sv);
 			}
 			else
 			{
-				F4SE::log::debug("Failed to register GetBaseObject."sv);
+				REX::DEBUG("Failed to register GetBaseObject."sv);
 			}
 		}
 

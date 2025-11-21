@@ -3,6 +3,7 @@
 namespace Events::Handlers
 {
 	class ItemCraftedHandler :
+		public REX::Singleton<ItemCraftedHandler>,
 		public RE::BSTEventSink<RE::ItemCrafted::Event>,
 		public RE::BSTEventSink<RE::MenuOpenCloseEvent>
 	{
@@ -10,21 +11,6 @@ namespace Events::Handlers
 		virtual ~ItemCraftedHandler()
 		{
 			m_refr.reset();
-		}
-
-		[[nodiscard]] static ItemCraftedHandler* GetSingleton()
-		{
-			static ItemCraftedHandler singleton;
-			return std::addressof(singleton);
-		}
-
-		static void Register()
-		{
-			RE::ItemCrafted::RegisterSink(GetSingleton());
-			if (auto UI = RE::UI::GetSingleton())
-			{
-				UI->RegisterSink<RE::MenuOpenCloseEvent>(GetSingleton());
-			}
 		}
 
 		virtual RE::BSEventNotifyControl ProcessEvent(const RE::ItemCrafted::Event& a_event, RE::BSTEventSource<RE::ItemCrafted::Event>*) override

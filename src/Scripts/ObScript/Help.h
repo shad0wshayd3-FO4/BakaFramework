@@ -30,11 +30,11 @@ namespace ObScript
 				it->parameters = params.data();
 				it->executeFunction = Execute;
 
-				F4SE::log::debug("Registered Help."sv);
+				REX::DEBUG("Registered Help."sv);
 			}
 			else
 			{
-				F4SE::log::debug("Failed to register Help."sv);
+				REX::DEBUG("Failed to register Help."sv);
 			}
 		}
 

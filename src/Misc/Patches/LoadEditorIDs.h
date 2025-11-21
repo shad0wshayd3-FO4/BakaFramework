@@ -7,224 +7,231 @@ namespace Patches
 	class LoadEditorIDs
 	{
 	private:
-		template <class Form>
-		static void InstallHook()
-		{
-			REL::Relocation<std::uintptr_t> vtbl{ Form::VTABLE[0] };
-			_GetFormEditorID = vtbl.write_vfunc(0x3A, GetFormEditorID);
-			_SetFormEditorID = vtbl.write_vfunc(0x3B, SetFormEditorID);
-		}
-
-		static const char* GetFormEditorID(RE::TESForm* a_this)
-		{
-			auto it = rmap.find(a_this->formID);
-			if (it != rmap.end())
-			{
-				return it->second.c_str();
-			}
-
-			return _GetFormEditorID(a_this);
-		}
-
-		static bool SetFormEditorID(RE::TESForm* a_this, const char* a_editor)
-		{
-			auto edid = std::string_view{ a_editor };
-			if (a_this->formID < 0xFF000000 && !edid.empty())
-			{
-				AddToGameMap(a_this, a_editor);
-			}
-
-			return _SetFormEditorID(a_this, a_editor);
-		}
-
-	private:
-		static void AddToGameMap(RE::TESForm* a_this, const char* a_editorID)
+		static void AddToGameMap(RE::TESForm* a_this, const char* a_edid)
 		{
 			const auto& [map, lock] = RE::TESForm::GetAllFormsByEditorID();
 			const RE::BSAutoWriteLock locker{ lock.get() };
 			if (map)
 			{
-				if (Config::Patches::bEnableEDIDConflictCheck.GetValue())
+				if (Config::Patches::bEnableEDIDConflictCheck)
 				{
-					auto iter = map->find(a_editorID);
+					auto iter = map->find(a_edid);
 					if (iter != map->end())
 					{
-						F4SE::log::warn(
-							"EditorID Conflict: {:08X} and {:08X} are both {:s}"sv,
-							iter->second->GetFormID(),
-							a_this->GetFormID(),
-							a_editorID);
+						const auto lhs = a_this->GetFormID();
+						const auto rhs = iter->second->GetFormID();
+						if (lhs != rhs)
+						{
+							REX::WARN("EditorID Conflict: {:08X} and {:08X} are both {}"sv, lhs, rhs, a_edid);
+						}
 						return;
 					}
 				}
 
-				map->emplace(a_editorID, a_this);
-				rmap.emplace(a_this->formID, a_editorID);
+				map->emplace(a_edid, a_this);
+				rmap.emplace(a_this->formID, a_edid);
 			}
 		}
 
 		inline static std::unordered_map<std::uint32_t, std::string> rmap;
 
-		inline static REL::Relocation<decltype(&RE::TESForm::SetFormEditorID)> _SetFormEditorID;
-		inline static REL::Relocation<decltype(&RE::TESForm::GetFormEditorID)> _GetFormEditorID;
+	private:
+		template <class T>
+		class hkFormEditorID :
+			public REX::Singleton<hkFormEditorID<T>>
+		{
+		private:
+			static const char* GetFormEditorID(RE::TESForm* a_this)
+			{
+				auto it = rmap.find(a_this->formID);
+				if (it != rmap.end())
+				{
+					return it->second.c_str();
+				}
+
+				return _GetFormEditorID(a_this);
+			}
+
+			static bool SetFormEditorID(RE::TESForm* a_this, const char* a_edid)
+			{
+				auto edid = std::string{ a_edid };
+				if (a_this->formID < 0xFF000000 && !edid.empty())
+				{
+					AddToGameMap(a_this, a_edid);
+				}
+
+				return _SetFormEditorID(a_this, a_edid);
+			}
+
+			inline static REL::Relocation<decltype(&GetFormEditorID)> _GetFormEditorID;
+			inline static REL::Relocation<decltype(&SetFormEditorID)> _SetFormEditorID;
+
+		public:
+			static void Install()
+			{
+				static REL::Relocation target{ T::VTABLE[0] };
+				_GetFormEditorID = target.write_vfunc(0x3A, GetFormEditorID);
+				_SetFormEditorID = target.write_vfunc(0x3B, SetFormEditorID);
+			}
+		};
 
 	public:
 		static void Install()
 		{
-			// InstallHook<RE::BGSKeyword>();
-			// InstallHook<RE::BGSLocationRefType>();
-			// InstallHook<RE::BGSAction>();
-			InstallHook<RE::BGSTransform>();
-			InstallHook<RE::BGSComponent>();
-			InstallHook<RE::BGSTextureSet>();
-			// InstallHook<RE::BGSMenuIcon>();
-			// InstallHook<RE::TESGlobal>();
-			InstallHook<RE::BGSDamageType>();
-			InstallHook<RE::TESClass>();
-			InstallHook<RE::TESFaction>();
-			// InstallHook<RE::BGSHeadPart>();
-			InstallHook<RE::TESEyes>();
-			// InstallHook<RE::TESRace>();
-			// InstallHook<RE::TESSound>();
-			InstallHook<RE::BGSAcousticSpace>();
-			InstallHook<RE::EffectSetting>();
-			InstallHook<RE::Script>();
-			InstallHook<RE::TESLandTexture>();
-			InstallHook<RE::EnchantmentItem>();
-			InstallHook<RE::SpellItem>();
-			InstallHook<RE::ScrollItem>();
-			InstallHook<RE::TESObjectACTI>();
-			InstallHook<RE::BGSTalkingActivator>();
-			InstallHook<RE::TESObjectARMO>();
-			InstallHook<RE::TESObjectBOOK>();
-			InstallHook<RE::TESObjectCONT>();
-			InstallHook<RE::TESObjectDOOR>();
-			InstallHook<RE::IngredientItem>();
-			InstallHook<RE::TESObjectLIGH>();
-			InstallHook<RE::TESObjectMISC>();
-			InstallHook<RE::TESObjectSTAT>();
-			// InstallHook<RE::BGSStaticCollection>();
-			// InstallHook<RE::BGSMovableStatic>();
-			InstallHook<RE::TESGrass>();
-			InstallHook<RE::TESObjectTREE>();
-			InstallHook<RE::TESFlora>();
-			InstallHook<RE::TESFurniture>();
-			InstallHook<RE::TESObjectWEAP>();
-			InstallHook<RE::TESAmmo>();
-			InstallHook<RE::TESNPC>();
-			InstallHook<RE::TESLevCharacter>();
-			InstallHook<RE::TESKey>();
-			InstallHook<RE::AlchemyItem>();
-			InstallHook<RE::BGSIdleMarker>();
-			InstallHook<RE::BGSNote>();
-			InstallHook<RE::BGSProjectile>();
-			InstallHook<RE::BGSHazard>();
-			InstallHook<RE::BGSBendableSpline>();
-			InstallHook<RE::TESSoulGem>();
-			InstallHook<RE::BGSTerminal>();
-			InstallHook<RE::TESLevItem>();
-			InstallHook<RE::TESWeather>();
-			InstallHook<RE::TESClimate>();
-			InstallHook<RE::BGSShaderParticleGeometryData>();
-			InstallHook<RE::BGSReferenceEffect>();
-			InstallHook<RE::TESRegion>();
-			// InstallHook<RE::NavMeshInfoMap>();
-			// InstallHook<RE::TESObjectCELL>();
-			// InstallHook<RE::TESObjectREFR>();
-			InstallHook<RE::Explosion>();
-			InstallHook<RE::Projectile>();
-			InstallHook<RE::Actor>();
-			InstallHook<RE::PlayerCharacter>();
-			InstallHook<RE::MissileProjectile>();
-			InstallHook<RE::ArrowProjectile>();
-			InstallHook<RE::GrenadeProjectile>();
-			InstallHook<RE::BeamProjectile>();
-			InstallHook<RE::FlameProjectile>();
-			InstallHook<RE::ConeProjectile>();
-			InstallHook<RE::BarrierProjectile>();
-			InstallHook<RE::Hazard>();
-			// InstallHook<RE::TESWorldSpace>();
-			// InstallHook<RE::TESObjectLAND>();
-			// InstallHook<RE::NavMesh>();
-			// InstallHook<RE::TESTopic>();
-			InstallHook<RE::TESTopicInfo>();
-			// InstallHook<RE::TESQuest>();
-			// InstallHook<RE::TESIdleForm>();
-			InstallHook<RE::TESPackage>();
-			InstallHook<RE::AlarmPackage>();
-			InstallHook<RE::DialoguePackage>();
-			InstallHook<RE::FleePackage>();
-			InstallHook<RE::SpectatorPackage>();
-			InstallHook<RE::TrespassPackage>();
-			InstallHook<RE::TESCombatStyle>();
-			InstallHook<RE::TESLoadScreen>();
-			InstallHook<RE::TESLevSpell>();
-			// InstallHook<RE::TESObjectANIO>();
-			InstallHook<RE::TESWaterForm>();
-			InstallHook<RE::TESEffectShader>();
-			InstallHook<RE::BGSExplosion>();
-			InstallHook<RE::BGSDebris>();
-			InstallHook<RE::TESImageSpace>();
-			// InstallHook<RE::TESImageSpaceModifier>();
-			InstallHook<RE::BGSListForm>();
-			InstallHook<RE::BGSPerk>();
-			InstallHook<RE::BGSBodyPartData>();
-			InstallHook<RE::BGSAddonNode>();
-			// InstallHook<RE::ActorValueInfo>();
-			InstallHook<RE::BGSCameraShot>();
-			InstallHook<RE::BGSCameraPath>();
-			// InstallHook<RE::BGSVoiceType>();
-			InstallHook<RE::BGSMaterialType>();
-			InstallHook<RE::BGSImpactData>();
-			InstallHook<RE::BGSImpactDataSet>();
-			InstallHook<RE::TESObjectARMA>();
-			InstallHook<RE::BGSEncounterZone>();
-			InstallHook<RE::BGSLocation>();
-			InstallHook<RE::BGSMessage>();
-			// InstallHook<RE::BGSDefaultObjectManager>();
-			// InstallHook<RE::BGSDefaultObject>();
-			InstallHook<RE::BGSLightingTemplate>();
-			// InstallHook<RE::BGSMusicType>();
-			InstallHook<RE::BGSFootstep>();
-			InstallHook<RE::BGSFootstepSet>();
-			// InstallHook<RE::BGSStoryManagerBranchNode>();
-			// InstallHook<RE::BGSStoryManagerQuestNode>();
-			// InstallHook<RE::BGSStoryManagerEventNode>();
-			InstallHook<RE::BGSDialogueBranch>();
-			InstallHook<RE::BGSMusicTrackFormWrapper>();
-			InstallHook<RE::TESWordOfPower>();
-			InstallHook<RE::TESShout>();
-			InstallHook<RE::BGSEquipSlot>();
-			InstallHook<RE::BGSRelationship>();
-			InstallHook<RE::BGSScene>();
-			InstallHook<RE::BGSAssociationType>();
-			InstallHook<RE::BGSOutfit>();
-			InstallHook<RE::BGSArtObject>();
-			InstallHook<RE::BGSMaterialObject>();
-			InstallHook<RE::BGSMovementType>();
-			// InstallHook<RE::BGSSoundDescriptorForm>();
-			InstallHook<RE::BGSDualCastData>();
-			InstallHook<RE::BGSSoundCategory>();
-			InstallHook<RE::BGSSoundOutput>();
-			InstallHook<RE::BGSCollisionLayer>();
-			InstallHook<RE::BGSColorForm>();
-			InstallHook<RE::BGSReverbParameters>();
-			// InstallHook<RE::BGSPackIn>();
-			InstallHook<RE::BGSAimModel>();
-			InstallHook<RE::BGSConstructibleObject>();
-			InstallHook<RE::BGSMod::Attachment::Mod>();
-			InstallHook<RE::BGSMaterialSwap>();
-			InstallHook<RE::BGSZoomData>();
-			InstallHook<RE::BGSInstanceNamingRules>();
-			InstallHook<RE::BGSSoundKeywordMapping>();
-			InstallHook<RE::BGSAudioEffectChain>();
-			// InstallHook<RE::BGSAttractionRule>();
-			InstallHook<RE::BGSSoundCategorySnapshot>();
-			InstallHook<RE::BGSSoundTagSet>();
-			InstallHook<RE::BGSLensFlare>();
-			InstallHook<RE::BGSGodRays>();
+			// hkFormEditorID<RE::BGSKeyword>::Install();
+			// hkFormEditorID<RE::BGSLocationRefType>::Install();
+			// hkFormEditorID<RE::BGSAction>::Install();
+			hkFormEditorID<RE::BGSTransform>::Install();
+			hkFormEditorID<RE::BGSComponent>::Install();
+			hkFormEditorID<RE::BGSTextureSet>::Install();
+			// hkFormEditorID<RE::BGSMenuIcon>::Install();
+			// hkFormEditorID<RE::TESGlobal>::Install();
+			hkFormEditorID<RE::BGSDamageType>::Install();
+			hkFormEditorID<RE::TESClass>::Install();
+			hkFormEditorID<RE::TESFaction>::Install();
+			// hkFormEditorID<RE::BGSHeadPart>::Install();
+			hkFormEditorID<RE::TESEyes>::Install();
+			// hkFormEditorID<RE::TESRace>::Install();
+			// hkFormEditorID<RE::TESSound>::Install();
+			hkFormEditorID<RE::BGSAcousticSpace>::Install();
+			hkFormEditorID<RE::EffectSetting>::Install();
+			hkFormEditorID<RE::Script>::Install();
+			hkFormEditorID<RE::TESLandTexture>::Install();
+			hkFormEditorID<RE::EnchantmentItem>::Install();
+			hkFormEditorID<RE::SpellItem>::Install();
+			hkFormEditorID<RE::ScrollItem>::Install();
+			hkFormEditorID<RE::TESObjectACTI>::Install();
+			hkFormEditorID<RE::BGSTalkingActivator>::Install();
+			hkFormEditorID<RE::TESObjectARMO>::Install();
+			hkFormEditorID<RE::TESObjectBOOK>::Install();
+			hkFormEditorID<RE::TESObjectCONT>::Install();
+			hkFormEditorID<RE::TESObjectDOOR>::Install();
+			hkFormEditorID<RE::IngredientItem>::Install();
+			hkFormEditorID<RE::TESObjectLIGH>::Install();
+			hkFormEditorID<RE::TESObjectMISC>::Install();
+			hkFormEditorID<RE::TESObjectSTAT>::Install();
+			// hkFormEditorID<RE::BGSStaticCollection>::Install();
+			// hkFormEditorID<RE::BGSMovableStatic>::Install();
+			hkFormEditorID<RE::TESGrass>::Install();
+			hkFormEditorID<RE::TESObjectTREE>::Install();
+			hkFormEditorID<RE::TESFlora>::Install();
+			hkFormEditorID<RE::TESFurniture>::Install();
+			hkFormEditorID<RE::TESObjectWEAP>::Install();
+			hkFormEditorID<RE::TESAmmo>::Install();
+			hkFormEditorID<RE::TESNPC>::Install();
+			hkFormEditorID<RE::TESLevCharacter>::Install();
+			hkFormEditorID<RE::TESKey>::Install();
+			hkFormEditorID<RE::AlchemyItem>::Install();
+			hkFormEditorID<RE::BGSIdleMarker>::Install();
+			hkFormEditorID<RE::BGSNote>::Install();
+			hkFormEditorID<RE::BGSProjectile>::Install();
+			hkFormEditorID<RE::BGSHazard>::Install();
+			hkFormEditorID<RE::BGSBendableSpline>::Install();
+			hkFormEditorID<RE::TESSoulGem>::Install();
+			hkFormEditorID<RE::BGSTerminal>::Install();
+			hkFormEditorID<RE::TESLevItem>::Install();
+			hkFormEditorID<RE::TESWeather>::Install();
+			hkFormEditorID<RE::TESClimate>::Install();
+			hkFormEditorID<RE::BGSShaderParticleGeometryData>::Install();
+			hkFormEditorID<RE::BGSReferenceEffect>::Install();
+			hkFormEditorID<RE::TESRegion>::Install();
+			// hkFormEditorID<RE::NavMeshInfoMap>::Install();
+			// hkFormEditorID<RE::TESObjectCELL>::Install();
+			// hkFormEditorID<RE::TESObjectREFR>::Install();
+			hkFormEditorID<RE::Explosion>::Install();
+			hkFormEditorID<RE::Projectile>::Install();
+			hkFormEditorID<RE::Actor>::Install();
+			hkFormEditorID<RE::PlayerCharacter>::Install();
+			hkFormEditorID<RE::MissileProjectile>::Install();
+			hkFormEditorID<RE::ArrowProjectile>::Install();
+			hkFormEditorID<RE::GrenadeProjectile>::Install();
+			hkFormEditorID<RE::BeamProjectile>::Install();
+			hkFormEditorID<RE::FlameProjectile>::Install();
+			hkFormEditorID<RE::ConeProjectile>::Install();
+			hkFormEditorID<RE::BarrierProjectile>::Install();
+			hkFormEditorID<RE::Hazard>::Install();
+			// hkFormEditorID<RE::TESWorldSpace>::Install();
+			// hkFormEditorID<RE::TESObjectLAND>::Install();
+			// hkFormEditorID<RE::NavMesh>::Install();
+			// hkFormEditorID<RE::TESTopic>::Install();
+			hkFormEditorID<RE::TESTopicInfo>::Install();
+			// hkFormEditorID<RE::TESQuest>::Install();
+			// hkFormEditorID<RE::TESIdleForm>::Install();
+			hkFormEditorID<RE::TESPackage>::Install();
+			hkFormEditorID<RE::AlarmPackage>::Install();
+			hkFormEditorID<RE::DialoguePackage>::Install();
+			hkFormEditorID<RE::FleePackage>::Install();
+			hkFormEditorID<RE::SpectatorPackage>::Install();
+			hkFormEditorID<RE::TrespassPackage>::Install();
+			hkFormEditorID<RE::TESCombatStyle>::Install();
+			hkFormEditorID<RE::TESLoadScreen>::Install();
+			hkFormEditorID<RE::TESLevSpell>::Install();
+			// hkFormEditorID<RE::TESObjectANIO>::Install();
+			hkFormEditorID<RE::TESWaterForm>::Install();
+			hkFormEditorID<RE::TESEffectShader>::Install();
+			hkFormEditorID<RE::BGSExplosion>::Install();
+			hkFormEditorID<RE::BGSDebris>::Install();
+			hkFormEditorID<RE::TESImageSpace>::Install();
+			// hkFormEditorID<RE::TESImageSpaceModifier>::Install();
+			hkFormEditorID<RE::BGSListForm>::Install();
+			hkFormEditorID<RE::BGSPerk>::Install();
+			hkFormEditorID<RE::BGSBodyPartData>::Install();
+			hkFormEditorID<RE::BGSAddonNode>::Install();
+			// hkFormEditorID<RE::ActorValueInfo>::Install();
+			hkFormEditorID<RE::BGSCameraShot>::Install();
+			hkFormEditorID<RE::BGSCameraPath>::Install();
+			// hkFormEditorID<RE::BGSVoiceType>::Install();
+			hkFormEditorID<RE::BGSMaterialType>::Install();
+			hkFormEditorID<RE::BGSImpactData>::Install();
+			hkFormEditorID<RE::BGSImpactDataSet>::Install();
+			hkFormEditorID<RE::TESObjectARMA>::Install();
+			hkFormEditorID<RE::BGSEncounterZone>::Install();
+			hkFormEditorID<RE::BGSLocation>::Install();
+			hkFormEditorID<RE::BGSMessage>::Install();
+			// hkFormEditorID<RE::BGSDefaultObjectManager>::Install();
+			// hkFormEditorID<RE::BGSDefaultObject>::Install();
+			hkFormEditorID<RE::BGSLightingTemplate>::Install();
+			// hkFormEditorID<RE::BGSMusicType>::Install();
+			hkFormEditorID<RE::BGSFootstep>::Install();
+			hkFormEditorID<RE::BGSFootstepSet>::Install();
+			// hkFormEditorID<RE::BGSStoryManagerBranchNode>::Install();
+			// hkFormEditorID<RE::BGSStoryManagerQuestNode>::Install();
+			// hkFormEditorID<RE::BGSStoryManagerEventNode>::Install();
+			hkFormEditorID<RE::BGSDialogueBranch>::Install();
+			hkFormEditorID<RE::BGSMusicTrackFormWrapper>::Install();
+			hkFormEditorID<RE::TESWordOfPower>::Install();
+			hkFormEditorID<RE::TESShout>::Install();
+			hkFormEditorID<RE::BGSEquipSlot>::Install();
+			hkFormEditorID<RE::BGSRelationship>::Install();
+			hkFormEditorID<RE::BGSScene>::Install();
+			hkFormEditorID<RE::BGSAssociationType>::Install();
+			hkFormEditorID<RE::BGSOutfit>::Install();
+			hkFormEditorID<RE::BGSArtObject>::Install();
+			hkFormEditorID<RE::BGSMaterialObject>::Install();
+			hkFormEditorID<RE::BGSMovementType>::Install();
+			// hkFormEditorID<RE::BGSSoundDescriptorForm>::Install();
+			hkFormEditorID<RE::BGSDualCastData>::Install();
+			hkFormEditorID<RE::BGSSoundCategory>::Install();
+			hkFormEditorID<RE::BGSSoundOutput>::Install();
+			hkFormEditorID<RE::BGSCollisionLayer>::Install();
+			hkFormEditorID<RE::BGSColorForm>::Install();
+			hkFormEditorID<RE::BGSReverbParameters>::Install();
+			// hkFormEditorID<RE::BGSPackIn>::Install();
+			hkFormEditorID<RE::BGSAimModel>::Install();
+			hkFormEditorID<RE::BGSConstructibleObject>::Install();
+			hkFormEditorID<RE::BGSMod::Attachment::Mod>::Install();
+			hkFormEditorID<RE::BGSMaterialSwap>::Install();
+			hkFormEditorID<RE::BGSZoomData>::Install();
+			hkFormEditorID<RE::BGSInstanceNamingRules>::Install();
+			hkFormEditorID<RE::BGSSoundKeywordMapping>::Install();
+			hkFormEditorID<RE::BGSAudioEffectChain>::Install();
+			// hkFormEditorID<RE::BGSAttractionRule>::Install();
+			hkFormEditorID<RE::BGSSoundCategorySnapshot>::Install();
+			hkFormEditorID<RE::BGSSoundTagSet>::Install();
+			hkFormEditorID<RE::BGSLensFlare>::Install();
+			hkFormEditorID<RE::BGSGodRays>::Install();
 
-			F4SE::log::debug("Installed Patch: LoadEditorIDs"sv);
+			REX::DEBUG("Installed Patch: LoadEditorIDs"sv);
 		}
 	};
 }

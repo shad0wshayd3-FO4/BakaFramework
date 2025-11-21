@@ -40,10 +40,9 @@ namespace
 	}
 }
 
-F4SEPluginLoad(const F4SE::LoadInterface* a_F4SE)
+F4SE_PLUGIN_LOAD(const F4SE::LoadInterface* a_f4se)
 {
-	F4SE::Init(a_F4SE);
-	F4SE::AllocTrampoline(1u << 10);
+	F4SE::Init(a_f4se, { .trampoline = true, .trampolineSize = 1024 });
 
 	Serialization::Register();
 

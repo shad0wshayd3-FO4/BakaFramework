@@ -29,11 +29,11 @@ namespace ObScript
 				it->parameters = params.data();
 				it->executeFunction = Execute;
 
-				F4SE::log::debug("Registered GetDefaultObject."sv);
+				REX::DEBUG("Registered GetDefaultObject."sv);
 			}
 			else
 			{
-				F4SE::log::debug("Failed to register GetDefaultObject."sv);
+				REX::DEBUG("Failed to register GetDefaultObject."sv);
 			}
 		}
 

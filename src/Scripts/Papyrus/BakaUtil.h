@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Scripts/Papyrus/Shared/RegistrationMap.h"
-#include "SteamAPI/SteamAPI.h"
 
 namespace Papyrus::BakaUtil
 {
@@ -67,11 +66,6 @@ namespace Papyrus::BakaUtil
 		}
 
 		return result;
-	}
-
-	void OpenWebPage(std::monostate, std::string_view a_url, bool a_fallback)
-	{
-		SteamAPI::OpenWebPage(a_url.data(), a_fallback);
 	}
 
 	void RegisterForPipboyLightEvent(std::monostate, const RE::BSScript::Variable* a_this)
