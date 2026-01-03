@@ -6,7 +6,7 @@ includes("lib/commonlibf4")
 
 -- set project
 set_project("BakaFramework")
-set_version("4.0.0")
+set_version("4.1.0")
 set_license("GPL-3.0")
 
 -- set defaults
