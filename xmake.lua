@@ -1,34 +1,22 @@
--- set minimum xmake version
-set_xmakever("2.9.4")
-
--- includes
+-- include subprojects
 includes("lib/commonlibf4")
 
--- set project
+-- set project constants
 set_project("BakaFramework")
 set_version("4.1.0")
 set_license("GPL-3.0")
-
--- set defaults
 set_languages("c++23")
 set_warnings("allextra")
 
--- set policies
-set_policy("package.requires_lock", true)
-
--- add rules
+-- add common rules
 add_rules("mode.debug", "mode.releasedbg")
 add_rules("plugin.vsxmake.autoupdate")
 
--- set config
+-- set configs
 set_config("commonlib_ini", true)
 
--- targets
+-- define targets
 target("BakaFramework")
-    -- bind local dependencies
-    add_deps("commonlibf4")
-
-    -- add commonlibf4 plugin
     add_rules("commonlibf4.plugin", {
         name = "BakaFramework",
         author = "shad0wshayd3"
