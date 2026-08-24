@@ -32,4 +32,7 @@ target("BakaFramework")
     add_extrafiles(".clang-format")
 
     -- add install files
-    add_installfiles("res/*.ini", { prefixdir = "F4SE/Plugins" })
+    add_installfiles("res/F4SE/**.ini",       { prefixdir = "F4SE/Plugins" })
+    add_installfiles("res/Scripts/*.pex",     { prefixdir = "Scripts" })
+    add_installfiles("res/Scripts/**.psc",    { prefixdir = "Scripts/Source" })
+    add_installfiles("res/BakaFramework.esm", { prefixdir = "" })
