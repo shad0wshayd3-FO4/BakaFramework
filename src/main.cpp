@@ -9,7 +9,7 @@ namespace Serialization
 {
 	namespace
 	{
-		void RevertCallback([[maybe_unused]] const F4SE::SerializationInterface* a_intfc)
+		void RevertCallback(const F4SE::SerializationInterface*)
 		{
 			Papyrus::BakaUtil::PipboyLightEventHandler::GetSingleton()->Revert();
 		}
@@ -47,24 +47,18 @@ namespace
 		switch (a_msg->type)
 		{
 		case F4SE::MessagingInterface::kPostLoad:
-		{
 			Config::Load();
 			Forms::Install();
 			Patches::Install();
 			ObScript::Install();
 			break;
-		}
 		case F4SE::MessagingInterface::kGameDataReady:
-		{
 			if (static_cast<bool>(a_msg->data))
 			{
 				Events::Register();
 				ObScript::Help::FORM::CELL::Build();
 			}
-
 			break;
-		}
-
 		default:
 			break;
 		}

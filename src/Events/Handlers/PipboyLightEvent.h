@@ -5,8 +5,8 @@
 namespace Events::Handlers
 {
 	class PipboyLightEventHandler :
-		public REX ::Singleton<PipboyLightEventHandler>,
-		public RE::BSTValueEventSink<RE::PipboyLightEvent>
+		public RE::BSTValueEventSink<RE::PipboyLightEvent>,
+		public REX::TSingleton<PipboyLightEventHandler>
 	{
 	public:
 		virtual RE::BSEventNotifyControl ProcessEvent(const RE::PipboyLightEvent& a_event, RE::BSTEventSource<RE::PipboyLightEvent>*) override

@@ -37,16 +37,11 @@ namespace Papyrus::BakaUtil
 	}
 
 	class PipboyLightEventHandler :
+		public Papyrus::Shared::RegistrationMap,
 		public RE::BSTValueEventSink<RE::PipboyLightEvent>,
-		public Papyrus::Shared::RegistrationMap
+		public REX::TSingleton<PipboyLightEventHandler>
 	{
 	public:
-		[[nodiscard]] static PipboyLightEventHandler* GetSingleton()
-		{
-			static PipboyLightEventHandler singleton;
-			return std::addressof(singleton);
-		}
-
 		virtual RE::BSEventNotifyControl ProcessEvent(const RE::PipboyLightEvent& a_event, RE::BSTEventSource<RE::PipboyLightEvent>*) override
 		{
 			const RE::BSAutoLock lock{ dataLock };

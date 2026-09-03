@@ -5,8 +5,8 @@
 namespace Events::Handlers
 {
 	class CurrentRadiationSourceCountHandler :
-		public REX::Singleton<CurrentRadiationSourceCountHandler>,
-		public RE::BSTValueEventSink<RE::CurrentRadiationSourceCount>
+		public RE::BSTValueEventSink<RE::CurrentRadiationSourceCount>,
+		public REX::TSingleton<CurrentRadiationSourceCountHandler>
 	{
 	public:
 		virtual RE::BSEventNotifyControl ProcessEvent(const RE::CurrentRadiationSourceCount& a_event, RE::BSTEventSource<RE::CurrentRadiationSourceCount>*) override

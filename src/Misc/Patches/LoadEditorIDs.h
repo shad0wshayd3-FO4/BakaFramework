@@ -41,7 +41,7 @@ namespace Patches
 	private:
 		template <class T>
 		class hkFormEditorID :
-			public REX::Singleton<hkFormEditorID<T>>
+			public REX::TSingleton<hkFormEditorID<T>>
 		{
 		private:
 			static const char* GetFormEditorID(RE::TESForm* a_this)

@@ -17,6 +17,8 @@ set_config("commonlib_ini", true)
 
 -- define targets
 target("BakaFramework")
+    add_deps("BakaFramework.papyrus", { order = true })
+
     add_rules("commonlibf4.plugin", {
         name = "BakaFramework",
         author = "shad0wshayd3"
@@ -30,3 +32,13 @@ target("BakaFramework")
 
     -- add extra files
     add_extrafiles(".clang-format")
+
+    -- add install files
+    add_installfiles("res/(**)")
+
+target("BakaFramework.papyrus")
+    add_rules("commonlibf4.papyrus", {
+        install = "BakaFramework"
+    })
+
+    add_extrafiles("res/Scripts/Source/Baka/(**.psc)")

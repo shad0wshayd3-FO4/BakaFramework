@@ -3,9 +3,9 @@
 namespace Events::Handlers
 {
 	class ItemCraftedHandler :
-		public REX::Singleton<ItemCraftedHandler>,
 		public RE::BSTEventSink<RE::ItemCrafted::Event>,
-		public RE::BSTEventSink<RE::MenuOpenCloseEvent>
+		public RE::BSTEventSink<RE::MenuOpenCloseEvent>,
+		public REX::TSingleton<ItemCraftedHandler>
 	{
 	public:
 		virtual ~ItemCraftedHandler()

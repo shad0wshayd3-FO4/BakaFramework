@@ -4,9 +4,9 @@ namespace Config
 {
 	namespace Patches
 	{
-		static REX::INI::Bool bEnableLoadingEditorIDs{ "bEnableLoadingEditorIDs", "Patches", true };
-		static REX::INI::Bool bEnableEDIDConflictCheck{ "bEnableEDIDConflictCheck", "Patches", false };
-		static REX::INI::Str  sBetaCommentFileName{ "sBetaCommentFileName", "Patches", "BetaComment.txt"s };
+		static REX::INI::Bool bEnableLoadingEditorIDs{ "Patches", "bEnableLoadingEditorIDs", true };
+		static REX::INI::Bool bEnableEDIDConflictCheck{ "Patches", "bEnableEDIDConflictCheck", false };
+		static REX::INI::Str  sBetaCommentFileName{ "Patches", "sBetaCommentFileName", "BetaComment.txt"s };
 	}
 
 	static void Load()
