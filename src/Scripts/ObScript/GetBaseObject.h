@@ -13,12 +13,9 @@ namespace ObScript::GetBaseObject
 		[[maybe_unused]] std::uint32_t&              a_offset)
 	{
 		if (!a_refObject || !a_refObject->data.objectReference)
-		{
 			return true;
-		}
-
-		RE::ConsoleLog::GetSingleton()->Log("GetBaseObject >> {:08X}"sv,
-			a_refObject->data.objectReference->formID);
+		if (auto console = RE::ConsoleLog::GetSingleton())
+			console->Log("GetBaseObject >> {:08X}"sv, a_refObject->data.objectReference->formID);
 		return true;
 	}
 

@@ -58,7 +58,7 @@ namespace Papyrus::StringUtil
 	std::string Substring(std::monostate, std::string_view a_string, std::int32_t a_idx, std::int32_t a_length)
 	{
 		std::string result{ "" };
-		if (a_string.length() >= a_idx)
+		if (a_idx >= 0 && a_string.length() >= a_idx)
 		{
 			result = a_string.substr(a_idx, a_length);
 		}

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Scripts/Papyrus/Shared/RegistrationMap.h"
-
 namespace Papyrus::BakaUtil
 {
 	std::vector<RE::TESObjectREFR*> FilterReferencesByKeywords(
@@ -34,37 +32,5 @@ namespace Papyrus::BakaUtil
 		}
 
 		return result;
-	}
-
-	class PipboyLightEventHandler :
-		public Papyrus::Shared::RegistrationMap,
-		public RE::BSTValueEventSink<RE::PipboyLightEvent>,
-		public REX::TSingleton<PipboyLightEventHandler>
-	{
-	public:
-		virtual RE::BSEventNotifyControl ProcessEvent(const RE::PipboyLightEvent& a_event, RE::BSTEventSource<RE::PipboyLightEvent>*) override
-		{
-			const RE::BSAutoLock lock{ dataLock };
-			DispatchImpl(a_event.optionalValue.value_or(false));
-
-			eventDataStruct.eventReceived = true;
-			return RE::BSEventNotifyControl::kContinue;
-		}
-
-		virtual std::uint32_t GetRecordSig() { return 'PLEH'; }
-
-		virtual std::uint32_t GetRecordVer() { return 2; }
-
-		virtual const char* GetEventName() { return "OnPipboyLightEvent"; }
-	};
-
-	void RegisterForPipboyLightEvent(std::monostate, const RE::BSScript::Variable* a_this)
-	{
-		PipboyLightEventHandler::GetSingleton()->Register(a_this);
-	}
-
-	void UnregisterForPipboyLightEvent(std::monostate, const RE::BSScript::Variable* a_this)
-	{
-		PipboyLightEventHandler::GetSingleton()->Unregister(a_this);
 	}
 }

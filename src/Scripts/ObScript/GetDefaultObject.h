@@ -33,13 +33,15 @@ namespace ObScript::GetDefaultObject
 		{
 			if (auto defaultObject = form->As<RE::BGSDefaultObject>())
 			{
-				RE::ConsoleLog::GetSingleton()->Log("GetDefaultObject ({}) >> {:08X}"sv,
-					defaultObject->GetFormEditorID(), defaultObject->form ? defaultObject->form->GetFormID() : 0);
+				auto formID = defaultObject->form ? defaultObject->form->GetFormID() : 0;
+				if (auto console = RE::ConsoleLog::GetSingleton())
+					console->Log("GetDefaultObject ({}) >> {:08X}"sv, defaultObject->GetFormEditorID(), formID);
 				return true;
 			}
 		}
 
-		RE::ConsoleLog::GetSingleton()->Log("DefaultObject \"{}\" Does Not Exist"sv, a_name);
+		if (auto console = RE::ConsoleLog::GetSingleton())
+			console->Log("DefaultObject \"{}\" Does Not Exist"sv, a_name);
 		return true;
 	}
 

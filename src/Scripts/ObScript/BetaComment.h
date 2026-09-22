@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Config/Config.h"
+#include "Settings/Settings.h"
 
 namespace ObScript::BetaComment
 {
@@ -154,7 +154,7 @@ namespace ObScript::BetaComment
 		// Output to File
 		std::ofstream output;
 		output.open(
-			Config::Patches::sBetaCommentFileName,
+			Settings::Patches::sBetaCommentFileName,
 			std::ofstream::out | std::ofstream::app);
 		output << out.str();
 		output.close();

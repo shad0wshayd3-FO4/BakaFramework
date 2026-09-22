@@ -4,36 +4,10 @@ namespace ObScript::Help
 {
 	namespace IMPL
 	{
-		bool Contains(std::string_view a_str, std::string_view a_sub)
+		static void Print(std::string_view a_msg)
 		{
-			if (a_str.empty())
-			{
-				return false;
-			}
-
-			if (a_sub.empty())
-			{
-				return true;
-			}
-
-			auto it = std::search(
-				a_str.begin(),
-				a_str.end(),
-				a_sub.begin(),
-				a_sub.end(),
-				[](char a_lhs, char a_rhs)
-				{
-					return std::tolower(a_lhs) == std::tolower(a_rhs);
-				});
-			return it != a_str.end();
-		}
-
-		void Print(std::string_view a_msg)
-		{
-			if (auto ConsoleLog = RE::ConsoleLog::GetSingleton())
-			{
-				ConsoleLog->PrintLine(a_msg.data());
-			}
+			if (auto console = RE::ConsoleLog::GetSingleton())
+				console->PrintLine(a_msg.data());
 		}
 	}
 
@@ -78,7 +52,7 @@ namespace ObScript::Help
 			std::string_view edid = a_form->GetFormEditorID();
 			std::string_view name = RE::TESFullName::GetFullName(*a_form);
 
-			if (IMPL::Contains(edid, a_name) || IMPL::Contains(name, a_name))
+			if (REX::STR::ICONTAINS(edid, a_name) || REX::STR::ICONTAINS(name, a_name))
 			{
 				output_t output;
 				output.edid = edid;
@@ -216,7 +190,7 @@ namespace ObScript::Help
 				std::sort(ExteriorCells.begin(), ExteriorCells.end());
 				for (auto& iter : ExteriorCells)
 				{
-					if (IMPL::Contains(iter.edid, a_name))
+					if (REX::STR::ICONTAINS(iter.edid, a_name))
 					{
 						std::stringstream ss;
 						if (!iter.name.empty())
@@ -284,7 +258,7 @@ namespace ObScript::Help
 
 			std::string_view nick = a_function.shortName;
 			std::string_view help = a_function.helpString;
-			if (IMPL::Contains(name, a_name) || IMPL::Contains(nick, a_name) || IMPL::Contains(help, a_name))
+			if (REX::STR::ICONTAINS(name, a_name) || REX::STR::ICONTAINS(nick, a_name) || REX::STR::ICONTAINS(help, a_name))
 			{
 				std::stringstream ss;
 				ss << name;
@@ -319,7 +293,7 @@ namespace ObScript::Help
 		void Match(const std::string_view& a_name, RE::TESGlobal* a_global)
 		{
 			std::string_view editorID = a_global->GetFormEditorID();
-			if (IMPL::Contains(editorID, a_name))
+			if (REX::STR::ICONTAINS(editorID, a_name))
 			{
 				auto ss = std::format("{} = {:0.2f}"sv, editorID, a_global->value);
 				IMPL::Print(ss);
@@ -344,7 +318,7 @@ namespace ObScript::Help
 		void Match(const std::string_view& a_name, RE::Setting* a_setting)
 		{
 			std::string_view name = a_setting->GetKey();
-			if (IMPL::Contains(name, a_name))
+			if (REX::STR::ICONTAINS(name, a_name))
 			{
 				std::stringstream ss;
 				ss << name;

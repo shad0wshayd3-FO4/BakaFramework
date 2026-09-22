@@ -46,11 +46,13 @@ namespace ObScript::SpellHasCastingPerk
 			case RE::ENUM_FORM_ID::kNPC_:
 				if (auto conds = perk->perkConditions)
 				{
-					auto PlayerCharacter = RE::PlayerCharacter::GetSingleton();
-					if (conds.IsTrue(PlayerCharacter, PlayerCharacter))
+					if (auto player = RE::PlayerCharacter::GetSingleton())
 					{
-						a_returnValue = 1.0f;
-						return true;
+						if (conds.IsTrue(player, player))
+						{
+							a_returnValue = 1.0f;
+							return true;
+						}
 					}
 				}
 				break;

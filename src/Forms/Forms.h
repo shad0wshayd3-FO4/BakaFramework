@@ -10,8 +10,10 @@ namespace Forms
 	{
 		if (auto TESDataHandler = RE::TESDataHandler::GetSingleton())
 		{
-			PipboyLightActive = TESDataHandler->LookupForm<RE::ActorValueInfo>(0x800, "BakaFramework.esm"sv);
-			RadiationSourceCount = TESDataHandler->LookupForm<RE::ActorValueInfo>(0x801, "BakaFramework.esm"sv);
+			PipboyLightActive = 
+				TESDataHandler->LookupForm<RE::ActorValueInfo>(0x800, "BakaFramework.esm"sv);
+			RadiationSourceCount =
+				TESDataHandler->LookupForm<RE::ActorValueInfo>(0x801, "BakaFramework.esm"sv);
 		}
 	}
-};
+}
